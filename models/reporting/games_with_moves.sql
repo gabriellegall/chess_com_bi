@@ -45,18 +45,37 @@ WITH score_defintion AS (
       WHEN variance_score_playing <= -1000 THEN 'Massive Blunder'
       WHEN variance_score_playing <= -300 THEN 'Blunder'
       WHEN variance_score_playing <= -100 THEN 'Mistake'
-      ELSE NULL END AS move_category_playing,
+      ELSE NULL END AS miss_category_playing,
     CASE
       WHEN variance_score_playing >= 1000 THEN 'Massive Blunder'
       WHEN variance_score_playing >= 300 THEN 'Blunder'
       WHEN variance_score_playing >= 100 THEN 'Mistake'
-      ELSE NULL END AS move_category_opponent,
+      ELSE NULL END AS miss_category_opponent,
     CASE  
       WHEN ABS(score_playing) <= 100 THEN 'Even'
       WHEN score_playing <= 100 THEN 'Disadvantage'
       WHEN score_playing >= 100 THEN 'Advantage'
-      ELSE NULL END AS position_advantage_status_playing
+      ELSE NULL END AS position_status_playing
   FROM previous_score
 )
 
-SELECT * FROM position_definition
+, prev_position_definition AS (
+SELECT 
+  *,
+  LAG(position_status_playing) OVER (PARTITION BY game_uuid ORDER BY move_number_chesscom ASC) AS prev_position_status_playing,
+FROM position_definition
+)
+
+SELECT 
+  *,
+  CASE  
+    WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Even')           THEN 'Playing Threw'
+    WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Advantage')      THEN 'Playing Missed Opponent Throw' 
+    WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Disadvantage')   THEN 'Playing Threw Even More' 
+    ELSE NULL END AS  miss_context_playing,
+  CASE  
+    WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Even')           THEN 'Opponent Threw'
+    WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Advantage')      THEN 'Opponent Threw Even More' 
+    WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Disadvantage')   THEN 'Opponent Missed Playing Throw' 
+    ELSE NULL END AS  miss_context_opponent
+FROM prev_position_definition
