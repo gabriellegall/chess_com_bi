@@ -1,4 +1,5 @@
 dbt-bigquery
+notebook
 python-chess
 stockfish
 google-cloud-bigquery
