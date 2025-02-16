@@ -15,6 +15,10 @@ clean-targets:
   - "dbt_packages"
 
 models:
-  dbt_chess:
-    example:
+  chess_com_bi:
+    intermediate:
       +materialized: view
+      +schema: intermediate
+    reporting:
+      +materialized: view
+      +schema: reporting
