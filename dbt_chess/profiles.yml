@@ -1,0 +1,14 @@
+dbt_chess:
+  outputs:
+    dev:
+      dataset: sandbox_dataset
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      keyfile: ./keyfile.json
+      location: US
+      method: service-account
+      priority: interactive
+      project: chesscom-451104
+      threads: 4
+      type: bigquery
+  target: dev
