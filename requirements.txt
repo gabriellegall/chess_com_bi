@@ -3,5 +3,6 @@ notebook
 python-chess
 stockfish
 google-cloud-bigquery
+tqdm
 pandas-gbq
 pyarrow
