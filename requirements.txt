@@ -1,0 +1,6 @@
+dbt-bigquery
+python-chess
+stockfish
+google-cloud-bigquery
+pandas-gbq
+pyarrow
