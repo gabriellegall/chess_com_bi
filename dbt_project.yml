@@ -1,7 +1,7 @@
-name: 'dbt_chess'
+name: 'chess_com_bi'
 version: '1.0.0'
 
-profile: 'dbt_chess'
+profile: 'chess_com_bi'
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]

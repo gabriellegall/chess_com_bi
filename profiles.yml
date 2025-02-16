@@ -1,4 +1,4 @@
-dbt_chess:
+chess_com_bi:
   outputs:
     dev:
       dataset: sandbox_dataset
