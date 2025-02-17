@@ -16,6 +16,7 @@ WITH score_defintion AS (
     games_moves.move_number_chesscom,
     games_moves.move,
     games.playing_as, 
+    games.playing_result,
     games_moves.player_color_turn,
     CASE 
       WHEN playing_as = 'White' THEN score_white
@@ -42,28 +43,28 @@ WITH score_defintion AS (
   SELECT 
     *,
     CASE 
-      WHEN variance_score_playing <= -1000 THEN 'Massive Blunder'
+      WHEN variance_score_playing <= -600 THEN 'Massive Blunder'
       WHEN variance_score_playing <= -300 THEN 'Blunder'
       WHEN variance_score_playing <= -100 THEN 'Mistake'
       ELSE NULL END AS miss_category_playing,
     CASE
-      WHEN variance_score_playing >= 1000 THEN 'Massive Blunder'
+      WHEN variance_score_playing >= 600 THEN 'Massive Blunder'
       WHEN variance_score_playing >= 300 THEN 'Blunder'
       WHEN variance_score_playing >= 100 THEN 'Mistake'
       ELSE NULL END AS miss_category_opponent,
     CASE  
-      WHEN ABS(score_playing) <= 100 THEN 'Even'
-      WHEN score_playing <= 100 THEN 'Disadvantage'
-      WHEN score_playing >= 100 THEN 'Advantage'
+      WHEN ABS(score_playing) <= 150 THEN 'Even'
+      WHEN score_playing <= -150 THEN 'Disadvantage'
+      WHEN score_playing >= 150 THEN 'Advantage'
       ELSE NULL END AS position_status_playing
   FROM previous_score
 )
 
 , prev_position_definition AS (
-SELECT 
-  *,
-  LAG(position_status_playing) OVER (PARTITION BY game_uuid ORDER BY move_number_chesscom ASC) AS prev_position_status_playing,
-FROM position_definition
+  SELECT 
+    *,
+    LAG(position_status_playing) OVER (PARTITION BY game_uuid ORDER BY move_number_chesscom ASC) AS prev_position_status_playing,
+  FROM position_definition
 )
 
 SELECT 
