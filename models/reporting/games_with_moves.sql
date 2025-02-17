@@ -63,9 +63,9 @@ WITH score_defintion AS (
       WHEN variance_score_playing >= 100 THEN move_number_chesscom
       ELSE NULL END AS miss_move_number_chesscom_opponent,
     CASE  
-      WHEN ABS(score_playing) <= 150 THEN 'Even'
-      WHEN score_playing <= -150 THEN 'Disadvantage'
-      WHEN score_playing >= 150 THEN 'Advantage'
+      WHEN ABS(score_playing) <= 100 THEN 'Even'
+      WHEN score_playing <= -100 THEN 'Disadvantage'
+      WHEN score_playing >= 100 THEN 'Advantage'
       ELSE NULL END AS position_status_playing
   FROM previous_score
 )
