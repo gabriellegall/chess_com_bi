@@ -15,7 +15,11 @@ WITH score_defintion AS (
     games.bq_load_date,
     games_moves.move_number_chesscom,
     games_moves.move,
-    games.playing_as, 
+    games.playing_as,
+    games.playing_rating, 
+    games.opponent_rating, 
+    ROUND(games.playing_rating / 100) * 100 AS playing_rating_100round,
+    ROUND(games.opponent_rating / 100) * 100 AS opponent_rating_100round,
     games.playing_result,
     games_moves.player_color_turn,
     CASE 
@@ -47,11 +51,17 @@ WITH score_defintion AS (
       WHEN variance_score_playing <= -300 THEN 'Blunder'
       WHEN variance_score_playing <= -100 THEN 'Mistake'
       ELSE NULL END AS miss_category_playing,
+    CASE 
+      WHEN variance_score_playing <= -100 THEN move_number_chesscom
+      ELSE NULL END AS miss_move_number_chesscom_playing,
     CASE
       WHEN variance_score_playing >= 600 THEN 'Massive Blunder'
       WHEN variance_score_playing >= 300 THEN 'Blunder'
       WHEN variance_score_playing >= 100 THEN 'Mistake'
       ELSE NULL END AS miss_category_opponent,
+    CASE 
+      WHEN variance_score_playing >= 100 THEN move_number_chesscom
+      ELSE NULL END AS miss_move_number_chesscom_opponent,
     CASE  
       WHEN ABS(score_playing) <= 150 THEN 'Even'
       WHEN score_playing <= -150 THEN 'Disadvantage'
@@ -67,16 +77,18 @@ WITH score_defintion AS (
   FROM position_definition
 )
 
-SELECT 
-  *,
-  CASE  
-    WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Even')           THEN 'Playing Threw'
-    WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Advantage')      THEN 'Playing Missed Opponent Throw' 
-    WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Disadvantage')   THEN 'Playing Threw Even More' 
-    ELSE NULL END AS  miss_context_playing,
-  CASE  
-    WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Even')           THEN 'Opponent Threw'
-    WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Advantage')      THEN 'Opponent Threw Even More' 
-    WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Disadvantage')   THEN 'Opponent Missed Playing Throw' 
-    ELSE NULL END AS  miss_context_opponent
-FROM prev_position_definition
+, context_definition AS (
+  SELECT 
+    *,
+    CASE  
+      WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Even', 'Disadvantage')   THEN 'Throw'
+      WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Advantage')              THEN 'Missed Opportunity' 
+      ELSE NULL END AS  miss_context_playing,
+    CASE  
+      WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Even', 'Disadvantage')  THEN 'Throw'
+      WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Advantage')             THEN 'Missed Opportunity' 
+      ELSE NULL END AS  miss_context_opponent
+  FROM prev_position_definition
+)
+
+SELECT * FROM context_definition
