@@ -5,5 +5,6 @@ sources:
     schema: staging
     tables:
       - name: games
+        identifier: "games_infos_*"
       - name: games_moves
         identifier: "games_moves_*"
