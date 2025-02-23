@@ -6,3 +6,4 @@ sources:
     tables:
       - name: games
       - name: games_moves
+        identifier: "games_moves_*"

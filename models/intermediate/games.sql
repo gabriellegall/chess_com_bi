@@ -4,7 +4,7 @@
 WITH cast_types AS (
     SELECT 
         * EXCEPT(end_time),
-        DATE(end_time) AS end_time
+        DATE(end_time) AS end_time,
     FROM {{ source('staging', 'games') }} 
 )
 
