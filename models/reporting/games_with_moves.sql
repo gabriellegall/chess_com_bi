@@ -13,11 +13,11 @@ WITH score_defintion AS (
     games.black_username,
     games.black_rating,
     games.bq_load_date,
-    games_moves.move_number_chesscom,
+    games_moves.move_number,
     games_moves.move,
     CASE  
-      WHEN move_number_chesscom <= 15 THEN 'Early Game'
-      WHEN move_number_chesscom <= 30 THEN 'Mid Game'
+      WHEN move_number <= 15 THEN 'Early Game'
+      WHEN move_number <= 30 THEN 'Mid Game'
       ELSE 'Late Game' END as game_phase,
     games_moves.player_color_turn,
     games.playing_as,
@@ -50,10 +50,10 @@ WITH score_defintion AS (
 , previous_score AS (
   SELECT 
     *,
-    LAG(score_playing) OVER (PARTITION BY game_uuid ORDER BY move_number_chesscom ASC)                      AS prev_score_playing,
-    score_playing - LAG(score_playing) OVER (PARTITION BY game_uuid ORDER BY move_number_chesscom ASC)      AS variance_score_playing,
-    PERCENTILE_CONT(score_playing, 0.5) OVER (PARTITION BY game_uuid, game_phase)                           AS median_score_playing_game_phase,
-    MAX(move_number_chesscom) OVER (PARTITION BY game_uuid)                                                 AS game_total_nb_moves,
+    LAG(score_playing) OVER (PARTITION BY game_uuid ORDER BY move_number ASC)                      AS prev_score_playing,
+    score_playing - LAG(score_playing) OVER (PARTITION BY game_uuid ORDER BY move_number ASC)      AS variance_score_playing,
+    PERCENTILE_CONT(score_playing, 0.5) OVER (PARTITION BY game_uuid, game_phase)                  AS median_score_playing_game_phase,
+    MAX(move_number) OVER (PARTITION BY game_uuid)                                                 AS game_total_nb_moves,
   FROM score_defintion
 )
 
@@ -61,21 +61,24 @@ WITH score_defintion AS (
   SELECT 
     *,
     CASE 
-      WHEN variance_score_playing <= -600 THEN 'Massive Blunder'
+      WHEN variance_score_playing <= -1000 THEN 'Massive Blunder'
       WHEN variance_score_playing <= -300 THEN 'Blunder'
       WHEN variance_score_playing <= -100 THEN 'Mistake'
       ELSE NULL END AS miss_category_playing,
     CASE 
-      WHEN variance_score_playing <= -100 THEN move_number_chesscom
-      ELSE NULL END AS miss_move_number_chesscom_playing,
+      WHEN variance_score_playing <= -100 THEN move_number
+      ELSE NULL END AS miss_move_number_playing,
+    CASE 
+      WHEN variance_score_playing <= -1000 THEN move_number
+      ELSE NULL END AS massive_blunder_move_number_playing,
     CASE
-      WHEN variance_score_playing >= 600 THEN 'Massive Blunder'
+      WHEN variance_score_playing >= 1000 THEN 'Massive Blunder'
       WHEN variance_score_playing >= 300 THEN 'Blunder'
       WHEN variance_score_playing >= 100 THEN 'Mistake'
       ELSE NULL END AS miss_category_opponent,
     CASE 
-      WHEN variance_score_playing >= 100 THEN move_number_chesscom
-      ELSE NULL END AS miss_move_number_chesscom_opponent,
+      WHEN variance_score_playing >= 100 THEN move_number
+      ELSE NULL END AS miss_move_number_opponent,
     CASE  
       WHEN ABS(score_playing) <= 100 THEN 'Even'
       WHEN score_playing <= -100 THEN 'Disadvantage'
@@ -87,7 +90,7 @@ WITH score_defintion AS (
 , prev_position_definition AS (
   SELECT 
     *,
-    LAG(position_status_playing) OVER (PARTITION BY game_uuid ORDER BY move_number_chesscom ASC) AS prev_position_status_playing,
+    LAG(position_status_playing) OVER (PARTITION BY game_uuid ORDER BY move_number ASC) AS prev_position_status_playing,
   FROM position_definition
 )
 
