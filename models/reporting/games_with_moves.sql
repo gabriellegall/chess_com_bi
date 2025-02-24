@@ -24,14 +24,14 @@ WITH score_defintion AS (
     games.playing_rating, 
     CASE 
         WHEN games.playing_rating < 500 THEN '0-500'
-        WHEN games.playing_rating < 700 THEN '500-700'
-        ELSE '700+'
+        WHEN games.playing_rating < 600 THEN '500-600'
+        ELSE '600+'
     END AS playing_rating_range,
     games.opponent_rating, 
     CASE 
         WHEN games.opponent_rating < 500 THEN '0-500'
-        WHEN games.opponent_rating < 700 THEN '500-700'
-        ELSE '700+'
+        WHEN games.opponent_rating < 600 THEN '500-600'
+        ELSE '600+'
     END AS opponent_rating_range,
     games.playing_result,
     CASE 
@@ -50,39 +50,40 @@ WITH score_defintion AS (
 , previous_score AS (
   SELECT 
     *,
-    LAG(score_playing) OVER (PARTITION BY game_uuid ORDER BY move_number ASC)                      AS prev_score_playing,
-    score_playing - LAG(score_playing) OVER (PARTITION BY game_uuid ORDER BY move_number ASC)      AS variance_score_playing,
-    PERCENTILE_CONT(score_playing, 0.5) OVER (PARTITION BY game_uuid, game_phase)                  AS median_score_playing_game_phase,
-    MAX(move_number) OVER (PARTITION BY game_uuid)                                                 AS game_total_nb_moves,
+    LAG(score_playing) OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC)                      AS prev_score_playing,
+    score_playing - LAG(score_playing) OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC)      AS variance_score_playing,
+    PERCENTILE_CONT(score_playing, 0.5) OVER (PARTITION BY game_uuid, username, game_phase)                  AS median_score_playing_game_phase,
+    MAX(move_number) OVER (PARTITION BY game_uuid, username)                                                 AS game_total_nb_moves,
   FROM score_defintion
 )
 
 , position_definition AS (
   SELECT 
     *,
+    -- To do : check why the condition is necessary here : player_color_turn = playing_as
     CASE 
-      WHEN variance_score_playing <= -1000 THEN 'Massive Blunder'
-      WHEN variance_score_playing <= -300 THEN 'Blunder'
-      WHEN variance_score_playing <= -100 THEN 'Mistake'
+      WHEN player_color_turn = playing_as AND variance_score_playing <= -600 AND prev_score_playing > -300 AND score_playing < 300 THEN 'Massive Blunder'
+      WHEN player_color_turn = playing_as AND variance_score_playing <= -300 AND prev_score_playing > -300 AND score_playing < 300 THEN 'Blunder'
+      WHEN player_color_turn = playing_as AND variance_score_playing <= -100 THEN 'Mistake'
       ELSE NULL END AS miss_category_playing,
     CASE 
-      WHEN variance_score_playing <= -100 THEN move_number
+      WHEN player_color_turn = playing_as AND variance_score_playing <= -100 THEN move_number
       ELSE NULL END AS miss_move_number_playing,
     CASE 
-      WHEN variance_score_playing <= -1000 THEN move_number
+      WHEN player_color_turn = playing_as AND variance_score_playing <= -600 AND prev_score_playing > -300 AND score_playing < 300 THEN move_number
       ELSE NULL END AS massive_blunder_move_number_playing,
     CASE
-      WHEN variance_score_playing >= 1000 THEN 'Massive Blunder'
-      WHEN variance_score_playing >= 300 THEN 'Blunder'
-      WHEN variance_score_playing >= 100 THEN 'Mistake'
+      WHEN player_color_turn <> playing_as AND variance_score_playing >= 600 AND prev_score_playing < 300 AND score_playing > -300 THEN 'Massive Blunder'
+      WHEN player_color_turn <> playing_as AND variance_score_playing >= 300 AND prev_score_playing < 300 AND score_playing > -300 THEN 'Blunder'
+      WHEN player_color_turn <> playing_as AND variance_score_playing >= 100 THEN 'Mistake'
       ELSE NULL END AS miss_category_opponent,
     CASE 
-      WHEN variance_score_playing >= 100 THEN move_number
+      WHEN player_color_turn <> playing_as AND variance_score_playing >= 100 THEN move_number
       ELSE NULL END AS miss_move_number_opponent,
     CASE  
-      WHEN ABS(score_playing) <= 100 THEN 'Even'
-      WHEN score_playing <= -100 THEN 'Disadvantage'
-      WHEN score_playing >= 100 THEN 'Advantage'
+      WHEN ABS(score_playing) <= 250 THEN 'Even'
+      WHEN score_playing <= -250 THEN 'Disadvantage'
+      WHEN score_playing >= 250 THEN 'Advantage'
       ELSE NULL END AS position_status_playing
   FROM previous_score
 )
@@ -90,7 +91,7 @@ WITH score_defintion AS (
 , prev_position_definition AS (
   SELECT 
     *,
-    LAG(position_status_playing) OVER (PARTITION BY game_uuid ORDER BY move_number ASC) AS prev_position_status_playing,
+    LAG(position_status_playing) OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC) AS prev_position_status_playing,
   FROM position_definition
 )
 
@@ -110,8 +111,8 @@ WITH score_defintion AS (
 
 SELECT 
   *,
-  COUNTIF(miss_category_playing = 'Massive Blunder') OVER (PARTITION BY game_uuid)    AS game_total_nb_massive_blunder,
-  COUNTIF(miss_category_playing = 'Blunder') OVER (PARTITION BY game_uuid)            AS game_total_nb_blunder,
-  COUNTIF(miss_context_playing = 'Throw') OVER (PARTITION BY game_uuid)               AS game_total_nb_throw,
-  COUNTIF(miss_context_playing = 'Missed Opportunity') OVER (PARTITION BY game_uuid)  AS game_total_nb_missed_opportunity,
+  COUNTIF(miss_category_playing = 'Massive Blunder') OVER (PARTITION BY game_uuid, username)    AS game_total_nb_massive_blunder,
+  COUNTIF(miss_category_playing = 'Blunder') OVER (PARTITION BY game_uuid, username)            AS game_total_nb_blunder,
+  COUNTIF(miss_context_playing = 'Throw') OVER (PARTITION BY game_uuid, username)               AS game_total_nb_throw,
+  COUNTIF(miss_context_playing = 'Missed Opportunity') OVER (PARTITION BY game_uuid, username)  AS game_total_nb_missed_opportunity,
 FROM context_definition
