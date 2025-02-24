@@ -104,7 +104,7 @@ WITH score_defintion AS (
       WHEN player_color_turn <> playing_as 
           AND variance_score_playing >= {{ var('score_thresholds')['variance_score_mistake'] }} 
           THEN move_number
-          ELSE NULL END AS miss_move_number_opponent,
+      ELSE NULL END AS miss_move_number_opponent,
     CASE  
       WHEN ABS(score_playing) <= {{ var('score_thresholds')['even_score_limit'] }} THEN 'Even'
       WHEN score_playing <= -{{ var('score_thresholds')['even_score_limit'] }} THEN 'Disadvantage'
