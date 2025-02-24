@@ -16,22 +16,22 @@ WITH score_defintion AS (
     games_moves.move_number,
     games_moves.move,
     CASE  
-      WHEN move_number <= 15 THEN 'Early Game'
-      WHEN move_number <= 30 THEN 'Mid Game'
+      WHEN move_number <= {{ var('game_phases')['end_early_game_move'] }} THEN 'Early Game'
+      WHEN move_number <= {{ var('game_phases')['end_mid_game_move'] }} THEN 'Mid Game'
       ELSE 'Late Game' END as game_phase,
     games_moves.player_color_turn,
     games.playing_as,
     games.playing_rating, 
     CASE 
-        WHEN games.playing_rating < 500 THEN '0-500'
-        WHEN games.playing_rating < 600 THEN '500-600'
-        ELSE '600+'
+        WHEN games.playing_rating < {{ var('elo_range')['low'] }} THEN '0-{{ var('elo_range')['low'] }}'
+        WHEN games.playing_rating < {{ var('elo_range')['mid'] }} THEN '{{ var('elo_range')['low'] }}-{{ var('elo_range')['mid'] }}'
+        ELSE '{{ var('elo_range')['mid'] }}+'
     END AS playing_rating_range,
-    games.opponent_rating, 
+    games.opponent_rating,
     CASE 
-        WHEN games.opponent_rating < 500 THEN '0-500'
-        WHEN games.opponent_rating < 600 THEN '500-600'
-        ELSE '600+'
+        WHEN games.opponent_rating < {{ var('elo_range')['low'] }} THEN '0-{{ var('elo_range')['low'] }}'
+        WHEN games.opponent_rating < {{ var('elo_range')['mid'] }} THEN '{{ var('elo_range')['low'] }}-{{ var('elo_range')['mid'] }}'
+        ELSE '{{ var('elo_range')['mid'] }}+'
     END AS opponent_rating_range,
     games.playing_result,
     CASE 
@@ -58,34 +58,67 @@ WITH score_defintion AS (
 )
 
 , position_definition AS (
-  SELECT 
+SELECT 
     *,
-    -- To do : check why the condition is necessary here : player_color_turn = playing_as
     CASE 
-      WHEN player_color_turn = playing_as AND variance_score_playing <= -600 AND prev_score_playing > -300 AND score_playing < 300 THEN 'Massive Blunder'
-      WHEN player_color_turn = playing_as AND variance_score_playing <= -300 AND prev_score_playing > -300 AND score_playing < 300 THEN 'Blunder'
-      WHEN player_color_turn = playing_as AND variance_score_playing <= -100 THEN 'Mistake'
-      ELSE NULL END AS miss_category_playing,
+      WHEN player_color_turn = playing_as 
+           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_massive_blunder'] }} 
+           AND prev_score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
+           AND score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
+      THEN 'Massive Blunder'
+      WHEN player_color_turn = playing_as 
+           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_blunder'] }} 
+           AND prev_score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
+           AND score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
+      THEN 'Blunder'
+      WHEN player_color_turn = playing_as 
+           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_mistake'] }} 
+      THEN 'Mistake'
+      ELSE NULL 
+    END AS miss_category_playing,
     CASE 
-      WHEN player_color_turn = playing_as AND variance_score_playing <= -100 THEN move_number
-      ELSE NULL END AS miss_move_number_playing,
+      WHEN player_color_turn = playing_as 
+           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_mistake'] }} 
+      THEN move_number
+      ELSE NULL 
+    END AS miss_move_number_playing,
     CASE 
-      WHEN player_color_turn = playing_as AND variance_score_playing <= -600 AND prev_score_playing > -300 AND score_playing < 300 THEN move_number
-      ELSE NULL END AS massive_blunder_move_number_playing,
+      WHEN player_color_turn = playing_as 
+           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_massive_blunder'] }} 
+           AND prev_score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
+           AND score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
+      THEN move_number
+      ELSE NULL 
+    END AS massive_blunder_move_number_playing,
     CASE
-      WHEN player_color_turn <> playing_as AND variance_score_playing >= 600 AND prev_score_playing < 300 AND score_playing > -300 THEN 'Massive Blunder'
-      WHEN player_color_turn <> playing_as AND variance_score_playing >= 300 AND prev_score_playing < 300 AND score_playing > -300 THEN 'Blunder'
-      WHEN player_color_turn <> playing_as AND variance_score_playing >= 100 THEN 'Mistake'
-      ELSE NULL END AS miss_category_opponent,
+      WHEN player_color_turn <> playing_as 
+           AND variance_score_playing >= {{ var('score_thresholds')['variance_score_massive_blunder'] }} 
+           AND prev_score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
+           AND score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
+      THEN 'Massive Blunder'
+      WHEN player_color_turn <> playing_as 
+           AND variance_score_playing >= {{ var('score_thresholds')['variance_score_blunder'] }} 
+           AND prev_score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
+           AND score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
+      THEN 'Blunder'
+      WHEN player_color_turn <> playing_as 
+           AND variance_score_playing >= {{ var('score_thresholds')['variance_score_mistake'] }} 
+      THEN 'Mistake'
+      ELSE NULL 
+    END AS miss_category_opponent,
     CASE 
-      WHEN player_color_turn <> playing_as AND variance_score_playing >= 100 THEN move_number
-      ELSE NULL END AS miss_move_number_opponent,
+      WHEN player_color_turn <> playing_as 
+           AND variance_score_playing >= {{ var('score_thresholds')['variance_score_mistake'] }} 
+      THEN move_number
+      ELSE NULL 
+    END AS miss_move_number_opponent,
     CASE  
-      WHEN ABS(score_playing) <= 250 THEN 'Even'
-      WHEN score_playing <= -250 THEN 'Disadvantage'
-      WHEN score_playing >= 250 THEN 'Advantage'
-      ELSE NULL END AS position_status_playing
-  FROM previous_score
+      WHEN ABS(score_playing) <= {{ var('score_thresholds')['even_score_limit'] }} THEN 'Even'
+      WHEN score_playing <= -{{ var('score_thresholds')['even_score_limit'] }} THEN 'Disadvantage'
+      WHEN score_playing >= {{ var('score_thresholds')['even_score_limit'] }} THEN 'Advantage'
+      ELSE NULL 
+    END AS position_status_playing
+FROM previous_score
 )
 
 , prev_position_definition AS (

@@ -14,6 +14,20 @@ clean-targets:
   - "target"
   - "dbt_packages"
 
+vars:
+  game_phases:
+    end_early_game_move: 15
+    end_mid_game_move: 30
+  elo_range:
+    low: 500
+    mid: 650
+  score_thresholds:
+    variance_score_massive_blunder: 600
+    variance_score_blunder: 250
+    variance_score_mistake: 100
+    score_balanced_limit: 300
+    even_score_limit: 150
+
 models:
   chess_com_bi:
     intermediate:
