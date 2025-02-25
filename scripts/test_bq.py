@@ -131,6 +131,8 @@ def fetch_and_union_game_data(usernames, email):
 
     return df
 
+print("Current working directory:", os.getcwd())
+
 with open("config.yml", "r") as file:
     config = yaml.safe_load(file)
 
