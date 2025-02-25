@@ -1,4 +1,5 @@
 import os
+import yaml
 import pandas as pd
 from pandas_gbq import read_gbq
 from google.cloud import bigquery
@@ -129,6 +130,14 @@ def fetch_and_union_game_data(usernames, email):
     df = pd.DataFrame(all_game_data)
 
     return df
+
+with open("config.yml", "r") as file:
+    config = yaml.safe_load(file)
+
+usernames = config["api"]["usernames"]
+email = config["api"]["email"]
+
+games = fetch_and_union_game_data(usernames, email)
 
 # Set up BigQuery client
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../keyfile.json"
