@@ -22,4 +22,4 @@ jobs:
           docker build -t dbt-container .
           docker run --rm \
             -v ${{ github.workspace }}/keyfile.json:/keyfile.json \
-            dbt-container python3 scripts/your_script.py
+            dbt-container python3 scripts/test_bq.py
