@@ -11,6 +11,7 @@ def table_with_prefix_exists(client: bigquery.Client, dataset_id: str, prefix: s
     tables = client.list_tables(dataset_id) # List all tables in the dataset
     return any(table.table_id.startswith(prefix) for table in tables)
 
+# Assuming that previous archive URL(s) have been already integrated. Keep only the archive URL(s) >= latest one
 def get_player_archive_and_filter(username: str, email: str, username_history: pd.DataFrame) -> dict[str, any]:
     headers = {'User-Agent': f'username: {username}, email: {email}'}
     URL = f'https://api.chess.com/pub/player/{username}/games/archives'
@@ -39,6 +40,7 @@ def get_player_archive_and_filter(username: str, email: str, username_history: p
 
     return archives
 
+# For the relevant archive URL(s), get all games > latest_end_time for each username(s)
 def fetch_and_append_game_data(usernames: list[str], email: str, username_history: pd.DataFrame) -> pd.DataFrame:
     all_game_data = []
     current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
