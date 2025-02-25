@@ -5,6 +5,7 @@ from pandas_gbq import read_gbq, to_gbq
 from google.cloud import bigquery
 import requests
 from datetime import datetime
+import platform
 
 # Set up BigQuery client
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../keyfile.json"
@@ -160,3 +161,5 @@ if not games.empty:
     print(f"Data loaded into BigQuery table: {table_id}")
 else:
     print("The games DataFrame is empty. No data loaded into BigQuery.")
+
+print(platform.system())
