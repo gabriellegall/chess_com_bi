@@ -131,9 +131,11 @@ def fetch_and_union_game_data(usernames, email):
 
     return df
 
-print("Current working directory:", os.getcwd())
+# Construct the path to config.yml located under 'scripts' folder
+config_path = os.path.join(os.getcwd(), "scripts", "config.yml")
 
-with open("config.yml", "r") as file:
+# Open the config file if it exists
+with open(config_path, "r") as file:
     config = yaml.safe_load(file)
 
 usernames = config["api"]["usernames"]
