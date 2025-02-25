@@ -1,25 +1,24 @@
-name: Run dbt in Docker
+name: api_games_integration
 
-on: 
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs every hour at minute 0
+  workflow_dispatch:  # Allows manual triggering from the Actions tab
 
 jobs:
-  run-dbt:
+  api_games_integration_job:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: checkout_repository
         uses: actions/checkout@v3
 
-      - name: Write Google Cloud credentials
+      - name: write_gcs_credentials
         run: echo '${{ secrets.GCS_KEYFILE }}' > keyfile.json
 
-      - name: Build and run Docker container
+      - name: build_and_run_script
         run: |
           docker build -t dbt-container .
           docker run --rm \
             -v ${{ github.workspace }}/keyfile.json:/keyfile.json \
-            dbt-container python3 scripts/test_bq.py
+            dbt-container python3 scripts/bq_load_player_games.py
