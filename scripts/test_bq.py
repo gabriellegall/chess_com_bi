@@ -1,7 +1,7 @@
 import os
 import yaml
 import pandas as pd
-from pandas_gbq import read_gbq
+from pandas_gbq import read_gbq, to_gbq
 from google.cloud import bigquery
 import requests
 from datetime import datetime
