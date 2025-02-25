@@ -28,6 +28,7 @@ if table_with_prefix_exists(client, dataset_id, table_games_prefix):
     """
     username_import = read_gbq(query, project_id='chesscom-451104', dialect='standard')
     print("Query executed successfully!")
+    print(username_import.head(10))
 # If no table exists, return an empty dataframe
 else:
     print(f"No tables with the prefix '{table_games_prefix}' found.")
