@@ -5,4 +5,13 @@ api:
     - leprechess
     - bgdu33
     - quentinusdesbois
+    - romainpct
+    - gokhvttttgxdddhjkig345
   email: cassado01@gmail.com
+
+bigquery:
+  config:
+    dataset_id: "chesscom-451104.staging"
+    project_id: "chesscom-451104"
+  tables:
+    games_prefix: "games_infos_"
