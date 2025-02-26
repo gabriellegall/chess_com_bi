@@ -106,7 +106,7 @@ def analyze_multiple_games(games: pd.DataFrame, engine_path: str):
 
         # Increment and print the number of processed games
         processed_games += 1
-        print(f"Processed {processed_games} games")
+        print(f"Processed {processed_games} games", flush=True)
 
     # Concatenate all dataframes into one
     return pd.concat(game_dfs, ignore_index=True)
