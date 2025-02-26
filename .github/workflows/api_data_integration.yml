@@ -22,3 +22,20 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}/keyfile.json:/keyfile.json \
             dbt-container python3 scripts/bq_load_player_games.py
+            
+  api_games_moves_integration_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout_repository
+        uses: actions/checkout@v3
+
+      - name: write_gcs_credentials
+        run: echo '${{ secrets.GCS_KEYFILE }}' > keyfile.json
+
+      - name: build_and_run_script
+        run: |
+          docker build -t dbt-container .
+          docker run --rm \
+            -v ${{ github.workspace }}/keyfile.json:/keyfile.json \
+            dbt-container python3 scripts/bq_load_player_games_moves.py
