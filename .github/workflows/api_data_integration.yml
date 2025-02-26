@@ -1,4 +1,4 @@
-name: api_games_integration
+name: api_data_integration
 
 on:
   schedule:
