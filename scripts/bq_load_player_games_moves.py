@@ -39,6 +39,7 @@ else:
     query = f"SELECT * FROM `{table_games}`"
 
 print("step 2")
+print(list(client.list_datasets()))
 
 # Run the query and load the result into a DataFrame
 games = read_gbq(query, project_id='chesscom-451104', dialect='standard')
