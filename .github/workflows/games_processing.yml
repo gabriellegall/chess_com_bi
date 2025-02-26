@@ -2,7 +2,7 @@ name: games_processing
 
 on:
   workflow_run:
-    workflows: ["api_games_integration"]
+    workflows: ["api_data_integration"]
     types:
       - completed
 
