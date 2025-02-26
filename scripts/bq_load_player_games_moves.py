@@ -129,9 +129,6 @@ print("step 4")
 date_suffix = datetime.now().strftime('%Y%m%d_%H%M')
 table_id = f'{dataset_id}.games_moves_{date_suffix}'
 
-# Load the DataFrame into BigQuery
-to_gbq(games_moves, table_id, project_id='chesscom-451104', if_exists='replace')
-
 if not games_moves.empty:
     # Load the DataFrame into BigQuery using pandas_gbq
     to_gbq(games_moves, table_id, project_id='chesscom-451104', if_exists='replace') # DROP & CREATE data load (full)
