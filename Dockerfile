@@ -5,7 +5,8 @@ WORKDIR $DBT_HOME
 
 RUN apt-get update && \
     apt-get install -y \
-        git && \
+        git \
+        stockfish && \
     rm -rf /var/lib/apt/lists/*
 
 COPY . .
