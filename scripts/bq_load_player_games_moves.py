@@ -39,7 +39,10 @@ else:
     query = f"SELECT * FROM `{table_games}`"
 
 print("step 2")
-print(list(client.list_datasets()))
+
+query_test = "SELECT COUNT(*) FROM `chesscom-451104.staging.games_infos_*`"
+games_test = read_gbq(query_test, project_id='chesscom-451104', dialect='standard')
+print(games_test)
 
 # Run the query and load the result into a DataFrame
 games = read_gbq(query, project_id='chesscom-451104', dialect='standard')
