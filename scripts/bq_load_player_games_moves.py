@@ -6,56 +6,15 @@ import chess.pgn
 import chess.engine
 import io
 import asyncio
+import yaml
 from datetime import datetime
+import platform
 
-# Set up BigQuery client
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../keyfile.json"
-client = bigquery.Client()
-
-# Define the BigQuery dataset and table names
-dataset_id = 'chesscom-451104.staging'
-table_games = f'{dataset_id}.games_infos_*'
-table_games_prefix = 'games_moves_'  # Prefix for wildcard tables
-
-print("step 1")
-
-# Check if at least one table with the prefix "games_moves_" exists
-def table_with_prefix_exists(client, dataset_id, prefix):
+def table_with_prefix_exists(client: bigquery.Client, dataset_id: str, prefix: str) -> bool:
     tables = client.list_tables(dataset_id)  # List all tables in the dataset
     return any(table.table_id.startswith(prefix) for table in tables)
 
-# Check if games_moves_* tables exist
-if table_with_prefix_exists(client, dataset_id, table_games_prefix):
-    # Define SQL query to get games not yet processed using wildcard tables
-    query = f"""
-    SELECT *
-    FROM `{table_games}` game
-    LEFT OUTER JOIN (SELECT DISTINCT game_uuid FROM `{dataset_id}.games_moves_*`) games_moves
-    USING (game_uuid)
-    WHERE games_moves.game_uuid IS NULL
-    """
-else:
-    # If no games_moves_* table exists, select all games
-    query = f"SELECT * FROM `{table_games}`"
-
-print("step 2")
-
-query_test = "SELECT COUNT(*) FROM `chesscom-451104.staging.games_infos_*`"
-games_test = read_gbq(query_test, project_id='chesscom-451104', dialect='standard')
-print(games_test)
-
-# Run the query and load the result into a DataFrame
-games = read_gbq(query, project_id='chesscom-451104', dialect='standard')
-
-print("Query executed successfully!")
-
-# Set the path to Stockfish
-engine_path = "/usr/games/stockfish"
-
-# if __name__ == "__main__" and hasattr(asyncio, 'WindowsProactorEventLoopPolicy'):
-#     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
-
-def analyze_chess_game(game_uuid: str, pgn: str, engine_path: str):
+def analyze_chess_game(game_uuid: str, pgn: str, engine_path: str) -> pd.DataFrame:
     # Load the PGN
     game = chess.pgn.read_game(io.StringIO(pgn))
 
@@ -88,11 +47,8 @@ def analyze_chess_game(game_uuid: str, pgn: str, engine_path: str):
 
     return df
 
-def analyze_multiple_games(games: pd.DataFrame, engine_path: str):
-    # Initialize an empty list to store individual game dataframes
+def analyze_multiple_games(games: pd.DataFrame, engine_path: str) -> pd.DataFrame:
     game_dfs = []
-
-    # Track the number of processed games
     processed_games = 0
 
     # Iterate over each game in the dataframe
@@ -111,29 +67,60 @@ def analyze_multiple_games(games: pd.DataFrame, engine_path: str):
     # Concatenate all dataframes into one
     return pd.concat(game_dfs, ignore_index=True)
 
-print("step 3")
+def get_stockfish_path():
+    if platform.system() == "Windows":
+        if hasattr(asyncio, 'WindowsProactorEventLoopPolicy'):
+            asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+        return "C:/Program Files/ChessEngines/stockfish_16/stockfish-windows-x86-64-avx2.exe"
+    return "/usr/games/stockfish"
 
-# Call the function with the games DataFrame and get the result
-games_moves = analyze_multiple_games(games, engine_path)
+# Open the config file if it exists
+config_path = os.path.join(os.getcwd(), "scripts", "config.yml")
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
 
 # Set up BigQuery client
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../keyfile.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./keyfile.json"
 client = bigquery.Client()
 
-# Define the BigQuery dataset
-dataset_id = 'chesscom-451104.staging'
+# Define the BigQuery dataset and table prefix
+project_id                  = config["bigquery"]["config"]["project_id"]
+dataset_id                  = config["bigquery"]["config"]["dataset_id"]
+table_games_prefix          = config["bigquery"]["tables"]["games_prefix"]
+table_games_moves_prefix    = config["bigquery"]["tables"]["games_moves_prefix"]
 
-print("step 4")
+# Define the BigQuery dataset and table names
+table_games         = f'{dataset_id}.{table_games_prefix}*'
+tables_games_moves  = f'{dataset_id}.{table_games_moves_prefix}*'
+
+if table_with_prefix_exists(client, dataset_id, table_games_moves_prefix):
+    # Define SQL query to get games not yet processed
+    query = f"""
+    SELECT *
+    FROM `{table_games}` game
+    LEFT OUTER JOIN (SELECT DISTINCT game_uuid FROM `{tables_games_moves}`) games_moves
+    USING (game_uuid)
+    WHERE games_moves.game_uuid IS NULL
+    """
+else:
+    # If no games_moves_* table exists, select all games
+    query = f"SELECT * FROM `{table_games}`"
+
+# Run the query and load the result into a DataFrame
+games = read_gbq(query, project_id='chesscom-451104', dialect='standard')
+print("Query to fetch games executed successfully!")
+
+# Calculate all games moves for all games
+engine_path = get_stockfish_path()
+games_moves = analyze_multiple_games(games, engine_path)
 
 # Generate the table name with current date, hour, and minute
 date_suffix = datetime.now().strftime('%Y%m%d_%H%M')
-table_id = f'{dataset_id}.games_moves_{date_suffix}'
+table_id = f'{dataset_id}.{table_games_moves_prefix}{date_suffix}'
 
 if not games_moves.empty:
-    # Load the DataFrame into BigQuery using pandas_gbq
-    to_gbq(games_moves, table_id, project_id='chesscom-451104', if_exists='replace') # DROP & CREATE data load (full)
+    to_gbq(games_moves, table_id, project_id='chesscom-451104', if_exists='replace')
     print(f"Data loaded into BigQuery table: {table_id}")
 else:
     print("The games DataFrame is empty. No data loaded into BigQuery.")
 
-print("step 5")

@@ -16,3 +16,4 @@ bigquery:
     project_id: "chesscom-451104"
   tables:
     games_prefix: "games_infos_"
+    games_moves_prefix: "games_moves_"
