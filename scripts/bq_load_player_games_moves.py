@@ -17,6 +17,8 @@ dataset_id = 'chesscom-451104.staging'
 table_games = f'{dataset_id}.games_infos_*'
 table_games_prefix = 'games_moves_'  # Prefix for wildcard tables
 
+print("step 1")
+
 # Check if at least one table with the prefix "games_moves_" exists
 def table_with_prefix_exists(client, dataset_id, prefix):
     tables = client.list_tables(dataset_id)  # List all tables in the dataset
@@ -35,6 +37,8 @@ if table_with_prefix_exists(client, dataset_id, table_games_prefix):
 else:
     # If no games_moves_* table exists, select all games
     query = f"SELECT * FROM `{table_games}`"
+
+print("step 2")
 
 # Run the query and load the result into a DataFrame
 games = read_gbq(query, project_id='chesscom-451104', dialect='standard')
@@ -103,6 +107,8 @@ def analyze_multiple_games(games: pd.DataFrame, engine_path: str):
     # Concatenate all dataframes into one
     return pd.concat(game_dfs, ignore_index=True)
 
+print("step 3")
+
 # Call the function with the games DataFrame and get the result
 games_moves = analyze_multiple_games(games, engine_path)
 
@@ -112,6 +118,8 @@ client = bigquery.Client()
 
 # Define the BigQuery dataset
 dataset_id = 'chesscom-451104.staging'
+
+print("step 4")
 
 # Generate the table name with current date, hour, and minute
 date_suffix = datetime.now().strftime('%Y%m%d_%H%M')
@@ -126,3 +134,5 @@ if not games_moves.empty:
     print(f"Data loaded into BigQuery table: {table_id}")
 else:
     print("The games DataFrame is empty. No data loaded into BigQuery.")
+
+print("step 5")
