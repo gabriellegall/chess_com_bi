@@ -36,3 +36,6 @@ models:
     reporting:
       +materialized: view
       +schema: reporting
+    datamart:
+      +materialized: view
+      +schema: datamart

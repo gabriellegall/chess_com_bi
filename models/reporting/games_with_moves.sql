@@ -7,6 +7,7 @@ WITH score_defintion AS (
     games.username,
     games.url,
     games.end_time,
+    FORMAT_DATE('%Y-%m', games.end_time) AS end_time_month,
     games.time_class,
     games.white_username,
     games.white_rating,
