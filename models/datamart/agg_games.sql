@@ -1,4 +1,7 @@
-{{ config(materialized='view') }}
+{{ config(
+    materialized='table',
+    pre_hook="DROP TABLE IF EXISTS {{ this }}"
+) }}
 
 SELECT 
     username,
@@ -12,6 +15,7 @@ SELECT
     ANY_VALUE(game_total_nb_blunder) AS game_total_nb_blunder,
     ANY_VALUE(game_total_nb_massive_blunder) AS game_total_nb_massive_blunder,
     ANY_VALUE(game_total_nb_missed_opportunity) AS game_total_nb_missed_opportunity,
-    ANY_VALUE(game_total_nb_throw) AS game_total_nb_throw
+    ANY_VALUE(game_total_nb_throw) AS game_total_nb_throw,
+    STRING_AGG(CAST(massive_blunder_move_number_playing AS STRING), ', ') AS massive_blunder_move_number_playing,
 FROM {{ ref ('games_with_moves') }}
 GROUP BY 1, 2

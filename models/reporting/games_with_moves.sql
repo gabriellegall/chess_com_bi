@@ -1,6 +1,13 @@
 {{ config(materialized='view') }}
 
-WITH score_defintion AS (
+WITH games_scope AS (
+  SELECT
+    *
+  FROM {{ ref ('games') }}
+  WHERE end_time >= {{ var('data_scope')['first_end_date'] }}
+)
+
+, score_defintion AS (
   SELECT 
     games.game_uuid,
     games.archive_url,
@@ -41,7 +48,7 @@ WITH score_defintion AS (
       WHEN playing_as = 'White' THEN win_probability_white
       WHEN playing_as = 'Black' THEN win_probability_black
       ELSE NULL END AS win_probability_playing,
-  FROM {{ ref ('games') }} AS games
+  FROM games_scope AS games
   INNER JOIN {{ ref ('games_moves') }} AS games_moves
     USING (game_uuid)
 )
@@ -125,16 +132,17 @@ WITH score_defintion AS (
   SELECT 
     *,
     CASE  
-      WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Even', 'Disadvantage')   THEN 'Throw'
-      WHEN miss_category_playing IS NOT NULL AND prev_position_status_playing IN ('Advantage')              THEN 'Missed Opportunity' 
-      ELSE NULL END AS  miss_context_playing,
+      WHEN miss_category_playing IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Even', 'Disadvantage')   THEN 'Throw'
+      WHEN miss_category_playing IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Advantage')              THEN 'Missed Opportunity' 
+      ELSE NULL END AS miss_context_playing,
     CASE  
-      WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Even', 'Disadvantage')  THEN 'Throw'
-      WHEN miss_category_opponent IS NOT NULL AND prev_position_status_playing IN ('Advantage')             THEN 'Missed Opportunity' 
-      ELSE NULL END AS  miss_context_opponent
+      WHEN miss_category_opponent IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Even', 'Disadvantage')  THEN 'Throw'
+      WHEN miss_category_opponent IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Advantage')             THEN 'Missed Opportunity' 
+      ELSE NULL END AS miss_context_opponent
   FROM prev_position_definition
 )
 
+, game_level_calculation AS (
 SELECT 
   *,
   COUNTIF(miss_category_playing = 'Massive Blunder') OVER (PARTITION BY game_uuid, username)    AS game_total_nb_massive_blunder,
@@ -142,3 +150,6 @@ SELECT
   COUNTIF(miss_context_playing = 'Throw') OVER (PARTITION BY game_uuid, username)               AS game_total_nb_throw,
   COUNTIF(miss_context_playing = 'Missed Opportunity') OVER (PARTITION BY game_uuid, username)  AS game_total_nb_missed_opportunity,
 FROM context_definition
+)
+
+SELECT * FROM game_level_calculation
