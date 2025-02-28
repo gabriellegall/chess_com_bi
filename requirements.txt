@@ -1,5 +1,5 @@
 dbt-bigquery
-notebook
+# notebook
 python-chess
 stockfish
 google-cloud-bigquery
