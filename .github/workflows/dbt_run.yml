@@ -1,0 +1,22 @@
+name: dbt_run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dbt_run_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout_repository
+        uses: actions/checkout@v3
+
+      - name: write_gcs_credentials
+        run: echo '${{ secrets.GCS_KEYFILE }}' > keyfile.json
+
+      - name: build_and_run_dbt
+        run: |
+          docker build -t dbt-container .
+          docker run --rm \
+            -v ${{ github.workspace }}/keyfile.json:/keyfile.json \
+            dbt-container dbt run
