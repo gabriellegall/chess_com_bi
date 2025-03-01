@@ -4,7 +4,7 @@ WITH games_scope AS (
   SELECT
     *
   FROM {{ ref ('games') }}
-  WHERE end_time >= {{ var('data_scope')['first_end_date'] }}
+  WHERE end_time_date >= {{ var('data_scope')['first_end_date'] }}
 )
 
 , score_defintion AS (
@@ -14,7 +14,8 @@ WITH games_scope AS (
     games.username,
     games.url,
     games.end_time,
-    FORMAT_DATE('%Y-%m', games.end_time) AS end_time_month,
+    games.end_time_date,
+    games.end_time_month,
     games.time_class,
     games.white_username,
     games.white_rating,
@@ -59,6 +60,7 @@ WITH games_scope AS (
     LAG(score_playing) OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC)                      AS prev_score_playing,
     score_playing - LAG(score_playing) OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC)      AS variance_score_playing,
     PERCENTILE_CONT(score_playing, 0.5) OVER (PARTITION BY game_uuid, username, game_phase)                  AS median_score_playing_game_phase,
+    PERCENTILE_CONT(score_playing, 0.5) OVER (PARTITION BY game_uuid, username)                              AS median_score_playing,
     MAX(move_number) OVER (PARTITION BY game_uuid, username)                                                 AS game_total_nb_moves,
   FROM score_defintion
 )

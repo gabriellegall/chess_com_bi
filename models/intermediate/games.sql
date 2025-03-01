@@ -3,8 +3,10 @@
 
 WITH cast_types AS (
     SELECT 
-        * EXCEPT(end_time),
-        DATE(end_time) AS end_time,
+        * EXCEPT (end_time),
+        CAST(end_time AS TIMESTAMP) AS end_time,
+        DATE(end_time) AS end_time_date,
+        FORMAT_DATE('%Y-%m', DATE(end_time)) AS end_time_month,
     FROM {{ source('staging', 'games') }} 
 )
 

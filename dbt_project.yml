@@ -15,8 +15,6 @@ clean-targets:
   - "dbt_packages"
 
 vars:
-  data_scope:
-    first_end_date: "'2024-10-01'"
   game_phases:
     end_early_game_move: 15
     end_mid_game_move: 30
@@ -29,6 +27,10 @@ vars:
     variance_score_mistake: 100
     score_balanced_limit: 300
     even_score_limit: 150
+  data_scope:
+    first_end_date: "'2024-10-01'"
+  datamart:
+    min_games_played: 20
 
 models:
   chess_com_bi:
