@@ -22,10 +22,12 @@ WITH aggregate_fields AS (
         ANY_VALUE(game_total_nb_missed_opportunity) AS game_total_nb_missed_opportunity,
         ANY_VALUE(game_total_nb_throw) AS game_total_nb_throw,
         STRING_AGG(CAST(massive_blunder_move_number_playing AS STRING), ', ') AS massive_blunder_move_number_playing,
-        MAX(score_playing) AS max_score_playing,
-        MIN(score_playing) AS min_score_playing,
-        STDDEV_SAMP(score_playing) AS std_score_playing,
-        MAX(move_number) AS total_move_number,
+        ANY_VALUE(game_max_score_playing) AS game_max_score_playing,
+        ANY_VALUE(game_decisive_advantage) AS game_decisive_advantage,
+        ANY_VALUE(game_min_score_playing) AS game_min_score_playing,
+        ANY_VALUE(game_std_score_playing) AS game_std_score_playing,
+        ANY_VALUE(game_total_move_number) AS game_total_move_number,
+        ANY_VALUE(game_playing_turn_name_first_blunder) AS game_playing_turn_name_first_blunder,
     FROM {{ ref ('games_with_moves') }}
     GROUP BY 1, 2
 )

@@ -30,6 +30,10 @@ WITH games_scope AS (
       ELSE 'Late Game' END as game_phase,
     games_moves.player_color_turn,
     games.playing_as,
+    player_color_turn = playing_as AS is_playing_turn,
+    CASE
+      WHEN player_color_turn = playing_as THEN 'Playing Turn'
+      ELSE 'Opponent Turn' END AS playing_turn_name,
     games.playing_rating, 
     CASE 
       WHEN games.playing_rating < {{ var('elo_range')['low'] }} THEN '0-{{ var('elo_range')['low'] }}'
@@ -68,50 +72,52 @@ WITH games_scope AS (
 , position_definition AS (
   SELECT 
     *,
+    -- Playing
     CASE 
-      WHEN player_color_turn = playing_as 
+      WHEN is_playing_turn 
           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_massive_blunder'] }} 
           AND prev_score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
           AND score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
           THEN 'Massive Blunder'
-      WHEN player_color_turn = playing_as 
+      WHEN is_playing_turn 
           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_blunder'] }} 
           AND prev_score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
           AND score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
           THEN 'Blunder'
-      WHEN player_color_turn = playing_as 
+      WHEN is_playing_turn 
           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_mistake'] }} 
           THEN 'Mistake'
       ELSE NULL END AS miss_category_playing,
     CASE 
-      WHEN player_color_turn = playing_as 
+      WHEN is_playing_turn 
           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_mistake'] }} 
           THEN move_number
       ELSE NULL END AS miss_move_number_playing,
     CASE 
-      WHEN player_color_turn = playing_as 
+      WHEN is_playing_turn 
           AND variance_score_playing <= -{{ var('score_thresholds')['variance_score_massive_blunder'] }} 
           AND prev_score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
           AND score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
           THEN move_number
       ELSE NULL END AS massive_blunder_move_number_playing,
+    -- Opponent
     CASE
-      WHEN player_color_turn <> playing_as 
+      WHEN NOT is_playing_turn 
           AND variance_score_playing >= {{ var('score_thresholds')['variance_score_massive_blunder'] }} 
           AND prev_score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
           AND score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
           THEN 'Massive Blunder'
-      WHEN player_color_turn <> playing_as 
+      WHEN NOT is_playing_turn 
           AND variance_score_playing >= {{ var('score_thresholds')['variance_score_blunder'] }} 
           AND prev_score_playing < {{ var('score_thresholds')['score_balanced_limit'] }} 
           AND score_playing > -{{ var('score_thresholds')['score_balanced_limit'] }} 
           THEN 'Blunder'
-      WHEN player_color_turn <> playing_as 
+      WHEN NOT is_playing_turn 
           AND variance_score_playing >= {{ var('score_thresholds')['variance_score_mistake'] }} 
           THEN 'Mistake'
       ELSE NULL END AS miss_category_opponent,
     CASE 
-      WHEN player_color_turn <> playing_as 
+      WHEN NOT is_playing_turn 
           AND variance_score_playing >= {{ var('score_thresholds')['variance_score_mistake'] }} 
           THEN move_number
       ELSE NULL END AS miss_move_number_opponent,
@@ -140,18 +146,28 @@ WITH games_scope AS (
     CASE  
       WHEN miss_category_opponent IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Even', 'Disadvantage')  THEN 'Throw'
       WHEN miss_category_opponent IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Advantage')             THEN 'Missed Opportunity' 
-      ELSE NULL END AS miss_context_opponent
+      ELSE NULL END AS miss_context_opponent,
   FROM prev_position_definition
 )
 
 , game_level_calculation AS (
-SELECT 
-  *,
-  COUNTIF(miss_category_playing = 'Massive Blunder') OVER (PARTITION BY game_uuid, username)    AS game_total_nb_massive_blunder,
-  COUNTIF(miss_category_playing = 'Blunder') OVER (PARTITION BY game_uuid, username)            AS game_total_nb_blunder,
-  COUNTIF(miss_context_playing = 'Throw') OVER (PARTITION BY game_uuid, username)               AS game_total_nb_throw,
-  COUNTIF(miss_context_playing = 'Missed Opportunity') OVER (PARTITION BY game_uuid, username)  AS game_total_nb_missed_opportunity,
-FROM context_definition
+  SELECT 
+    *,
+    COUNTIF(miss_category_playing = 'Massive Blunder') OVER (PARTITION BY game_uuid, username)                      AS game_total_nb_massive_blunder,
+    COUNTIF(miss_category_playing = 'Blunder') OVER (PARTITION BY game_uuid, username)                              AS game_total_nb_blunder,
+    COUNTIF(miss_context_playing = 'Throw') OVER (PARTITION BY game_uuid, username)                                 AS game_total_nb_throw,
+    COUNTIF(miss_context_playing = 'Missed Opportunity') OVER (PARTITION BY game_uuid, username)                    AS game_total_nb_missed_opportunity,
+    MAX(score_playing) OVER (PARTITION BY game_uuid, username)                                                      AS game_max_score_playing,
+    CASE
+      WHEN MAX(score_playing) OVER (PARTITION BY game_uuid, username) > {{ var('score_thresholds')['should_win_score'] }} THEN 'Decisive advantage' 
+      ELSE 'No decisive advantage' END                                                                              AS game_decisive_advantage,
+    MIN(score_playing) OVER (PARTITION BY game_uuid, username)                                                      AS game_min_score_playing,
+    STDDEV_SAMP(score_playing) OVER (PARTITION BY game_uuid, username)                                              AS game_std_score_playing,
+    MAX(move_number) OVER (PARTITION BY game_uuid, username)                                                        AS game_total_move_number,
+    FIRST_VALUE (
+      CASE WHEN COALESCE(miss_category_playing, miss_category_opponent) = 'Massive Blunder' THEN playing_turn_name ELSE NULL END IGNORE NULLS)
+      OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS game_playing_turn_name_first_blunder,
+  FROM context_definition
 )
 
 SELECT * FROM game_level_calculation
