@@ -151,21 +151,24 @@ WITH games_scope AS (
 , game_level_calculation AS (
   SELECT 
     *,
-    PERCENTILE_CONT(score_playing, 0.5) OVER game_window                                     AS game_median_score_playing,
-    COUNTIF(miss_category_playing = 'Massive Blunder') OVER game_window                      AS game_total_nb_massive_blunder,
-    COUNTIF(miss_category_playing = 'Blunder') OVER game_window                              AS game_total_nb_blunder,
-    COUNTIF(miss_context_playing = 'Throw') OVER game_window                                 AS game_total_nb_throw,
-    COUNTIF(miss_context_playing = 'Missed Opportunity') OVER game_window                    AS game_total_nb_missed_opportunity,
-    MAX(score_playing) OVER game_window                                                      AS game_max_score_playing,
-    CASE
-      WHEN MAX(score_playing) OVER game_window > {{ var('score_thresholds')['should_win_score'] }} THEN 'Decisive advantage' 
-      ELSE 'No decisive advantage' END                                                       AS game_decisive_advantage,
-    MIN(score_playing) OVER game_window                                                      AS game_min_score_playing,
-    STDDEV_SAMP(score_playing) OVER game_window                                              AS game_std_score_playing,
-    MAX(move_number) OVER game_window                                                        AS game_total_move_number,
+    PERCENTILE_CONT(score_playing, 0.5) OVER game_window                                                                          AS game_median_score_playing,
+    COUNTIF(miss_category_playing = 'Massive Blunder') OVER game_window                                                           AS game_total_nb_massive_blunder,
+    CASE    
+      WHEN COUNTIF(miss_category_playing = 'Massive Blunder') OVER game_window > 0 THEN 'Massive Blunder(s)'    
+      ELSE 'No Massive Blunder' END                                                                                               AS game_total_massive_blunder,
+    COUNTIF(miss_category_playing = 'Blunder') OVER game_window                                                                   AS game_total_nb_blunder,
+    COUNTIF(miss_context_playing = 'Throw') OVER game_window                                                                      AS game_total_nb_throw,
+    COUNTIF(miss_context_playing = 'Missed Opportunity') OVER game_window                                                         AS game_total_nb_missed_opportunity,
+    MAX(score_playing) OVER game_window                                                                                           AS game_max_score_playing,
+    CASE    
+      WHEN MAX(score_playing) OVER game_window > {{ var('score_thresholds')['should_win_score'] }} THEN 'Decisive advantage'    
+      ELSE 'No decisive advantage' END                                                                                            AS game_decisive_advantage,
+    MIN(score_playing) OVER game_window                                                                                           AS game_min_score_playing,
+    STDDEV_SAMP(score_playing) OVER game_window                                                                                   AS game_std_score_playing,
+    MAX(move_number) OVER game_window                                                                                             AS game_total_move_number,
     FIRST_VALUE (
       CASE WHEN COALESCE(miss_category_playing, miss_category_opponent) = 'Massive Blunder' THEN playing_turn_name ELSE NULL END IGNORE NULLS)
-      OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS game_playing_turn_name_first_blunder,
+      OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)   AS game_playing_turn_name_first_blunder,
   FROM context_definition
   WINDOW game_window AS (PARTITION BY game_uuid, username)
 )
