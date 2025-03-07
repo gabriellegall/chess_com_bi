@@ -7,6 +7,7 @@ WITH aggregate_fields AS (
     SELECT 
         username,
         game_uuid,
+        -- Dimensions
         ANY_VALUE(url)                                                           AS url,
         ANY_VALUE(end_time)                                                      AS end_time,
         ANY_VALUE(end_time_date)                                                 AS end_time_date,
@@ -16,6 +17,7 @@ WITH aggregate_fields AS (
         ANY_VALUE(playing_as)                                                    AS playing_as,
         ANY_VALUE(playing_result)                                                AS playing_result,
         ANY_VALUE(time_class)                                                    AS time_class,
+        -- Measures
         ANY_VALUE(game_median_score_playing)                                     AS game_median_score_playing,
         ANY_VALUE(game_total_nb_blunder)                                         AS game_total_nb_blunder,
         ANY_VALUE(game_total_nb_massive_blunder)                                 AS game_total_nb_massive_blunder,     

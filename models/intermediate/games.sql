@@ -42,9 +42,9 @@ WITH cast_types AS (
     SELECT 
         *,
         CASE    
-            WHEN playing_result_detailed IN ('checkmated', 'resigned', 'abandoned', 'timeout')                           THEN 'Lose'
-            WHEN playing_result_detailed IN ('win')                                                                      THEN 'Win'
-            WHEN playing_result_detailed IN ('stalemate', 'repetition', 'agreed', 'timevsinsufficient', 'insufficient')  THEN 'Draw'
+            WHEN playing_result_detailed IN ('checkmated', 'resigned', 'abandoned', 'timeout')                                      THEN 'Lose'
+            WHEN playing_result_detailed IN ('win')                                                                                 THEN 'Win'
+            WHEN playing_result_detailed IN ('stalemate', 'repetition', 'agreed', 'timevsinsufficient', 'insufficient', '50move')   THEN 'Draw'
             ELSE NULL END AS playing_result
     FROM define_result
 )
