@@ -17,7 +17,7 @@ WITH username_info AS (
     COUNT(*)                             AS nb_games,
   FROM {{ ref ('agg_games_phases') }}
   WHERE playing_rating_range = opponent_rating_range
-    AND end_time_date >= CURRENT_DATE - INTERVAL 1 MONTH
+    AND end_time_date >= CURRENT_DATE - INTERVAL 3 MONTH
   GROUP BY ALL
   HAVING COUNT(*) > 20
 )
