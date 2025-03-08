@@ -156,7 +156,7 @@ WITH games_scope AS (
     CASE    
       WHEN COUNTIF(miss_category_playing = 'Massive Blunder') OVER game_window > 0 THEN 'Massive Blunder(s)'    
       ELSE 'No Massive Blunder' END                                                                                               AS game_total_massive_blunder,
-    COUNTIF(miss_category_playing = 'Blunder') OVER game_window                                                                   AS game_total_nb_blunder,
+    COUNTIF(miss_category_playing IN ('Blunder', 'Massive Blunder')) OVER game_window                                             AS game_total_nb_blunder,
     COUNTIF(miss_context_playing = 'Throw') OVER game_window                                                                      AS game_total_nb_throw,
     COUNTIF(miss_context_playing = 'Missed Opportunity') OVER game_window                                                         AS game_total_nb_missed_opportunity,
     MAX(score_playing) OVER game_window                                                                                           AS game_max_score_playing,
