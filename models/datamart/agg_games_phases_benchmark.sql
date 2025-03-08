@@ -1,4 +1,5 @@
 {{ config(
+    enabled=False,
     materialized='table',
     pre_hook="DROP TABLE IF EXISTS {{ this }}"
 ) }}

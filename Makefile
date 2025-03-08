@@ -1,7 +1,3 @@
-docker_start:
-	docker build -t chess_com_bi .
-	docker run --name chess-com-container -it chess_com_bi /bin/bash
-
-docker_end:
-	docker stop chess-com-container
-	docker rm chess-com-container
+docker_backup_metabase:
+	docker stop metabase
+	docker cp metabase:/metabase.db C:\Users\User\chess_com_bi\metabase.db
