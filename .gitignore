@@ -4,5 +4,4 @@ logs/
 venv/
 keyfile.json
 metabase.db
-metabase-glg-keypair.pem
 notes.txt
