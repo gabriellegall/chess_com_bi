@@ -9,6 +9,14 @@ WITH aggregate_fields AS (
         username,
         game_uuid,
         game_phase,
+        CASE 
+            WHEN GROUPING(game_phase) = 1 THEN 'Recent Games'
+            ELSE game_phase
+            END AS game_phase_key,
+        CASE 
+            WHEN GROUPING(game_phase) = 1 THEN 'Games'
+            ELSE 'Game Phases'
+            END AS aggregation_level,
         -- Dimensions
         ANY_VALUE(url)                                                      AS url,
         ANY_VALUE(end_time)                                                 AS end_time,
@@ -28,7 +36,10 @@ WITH aggregate_fields AS (
         COUNTIF(miss_context_playing = 'Missed Opportunity')                AS nb_missed_opportunity_playing,
         ANY_VALUE(median_score_playing_game_phase)                          AS median_score_playing,
     FROM {{ ref ('games_with_moves') }}
-    GROUP BY 1, 2, 3
+    GROUP BY GROUPING SETS (
+        (1, 2, 3),
+        (1, 2)
+        )
 )
 
 SELECT * FROM aggregate_fields

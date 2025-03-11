@@ -9,7 +9,8 @@ WITH username_info AS (
     username,
     time_class,
     playing_rating_range,
-    game_phase,
+    game_phase_key,
+    aggregation_level,
     COUNTIF(nb_blunder_playing > 0) / COUNT(*)              AS rate_nb_blunder_playing,
     COUNTIF(nb_massive_blunder_playing > 0) / COUNT(*)      AS rate_nb_massive_blunder_playing,
     COUNTIF(nb_throw_playing > 0) / COUNT(*)                AS rate_nb_throw_playing,
@@ -26,9 +27,10 @@ WITH username_info AS (
 
 SELECT 
   u.username,
-  u.game_phase,
+  u.game_phase_key,
   u.time_class,
   u.playing_rating_range,
+  u.aggregation_level,
   -- Playing metrics
   ANY_VALUE(u.rate_nb_blunder_playing)                      AS rate_nb_blunder_playing,
   ANY_VALUE(u.rate_nb_massive_blunder_playing)              AS rate_nb_massive_blunder_playing,
@@ -46,9 +48,9 @@ SELECT
 FROM username_info u
 LEFT OUTER JOIN {{ ref ('agg_games_phases') }} gp 
   ON gp.username <> u.username
-  AND gp.game_phase = u.game_phase
+  AND gp.game_phase_key = u.game_phase_key
   AND gp.time_class = u.time_class
   AND gp.playing_rating_range = u.playing_rating_range
 WHERE gp.playing_rating_range = gp.opponent_rating_range -- ensure that the level of both players is relevant
-GROUP BY 1, 2, 3, 4
+GROUP BY ALL
 HAVING COUNT(*) > {{ var('datamart')['min_games_played'] }} -- ensure that enough observations are captured
