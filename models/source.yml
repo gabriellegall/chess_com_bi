@@ -6,5 +6,57 @@ sources:
     tables:
       - name: games
         identifier: "games_infos_*"
+        description: "chess.com raw data extracted from the API"
+        columns:
+          - name: archive_url
+            description: "Partition queried via the API to fetch the games. Contains the month and the username"
+          - name: username
+            description: "Username of the player queried via the API to fetch the games"
+          - name: bq_load_date
+            description: "Date when the game was loaded into BigQuery"
+          - name: url
+            description: "Direct URL to the game in chess.com"
+          - name: pgn
+            description: "PGN (Portable Game Notation) of the game. Contains all the moves in a raw format"
+          - name: time_control
+            description: "Time control settings of the game (e.g. 300+5, 180+2, etc.)"
+          - name: end_time_integer
+            description: "End time of the game in integer (raw) format"
+          - name: end_time
+            description: "End time of the game"
+          - name: rated
+            description: "Boolean flag indicating whether the game was rated"
+          - name: tcn
+            description: "TCN encoding of the game"
+          - name: game_uuid
+            description: "Unique identifier for the game"
+          - name: initial_setup
+            description: "Initial setup of the chessboard"
+          - name: fen
+            description: "FEN (Forsyth-Edwards Notation) string of the game"
+          - name: time_class
+            description: "Time class of the game (e.g., bullet, blitz, rapid)"
+          - name: rules
+            description: "Ruleset used in the game (e.g., chess, chess960, etc.)"
+          - name: white_username
+            description: "Username of the white player"
+          - name: white_rating
+            description: "ELO rating of the white player"
+          - name: white_result
+            description: "Result from the perspective of the white player"
+          - name: white_id
+            description: "API unique identifier for the white player"
+          - name: white_uuid
+            description: "UUID for the white player"
+          - name: black_username
+            description: "Username of the black player"
+          - name: black_rating
+            description: "Rating of the black player"
+          - name: black_result
+            description: "Result from the perspective of the black player"
+          - name: black_id
+            description: "API unique identifier for the black player"
+          - name: black_uuid
+            description: "UUID for the black player"
       - name: games_moves
         identifier: "games_moves_*"
