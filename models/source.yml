@@ -19,7 +19,7 @@ sources:
           - name: pgn
             description: "PGN (Portable Game Notation) of the game. Contains all the moves in a raw format"
           - name: time_control
-            description: "Time control settings of the game (e.g. 300+5, 180+2, etc.)"
+            description: "PGN-compliant time control of the game (e.g. 300+5, 180+2, etc.)"
           - name: end_time_integer
             description: "End time of the game in integer (raw) format"
           - name: end_time
@@ -37,25 +37,25 @@ sources:
           - name: time_class
             description: "Time class of the game (e.g., bullet, blitz, rapid)"
           - name: rules
-            description: "Ruleset used in the game (e.g., chess, chess960, etc.)"
+            description: "Game variant information (e.g., "chess960")"
           - name: white_username
             description: "Username of the white player"
           - name: white_rating
-            description: "ELO rating of the white player"
+            description: "ELO rating of the white player after the game has finished"
           - name: white_result
             description: "Result from the perspective of the white player"
           - name: white_id
-            description: "API unique identifier for the white player"
+            description: "URL of the white player's profile"
           - name: white_uuid
             description: "UUID for the white player"
           - name: black_username
             description: "Username of the black player"
           - name: black_rating
-            description: "ELO rating of the black player"
+            description: "ELO rating of the black player after the game has finished"
           - name: black_result
             description: "Result from the perspective of the black player"
           - name: black_id
-            description: "API unique identifier for the black player"
+            description: "URL of the black player's profile"
           - name: black_uuid
             description: "UUID for the black player"
       - name: games_moves
