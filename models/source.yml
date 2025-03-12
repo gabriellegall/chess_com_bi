@@ -51,7 +51,7 @@ sources:
           - name: black_username
             description: "Username of the black player"
           - name: black_rating
-            description: "Rating of the black player"
+            description: "ELO rating of the black player"
           - name: black_result
             description: "Result from the perspective of the black player"
           - name: black_id
