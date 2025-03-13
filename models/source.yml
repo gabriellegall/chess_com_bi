@@ -9,64 +9,64 @@ sources:
         description: "chess.com raw data extracted from the API"
         columns:
           - name: archive_url
-            description: "Partition queried via the API to fetch the games. Contains the month and the username"
+            description: "{{ doc('archive_url') }}"
           - name: username
-            description: "Username of the player queried via the API to fetch the games"
+            description: "{{ doc('username') }}"
           - name: bq_load_date
-            description: "Date when the game was loaded into BigQuery"
+            description: "{{ doc('bq_load_date') }}"
           - name: url
-            description: "Direct URL to the game in chess.com"
+            description: "{{ doc('url') }}"
           - name: pgn
-            description: "PGN (Portable Game Notation) of the game. Contains all the moves in a raw format"
+            description: "{{ doc('pgn') }}"
           - name: time_control
-            description: "PGN-compliant time control of the game (e.g. 300+5, 180+2, etc.)"
+            description: "{{ doc('time_control') }}"
           - name: end_time_integer
-            description: "End time of the game in integer (raw) format"
+            description: "{{ doc('end_time_integer') }}"
           - name: end_time
-            description: "End time of the game"
+            description: "{{ doc('end_time') }}"
           - name: rated
-            description: "Boolean flag indicating whether the game was rated"
+            description: "{{ doc('rated') }}"
           - name: tcn
-            description: "TCN encoding of the game"
+            description: "{{ doc('tcn') }}"
           - name: game_uuid
-            description: "Unique identifier for the game"
+            description: "{{ doc('game_uuid') }}"
           - name: initial_setup
-            description: "Initial setup of the chessboard"
+            description: "{{ doc('initial_setup') }}"
           - name: fen
-            description: "FEN (Forsyth-Edwards Notation) string of the game"
+            description: "{{ doc('fen') }}"
           - name: time_class
-            description: "Time class of the game (e.g., bullet, blitz, rapid)"
+            description: "{{ doc('time_class') }}"
           - name: rules
-            description: "Game variant information (e.g. chess960)"
+            description: "{{ doc('rules') }}"
           - name: white_username
-            description: "Username of the white player"
+            description: "{{ doc('white_username') }}"
           - name: white_rating
-            description: "ELO rating of the white player after the game has finished"
+            description: "{{ doc('white_rating') }}"
           - name: white_result
-            description: "Result from the perspective of the white player"
+            description: "{{ doc('white_result') }}"
           - name: white_id
-            description: "URL of the white player's profile"
+            description: "{{ doc('white_id') }}"
           - name: white_uuid
-            description: "UUID for the white player"
+            description: "{{ doc('white_uuid') }}"
           - name: black_username
-            description: "Username of the black player"
+            description: "{{ doc('black_username') }}"
           - name: black_rating
-            description: "ELO rating of the black player after the game has finished"
+            description: "{{ doc('black_rating') }}"
           - name: black_result
-            description: "Result from the perspective of the black player"
+            description: "{{ doc('black_result') }}"
           - name: black_id
-            description: "URL of the black player's profile"
+            description: "{{ doc('black_id') }}"
           - name: black_uuid
-            description: "UUID for the black player"
+            description: "{{ doc('black_uuid') }}"
       - name: games_moves
         description: "individual game moves evaluated using the Stockfish engine"
         columns:
           - name: game_uuid
-            description: "Unique identifier for the game"
+            description: "{{ doc('game_uuid') }}"
           - name: move_number
-            description: "Sequential move number starting from 1"
+            description: "{{ doc('move_number') }}"
           - name: moves
-            description: "Move played"
+            description: "{{ doc('moves') }}"
           - name: scores_white
-            description: "Stockfish evaluation of the position (after the move has been played), from the perspective of white. When >0 white has advantage, when <0 black has advantage"
+            description: "{{ doc('scores_white') }}"
         identifier: "games_moves_*"
