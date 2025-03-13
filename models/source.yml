@@ -65,8 +65,8 @@ sources:
             description: "{{ doc('game_uuid') }}"
           - name: move_number
             description: "{{ doc('move_number') }}"
-          - name: moves
-            description: "{{ doc('moves') }}"
-          - name: scores_white
-            description: "{{ doc('scores_white') }}"
+          - name: move
+            description: "{{ doc('move') }}"
+          - name: score_white
+            description: "{{ doc('score_white') }}"
         identifier: "games_moves_*"

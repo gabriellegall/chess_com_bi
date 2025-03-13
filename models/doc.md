@@ -100,16 +100,64 @@ URL of the black player's profile.
 UUID for the black player.
 {% enddocs %}
 
-# Game moves
+# Games moves
 
 {% docs move_number %}
 Sequential move number starting from 1.
 {% enddocs %}
 
-{% docs moves %}
+{% docs move %}
 Move played.
 {% enddocs %}
 
-{% docs scores_white %}
-Stockfish evaluation of the position (after the move has been played), from the perspective of white. When >0 white has an advantage, when <0 black has an advantage.
+{% docs score_white %}
+Stockfish evaluation (in centipawns) of the position (after the move has been played), from the perspective of white. When >0 white has an advantage, when <0 black has an advantage.
+{% enddocs %}
+
+# Processed - Games
+
+{% docs end_time_date %}
+End time field casted as DATE.
+{% enddocs %}
+
+{% docs end_time_month %}
+End time field casted as STRING YYYY-MM.
+{% enddocs %}
+
+{% docs playing_as %}
+Color that the username is playing in the game.
+{% enddocs %}
+
+{% docs playing_result_detailed %}
+Game result field, from the perspective of the username playing.
+{% enddocs %}
+
+{% docs playing_rating %}
+ELO rating of the username playing.
+{% enddocs %}
+
+{% docs opponent_rating %}
+ELO rating of the opponent of username.
+{% enddocs %}
+
+{% docs playing_result %}
+Simplified result of the game, from the perspective of the username playing.
+{% enddocs %}
+
+# Processed - Games moves
+
+{% docs player_color_turn %}
+Color of the player who played the move, derived from the move number : white's turn on odd numbers, black's turn on even numbers.
+{% enddocs %}
+
+{% docs score_black %}
+Score of the black player calculated by Stockfish, derived as the opposite of white's score.
+{% enddocs %}
+
+{% docs win_probability_white %}
+Translation of the white score into a win probability, derived using the sigmoid function, converts the Stockfish evaluation into a probability between 0 and 1.
+{% enddocs %}
+
+{% docs win_probability_black %}
+Translation of the black score into a win probability, derived using the sigmoid function, converts the Stockfish evaluation into a probability between 0 and 1.
 {% enddocs %}

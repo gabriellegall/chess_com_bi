@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: games
+    description: "Games data with few calculated fields that can be directly derived w/o any join"
+    columns:
+      - name: archive_url
+        description: "{{ doc('archive_url') }}"
+      - name: username
+        description: "{{ doc('username') }}"
+      - name: bq_load_date
+        description: "{{ doc('bq_load_date') }}"
+      - name: url
+        description: "{{ doc('url') }}"
+      - name: pgn
+        description: "{{ doc('pgn') }}"
+      - name: time_control
+        description: "{{ doc('time_control') }}"
+      - name: end_time_integer
+        description: "{{ doc('end_time_integer') }}"
+      - name: end_time
+        description: "{{ doc('end_time') }}"
+      - name: rated
+        description: "{{ doc('rated') }}"
+      - name: tcn
+        description: "{{ doc('tcn') }}"
+      - name: game_uuid
+        description: "{{ doc('game_uuid') }}"
+      - name: initial_setup
+        description: "{{ doc('initial_setup') }}"
+      - name: fen
+        description: "{{ doc('fen') }}"
+      - name: time_class
+        description: "{{ doc('time_class') }}"
+      - name: rules
+        description: "{{ doc('rules') }}"
+      - name: white_username
+        description: "{{ doc('white_username') }}"
+      - name: white_rating
+        description: "{{ doc('white_rating') }}"
+      - name: white_result
+        description: "{{ doc('white_result') }}"
+      - name: white_id
+        description: "{{ doc('white_id') }}"
+      - name: white_uuid
+        description: "{{ doc('white_uuid') }}"
+      - name: black_username
+        description: "{{ doc('black_username') }}"
+      - name: black_rating
+        description: "{{ doc('black_rating') }}"
+      - name: black_result
+        description: "{{ doc('black_result') }}"
+      - name: black_id
+        description: "{{ doc('black_id') }}"
+      - name: black_uuid
+        description: "{{ doc('black_uuid') }}"
+      - name: end_time_date
+        description: "{{ doc('end_time_date') }}"
+      - name: end_time_month
+        description: "{{ doc('end_time_month') }}"
+      - name: playing_as
+        description: "{{ doc('playing_as') }}"
+      - name: playing_result_detailed
+        description: "{{ doc('playing_result_detailed') }}"
+      - name: playing_rating
+        description: "{{ doc('playing_rating') }}"
+      - name: opponent_rating
+        description: "{{ doc('opponent_rating') }}"
+      - name: playing_result
+        description: "{{ doc('playing_result') }}"
