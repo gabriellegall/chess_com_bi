@@ -37,7 +37,7 @@ sources:
           - name: time_class
             description: "Time class of the game (e.g., bullet, blitz, rapid)"
           - name: rules
-            description: "Game variant information (e.g., "chess960")"
+            description: "Game variant information (e.g. chess960)"
           - name: white_username
             description: "Username of the white player"
           - name: white_rating
