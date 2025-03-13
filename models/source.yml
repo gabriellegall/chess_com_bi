@@ -59,4 +59,14 @@ sources:
           - name: black_uuid
             description: "UUID for the black player"
       - name: games_moves
+        description: "individual game moves evaluated using the Stockfish engine"
+        columns:
+          - name: game_uuid
+            description: "Unique identifier for the game"
+          - name: move_number
+            description: "Sequential move number starting from 1"
+          - name: moves
+            description: "Move played"
+          - name: scores_white
+            description: "Stockfish evaluation of the position (after the move has been played), from the perspective of white. When >0 white has advantage, when <0 black has advantage"
         identifier: "games_moves_*"
