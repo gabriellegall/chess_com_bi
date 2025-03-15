@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: recent_games_moves
+    description: "Subset of the games with moves, filtered on recent games and specific turns only"
+    columns:
+      - name: username
+        description: "{{ doc('username') }}"
+      - name: time_class
+        description: "{{ doc('time_class') }}"
+      - name: playing_result
+        description: "{{ doc('playing_result') }}"
+      - name: score_playing
+        description: "{{ doc('score_playing') }}"
+      - name: opponent_rating_range
+        description: "{{ doc('opponent_rating_range') }}"
+      - name: url
+        description: "{{ doc('url') }}"
+      - name: move_number
+        description: "{{ doc('move_number') }}"
+      - name: end_time
+        description: "{{ doc('end_time') }}"
+      - name: playing_as
+        description: "{{ doc('playing_as') }}"
