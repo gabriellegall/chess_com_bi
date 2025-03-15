@@ -161,3 +161,129 @@ Translation of the white score into a win probability, derived using the sigmoid
 {% docs win_probability_black %}
 Translation of the black score into a win probability, derived using the sigmoid function, converts the Stockfish evaluation into a probability between 0 and 1.
 {% enddocs %}
+
+# Games with moves
+
+{% docs game_phase %}
+Game phase determined by the move number.
+{% enddocs %}
+
+{% docs is_playing_turn %}
+Indicates if it is the username's turn (`player_color_turn = playing_as`).
+{% enddocs %}
+
+{% docs playing_turn_name %}
+Describes the player's turn: 'Opponent' if the opponent has played, 'Playing' if username has played.
+{% enddocs %}
+
+{% docs playing_rating_range %}
+ELO range based on the username's rating.
+{% enddocs %}
+
+{% docs opponent_rating_range %}
+ELO range based on the opponent's rating.
+{% enddocs %}
+
+{% docs score_playing %}
+Score defined from the perspective of username. This normalized field is used in all subsequent calculations whenever the notion of score is used. 
+{% enddocs %}
+
+{% docs win_probability_playing %}
+Win probability defined from the perspective of username. 
+{% enddocs %}
+
+{% docs prev_score_playing %}
+Score in the previous turn.
+{% enddocs %}
+
+{% docs variance_score_playing %}
+Variance in the score between the previous and the current turn.
+{% enddocs %}
+
+{% docs median_score_playing_game_phase %}
+Median score for the current game phase. 
+{% enddocs %}
+
+{% docs miss_category_playing %}
+If the move is an inaccuracy (from the perspective of username), classification of the type of miss is as follows : 'Mistake' < 'Blunder' < 'Massive Blunder'
+{% enddocs %}
+
+{% docs miss_move_number_playing %}
+Move number associated with any of the username's miss.
+{% enddocs %}
+
+{% docs massive_blunder_move_number_playing %}
+Move number associated with any of the username's massive blunder.
+{% enddocs %}
+
+{% docs miss_category_opponent %}
+If the move is an inaccuracy (from the perspective of the opponent), classification of the type of miss is as follows : 'Mistake' < 'Blunder' < 'Massive Blunder'
+{% enddocs %}
+
+{% docs miss_move_number_opponent %}
+Move number associated with the opponent's miss.
+{% enddocs %}
+
+{% docs position_status_playing %}
+Current positional status for the player.
+{% enddocs %}
+
+{% docs prev_position_status_playing %}
+Previous positional status for the player.
+{% enddocs %}
+
+{% docs miss_context_playing %}
+Context of the player's miss (e.g., critical phase).
+{% enddocs %}
+
+{% docs miss_context_opponent %}
+Context of the opponent's miss.
+{% enddocs %}
+
+{% docs game_median_score_playing %}
+Median score for the player across the game.
+{% enddocs %}
+
+{% docs game_total_nb_massive_blunder %}
+Total number of massive blunders in the game.
+{% enddocs %}
+
+{% docs game_total_massive_blunder %}
+Details about massive blunders in the game.
+{% enddocs %}
+
+{% docs game_total_nb_blunder %}
+Total number of blunders in the game.
+{% enddocs %}
+
+{% docs game_total_nb_throw %}
+Total number of throw moves in the game.
+{% enddocs %}
+
+{% docs game_total_nb_missed_opportunity %}
+Total number of missed opportunities in the game.
+{% enddocs %}
+
+{% docs game_max_score_playing %}
+Maximum score achieved by the player in the game.
+{% enddocs %}
+
+{% docs game_decisive_advantage %}
+Indicates if the player had a decisive advantage in the game.
+{% enddocs %}
+
+{% docs game_min_score_playing %}
+Minimum score achieved by the player in the game.
+{% enddocs %}
+
+{% docs game_std_score_playing %}
+Standard deviation of the player's score in the game.
+{% enddocs %}
+
+{% docs game_total_move_number %}
+Total number of moves in the game.
+{% enddocs %}
+
+{% docs game_playing_turn_name_first_blunder %}
+Player who made the first blunder in the game.
+{% enddocs %}

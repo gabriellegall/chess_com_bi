@@ -1,0 +1,130 @@
+version: 2
+
+models:
+  - name: games_with_moves
+    description: "Games and games moves joined together, making it possible to calculate score variations, blunders, ELO ranges, game phases, etc."
+    columns:
+      - name: game_uuid
+        description: "{{ doc('game_uuid') }}"
+      - name: archive_url
+        description: "{{ doc('archive_url') }}"
+      - name: username
+        description: "{{ doc('username') }}"
+      - name: url
+        description: "{{ doc('url') }}"
+      - name: end_time
+        description: "{{ doc('end_time') }}"
+      - name: end_time_date
+        description: "{{ doc('end_time_date') }}"
+      - name: end_time_month
+        description: "{{ doc('end_time_month') }}"
+      - name: time_class
+        description: "{{ doc('time_class') }}"
+      - name: white_username
+        description: "{{ doc('white_username') }}"
+      - name: white_rating
+        description: "{{ doc('white_rating') }}"
+      - name: black_username
+        description: "{{ doc('black_username') }}"
+      - name: black_rating
+        description: "{{ doc('black_rating') }}"
+      - name: bq_load_date
+        description: "{{ doc('bq_load_date') }}"
+      - name: move_number
+        description: "{{ doc('move_number') }}"
+      - name: move
+        description: "{{ doc('move') }}"
+      - name: game_phase
+        description: "{{ doc('game_phase') }}"
+      - name: player_color_turn
+        description: "{{ doc('player_color_turn') }}"
+      - name: playing_as
+        description: "{{ doc('playing_as') }}"
+      - name: is_playing_turn
+        description: "{{ doc('is_playing_turn') }}"
+      - name: playing_turn_name
+        description: "{{ doc('playing_turn_name') }}"
+      - name: playing_rating
+        description: "{{ doc('playing_rating') }}"
+      - name: playing_rating_range
+        description: "{{ doc('playing_rating_range') }}"
+      - name: opponent_rating
+        description: "{{ doc('opponent_rating') }}"
+      - name: opponent_rating_range
+        description: "{{ doc('opponent_rating_range') }}"
+      - name: playing_result
+        description: "{{ doc('playing_result') }}"
+      - name: score_playing
+        description: "{{ doc('score_playing') }}"
+      - name: win_probability_playing
+        description: "{{ doc('win_probability_playing') }}"
+      - name: prev_score_playing
+        description: "{{ doc('prev_score_playing') }}"
+      - name: variance_score_playing
+        description: "{{ doc('variance_score_playing') }}"
+      - name: median_score_playing_game_phase
+        description: "{{ doc('median_score_playing_game_phase') }}"
+      - name: miss_category_playing
+        description: "
+          {{ doc('miss_category_playing') }}.
+          A 'Massive Blunder' is any score variance decrease beyond {{ var('score_thresholds')['variance_score_massive_blunder'] }}.
+          A 'Blunder' is any score variance decrease between {{ var('score_thresholds')['variance_score_blunder'] }} and {{ var('score_thresholds')['variance_score_massive_blunder'] }}.
+          A 'Mistake' is any score variance decrease between {{ var('score_thresholds')['variance_score_mistake'] }} and {{ var('score_thresholds')['variance_score_blunder'] }}.
+          Remark:
+            miss_category for 'Massive Blunder' and 'Blunder' are defined only if they respect two conditions
+            (1) the previous disadvantage does not exceed -{{ var('score_thresholds')['score_balanced_limit'] }}, and 
+            (2) the resulting position is below +{{ var('score_thresholds')['score_balanced_limit'] }}.
+          Otherwise, it means the situation was already massively imbalanced or remains favorable.
+          "
+      - name: miss_move_number_playing
+        description: "{{ doc('miss_move_number_playing') }}"
+      - name: massive_blunder_move_number_playing
+        description: "{{ doc('massive_blunder_move_number_playing') }}"
+      - name: miss_category_opponent
+        description: "
+          {{ doc('miss_category_opponent') }}.
+          A 'Massive Blunder' is any score variance decrease beyond {{ var('score_thresholds')['variance_score_massive_blunder'] }}.
+          A 'Blunder' is any score variance decrease between {{ var('score_thresholds')['variance_score_blunder'] }} and {{ var('score_thresholds')['variance_score_massive_blunder'] }}.
+          A 'Mistake' is any score variance decrease between {{ var('score_thresholds')['variance_score_mistake'] }} and {{ var('score_thresholds')['variance_score_blunder'] }}.
+          Remark:
+            miss_category for 'Massive Blunder' and 'Blunder' are defined only if they respect two conditions
+            (1) the previous disadvantage does not exceed -{{ var('score_thresholds')['score_balanced_limit'] }}, and 
+            (2) the resulting position is below +{{ var('score_thresholds')['score_balanced_limit'] }}.
+          Otherwise, it means the situation was already massively imbalanced or remains favorable.
+          "
+      - name: miss_move_number_opponent
+        description: "{{ doc('miss_move_number_opponent') }}"
+
+      # TO DO:
+      - name: position_status_playing
+        description: "{{ doc('position_status_playing') }}"
+      - name: prev_position_status_playing
+        description: "{{ doc('prev_position_status_playing') }}"
+      - name: miss_context_playing
+        description: "{{ doc('miss_context_playing') }}"
+      - name: miss_context_opponent
+        description: "{{ doc('miss_context_opponent') }}"
+      - name: game_median_score_playing
+        description: "{{ doc('game_median_score_playing') }}"
+      - name: game_total_nb_massive_blunder
+        description: "{{ doc('game_total_nb_massive_blunder') }}"
+      - name: game_total_massive_blunder
+        description: "{{ doc('game_total_massive_blunder') }}"
+      - name: game_total_nb_blunder
+        description: "{{ doc('game_total_nb_blunder') }}"
+      - name: game_total_nb_throw
+        description: "{{ doc('game_total_nb_throw') }}"
+      - name: game_total_nb_missed_opportunity
+        description: "{{ doc('game_total_nb_missed_opportunity') }}"
+      - name: game_max_score_playing
+        description: "{{ doc('game_max_score_playing') }}"
+      - name: game_decisive_advantage
+        description: "{{ doc('game_decisive_advantage') }}"
+      - name: game_min_score_playing
+        description: "{{ doc('game_min_score_playing') }}"
+      - name: game_std_score_playing
+        description: "{{ doc('game_std_score_playing') }}"
+      - name: game_total_move_number
+        description: "{{ doc('game_total_move_number') }}"
+      - name: game_playing_turn_name_first_blunder
+        description: "{{ doc('game_playing_turn_name_first_blunder') }}"
