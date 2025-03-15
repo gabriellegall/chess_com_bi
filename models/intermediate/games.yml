@@ -60,8 +60,12 @@ models:
         description: "{{ doc('end_time_month') }}"
       - name: playing_as
         description: "{{ doc('playing_as') }}"
+        tests:
+          - not_null
       - name: playing_result_detailed
         description: "{{ doc('playing_result_detailed') }}"
+        tests:
+          - not_null
       - name: playing_rating
         description: "{{ doc('playing_rating') }}"
       - name: opponent_rating
