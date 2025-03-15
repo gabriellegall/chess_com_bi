@@ -201,7 +201,7 @@ Variance in the score between the previous and the current turn.
 {% enddocs %}
 
 {% docs median_score_playing_game_phase %}
-Median score for the current game phase. 
+Window calculation repeating the median score from the username's perspective at the game_phase level.
 {% enddocs %}
 
 {% docs miss_category_playing %}
@@ -209,7 +209,7 @@ If the move is an inaccuracy (from the perspective of username), classification 
 {% enddocs %}
 
 {% docs miss_move_number_playing %}
-Move number associated with any of the username's miss.
+Move number associated with any of the username's inaccuracy.
 {% enddocs %}
 
 {% docs massive_blunder_move_number_playing %}
@@ -221,69 +221,73 @@ If the move is an inaccuracy (from the perspective of the opponent), classificat
 {% enddocs %}
 
 {% docs miss_move_number_opponent %}
-Move number associated with the opponent's miss.
+Move number associated with the opponent's inaccuracy.
 {% enddocs %}
 
 {% docs position_status_playing %}
-Current positional status for the player.
+Description of the current score advantage/disadvantage, from the perspective of the username.
 {% enddocs %}
 
 {% docs prev_position_status_playing %}
-Previous positional status for the player.
+Position status on the previous turn, from the perspective of the username.
 {% enddocs %}
 
 {% docs miss_context_playing %}
-Context of the player's miss (e.g., critical phase).
+Defines if the blunder or massive blunder (from the username's perspective) is made in the context of a 'Throw' or a 'Missed Opportunity'.
+A 'Throw' occurs when the previous situation was even or already disadvantageous (for the player username).
+A 'Missed Opportunity' occurs when the previous situation was advantageous (for the player username).
 {% enddocs %}
 
 {% docs miss_context_opponent %}
-Context of the opponent's miss.
+Defines if the blunder or massive blunder (from the opponent's perspective) is made in the context of a 'Throw' or a 'Missed Opportunity'.
+A 'Throw' occurs when the previous situation was even or already disadvantageous (for the opponent player).
+A 'Missed Opportunity' occurs when the previous situation was advantageous (for the opponent player).
 {% enddocs %}
 
 {% docs game_median_score_playing %}
-Median score for the player across the game.
+Window calculation repeating the median score from the username's perspective at the game_uuid level.
 {% enddocs %}
 
 {% docs game_total_nb_massive_blunder %}
-Total number of massive blunders in the game.
+Window calculation repeating the number of `miss_category_opponent = 'Massive Blunder'` at the game_uuid level.
 {% enddocs %}
 
 {% docs game_total_massive_blunder %}
-Details about massive blunders in the game.
+Window calculation at the game_uuid level to check if it contains at least one `miss_category_opponent = 'Massive Blunder'`.
 {% enddocs %}
 
 {% docs game_total_nb_blunder %}
-Total number of blunders in the game.
+Window calculation repeating the number of `miss_category_opponent = 'Blunder'` at the game_uuid level.
 {% enddocs %}
 
 {% docs game_total_nb_throw %}
-Total number of throw moves in the game.
+Window calculation repeating the number of `miss_context_playing = 'Throw'` at the game_uuid level.
 {% enddocs %}
 
 {% docs game_total_nb_missed_opportunity %}
-Total number of missed opportunities in the game.
+Window calculation repeating the number of `miss_context_playing = 'Missed Opportunity'` at the game_uuid level.
 {% enddocs %}
 
 {% docs game_max_score_playing %}
-Maximum score achieved by the player in the game.
+Window calculation repeating the maximum score from the username's perspective at the game_uuid level.
 {% enddocs %}
 
 {% docs game_decisive_advantage %}
-Indicates if the player had a decisive advantage in the game.
+Window calculation at the game_uuid level checking if the username was, at any point, in a decisive winning position.
 {% enddocs %}
 
 {% docs game_min_score_playing %}
-Minimum score achieved by the player in the game.
+Window calculation repeating the minimum score from the username's perspective at the game_uuid level.
 {% enddocs %}
 
 {% docs game_std_score_playing %}
-Standard deviation of the player's score in the game.
+Window calculation repeating the score standard deviation from the username's perspective at the game_uuid level.
 {% enddocs %}
 
 {% docs game_total_move_number %}
-Total number of moves in the game.
+Window calculation repeating the total number of moves at the game_uuid level.
 {% enddocs %}
 
 {% docs game_playing_turn_name_first_blunder %}
-Player who made the first blunder in the game.
+Window calculation repeating who ('Opponent' vs 'Playing') made the first massive blunder at the game_uuid level.
 {% enddocs %}
