@@ -103,8 +103,6 @@ models:
         description: "{{ doc('prev_position_status_playing') }}"
       - name: miss_context_playing
         description: "{{ doc('miss_context_playing') }}"
-      - name: miss_context_opponent
-        description: "{{ doc('miss_context_opponent') }}"
       - name: game_median_score_playing
         description: "{{ doc('game_median_score_playing') }}"
       - name: game_total_nb_massive_blunder

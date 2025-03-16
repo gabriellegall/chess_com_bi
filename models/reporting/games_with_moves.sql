@@ -141,10 +141,6 @@ WITH games_scope AS (
       WHEN miss_category_playing IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Even', 'Disadvantage')   THEN 'Throw'
       WHEN miss_category_playing IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Advantage')              THEN 'Missed Opportunity' 
       ELSE NULL END AS miss_context_playing,
-    CASE  
-      WHEN miss_category_opponent IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Even', 'Disadvantage')  THEN 'Throw'
-      WHEN miss_category_opponent IN ('Blunder', 'Massive Blunder') AND prev_position_status_playing IN ('Advantage')             THEN 'Missed Opportunity' 
-      ELSE NULL END AS miss_context_opponent,
   FROM prev_position_definition
 )
 

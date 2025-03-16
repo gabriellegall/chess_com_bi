@@ -25,7 +25,7 @@ vars:
     variance_score_massive_blunder: 600
     variance_score_blunder: 250
     variance_score_mistake: 100
-    score_balanced_limit: 300
+    score_balanced_limit: 200
     even_score_limit: 150
     should_win_score: 700
   data_scope:

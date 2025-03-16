@@ -238,12 +238,6 @@ A 'Throw' occurs when the previous situation was even or already disadvantageous
 A 'Missed Opportunity' occurs when the previous situation was advantageous (for the player username).
 {% enddocs %}
 
-{% docs miss_context_opponent %}
-Defines if the blunder or massive blunder (from the opponent's perspective) is made in the context of a 'Throw' or a 'Missed Opportunity'.
-A 'Throw' occurs when the previous situation was even or already disadvantageous (for the opponent player).
-A 'Missed Opportunity' occurs when the previous situation was advantageous (for the opponent player).
-{% enddocs %}
-
 {% docs game_median_score_playing %}
 Window calculation repeating the median score from the username's perspective at the game_uuid level.
 {% enddocs %}
