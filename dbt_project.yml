@@ -44,3 +44,6 @@ models:
     datamart:
       +materialized: view
       +schema: datamart
+seeds:
+  chess_com_bi:
+    schema: staging

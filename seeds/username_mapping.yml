@@ -2,9 +2,9 @@ version: 2
 
 seeds:
   - name: username_mapping
-    description: "Mapping table, aiming to group multi-accounts under a single name"
+    description: "Mapping table, aiming to group multi-accounts under a single name."
     columns:
       - name: username
-        description: "Username under which data was extracted from the chess.com API"
+        description: "Username under which data was extracted from the chess.com API."
       - name: target_username
-        description: "Target username that should be used on display"
+        description: "Target username that should be used on display."
