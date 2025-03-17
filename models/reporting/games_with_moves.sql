@@ -13,7 +13,7 @@ WITH games_scope AS (
   SELECT 
     games.game_uuid,
     games.archive_url,
-    COALESCE(username_mapping.target_username, games.username) AS username,
+    COALESCE(username_mapping.target_username, games.username) AS username, -- Use the target username from the mapping table if it exists
     games.url,
     games.end_time,
     games.end_time_date,
