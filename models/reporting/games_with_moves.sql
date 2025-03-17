@@ -4,7 +4,9 @@ WITH games_scope AS (
   SELECT
     *
   FROM {{ ref ('games') }}
-  WHERE end_time_date >= {{ var('data_scope')['first_end_date'] }}
+  WHERE TRUE
+    AND end_time_date >= {{ var('data_scope')['first_end_date'] }}
+    AND rated
 )
 
 , score_defintion AS (
