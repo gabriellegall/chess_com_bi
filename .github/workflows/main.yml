@@ -1,0 +1,42 @@
+name: dbt_prod_doc_serve
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  dbt_prod_doc_serve_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout_repository
+        uses: actions/checkout@v3
+        
+      - name: build_and_serve_dbt
+        run: |
+          docker build -t dbt-container .
+          docker run --rm \
+            -v ${{ github.workspace }}/keyfile.json:/keyfile.json \
+            dbt-container dbt docs generate
+            
+      - name: upload_dbt_doc
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: target/
+          retention-days: 7
+
+  deploy_to_github_pages_job:
+    needs: dbt_prod_doc_serve_job
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: deploy_to_github_pages
+        id: deployment
+        uses: actions/deploy-pages@v4
