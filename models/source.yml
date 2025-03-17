@@ -22,8 +22,6 @@ sources:
             description: "{{ doc('time_control') }}"
           - name: end_time_integer
             description: "{{ doc('end_time_integer') }}"
-          - name: end_time
-            description: "{{ doc('end_time') }}"
           - name: rated
             description: "{{ doc('rated') }}"
           - name: tcn

@@ -25,7 +25,7 @@ PGN-compliant time control of the game (e.g. 300+5, 180+2, etc.).
 {% enddocs %}
 
 {% docs end_time_integer %}
-End time of the game in integer (raw) format.
+End time of the game in integer (raw) format. The time is expressed in Unix timestamp, which represents the number of seconds since January 1, 1970 (the Unix epoch).
 {% enddocs %}
 
 {% docs end_time %}

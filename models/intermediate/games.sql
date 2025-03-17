@@ -1,12 +1,11 @@
 {{ config(materialized='view') }}
 
-
 WITH cast_types AS (
     SELECT 
-        * EXCEPT (end_time),
-        CAST(end_time AS TIMESTAMP) AS end_time,
-        DATE(end_time) AS end_time_date,
-        FORMAT_DATE('%Y-%m', DATE(end_time)) AS end_time_month,
+        *,
+        DATETIME(TIMESTAMP_SECONDS(end_time_integer), {{ var('data_conversion')['utc_to_target_timezone'] }})                       AS end_time, 
+        DATE(DATETIME(TIMESTAMP_SECONDS(end_time_integer), {{ var('data_conversion')['utc_to_target_timezone'] }}))                 AS end_time_date,
+        FORMAT_DATE('%Y-%m', DATETIME(TIMESTAMP_SECONDS(end_time_integer), {{ var('data_conversion')['utc_to_target_timezone'] }})) AS end_time_month,
     FROM {{ source('staging', 'games') }} 
 )
 

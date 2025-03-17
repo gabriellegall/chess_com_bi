@@ -16,7 +16,10 @@ models:
       - name: url
         description: "{{ doc('url') }}"
       - name: end_time
-        description: "{{ doc('end_time') }}"
+        description: "
+          {{ doc('end_time') }} 
+          Expressed in the timezone {{ var('data_conversion')['utc_to_target_timezone'] }}
+          "
       - name: end_time_date
         description: "{{ doc('end_time_date') }}"
       - name: end_time_month

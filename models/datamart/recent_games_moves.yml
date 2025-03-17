@@ -19,6 +19,9 @@ models:
       - name: move_number
         description: "{{ doc('move_number') }}"
       - name: end_time
-        description: "{{ doc('end_time') }}"
+        description: "
+          {{ doc('end_time') }} 
+          Expressed in the timezone {{ var('data_conversion')['utc_to_target_timezone'] }}
+          "
       - name: playing_as
         description: "{{ doc('playing_as') }}"
