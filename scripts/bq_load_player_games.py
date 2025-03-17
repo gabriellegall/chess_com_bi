@@ -67,7 +67,7 @@ def fetch_and_append_game_data(usernames: list[str], email: str, username_histor
             # Limit the number of API calls
             api_query_counter += 1
             if api_query_counter % 60 == 0:
-                print("Reached 60 API queries, sleeping for 1 minute...")
+                print("Reached 60 API queries, sleeping for 1 minute...", flush=True)
                 time.sleep(60)
 
             response = requests.get(archive_url, headers={'User-Agent': f'username: {username}, email: {email}'})
