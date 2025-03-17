@@ -1,4 +1,4 @@
-name: dbt_prod_doc_serve
+name: dbt_documentation
 
 on:
   push:
