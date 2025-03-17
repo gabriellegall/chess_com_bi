@@ -21,7 +21,7 @@ jobs:
           docker build -t dbt-container .
           docker run --rm \
             -v ${{ github.workspace }}/keyfile.json:/keyfile.json \
-            dbt-container dbt docs generate
+            dbt-container /bin/sh -c "dbt compile && dbt docs generate"
             
       - name: upload_dbt_doc
         uses: actions/upload-pages-artifact@v3
