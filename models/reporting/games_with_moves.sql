@@ -11,7 +11,7 @@ WITH games_scope AS (
   SELECT 
     games.game_uuid,
     games.archive_url,
-    games.username,
+    COALESCE(username_mapping.target_username, games.username) AS username,
     games.url,
     games.end_time,
     games.end_time_date,
@@ -56,6 +56,8 @@ WITH games_scope AS (
   FROM games_scope AS games
   INNER JOIN {{ ref ('games_moves') }} AS games_moves
     USING (game_uuid)
+  LEFT OUTER JOIN {{ ref ('username_mapping') }} username_mapping
+    ON LOWER(username_mapping.username) = LOWER(games.username) 
 )
 
 , previous_score AS (
