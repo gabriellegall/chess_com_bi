@@ -5,6 +5,7 @@ from pandas_gbq import read_gbq, to_gbq
 from google.cloud import bigquery
 import requests
 from datetime import datetime
+import time
 
 # Check if at least one table with the prefix exists
 def table_with_prefix_exists(client: bigquery.Client, dataset_id: str, prefix: str) -> bool:
@@ -43,6 +44,7 @@ def get_player_archive_and_filter(username: str, email: str, username_history: p
 # For the relevant archive URL(s), get all games > latest_end_time for each username(s)
 def fetch_and_append_game_data(usernames: list[str], email: str, username_history: pd.DataFrame) -> pd.DataFrame:
     all_game_data = []
+    api_query_counter = 0
     current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     for username in usernames:
@@ -61,6 +63,13 @@ def fetch_and_append_game_data(usernames: list[str], email: str, username_histor
 
         # Loop through each archive URL
         for archive_url in archives.get("archives", []):
+
+            # Limit the number of API calls
+            api_query_counter += 1
+            if api_query_counter % 60 == 0:
+                print("Reached 60 API queries, sleeping for 1 minute...")
+                time.sleep(60)
+
             response = requests.get(archive_url, headers={'User-Agent': f'username: {username}, email: {email}'})
             archive_data = response.json()
 
@@ -75,7 +84,6 @@ def fetch_and_append_game_data(usernames: list[str], email: str, username_histor
                     "pgn": game.get("pgn", ""),
                     "time_control": game.get("time_control", ""),
                     "end_time_integer" : game.get("end_time", 0),
-                    "end_time": datetime.fromtimestamp(game.get("end_time", 0)).strftime("%Y-%m-%d %H:%M:%S"),
                     "rated": game.get("rated", False),
                     "tcn": game.get("tcn", ""),
                     "game_uuid": game.get("uuid", ""),
