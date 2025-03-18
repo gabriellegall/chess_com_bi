@@ -1,14 +1,13 @@
-name: dbt_run
+name: bq_load_player_games_moves
 
 on:
-  workflow_dispatch:
   workflow_run:
-    workflows: ["bq_load_player_games_moves"]
+    workflows: ["bq_load_player_games"]
     types:
       - completed
 
 jobs:
-  dbt_run_job:
+  bq_load_player_games_moves_job:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,9 +17,9 @@ jobs:
       - name: write_gcs_credentials
         run: echo '${{ secrets.GCS_KEYFILE }}' > keyfile.json
 
-      - name: build_and_run_dbt
+      - name: build_and_run_script
         run: |
           docker build -t dbt-container .
           docker run --rm \
             -v ${{ github.workspace }}/keyfile.json:/keyfile.json \
-            dbt-container dbt run
+            dbt-container python3 scripts/bq_load_player_games_moves.py

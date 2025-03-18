@@ -1,12 +1,12 @@
-name: api_data_integration
+name: dbt_test
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # Runs every day at midnight
-  workflow_dispatch:  # Allows manual triggering from the Actions tab
+    - cron: "0 0 * * 0"  # Runs every Sunday at midnight UTC
 
 jobs:
-  api_games_integration_job:
+  dbt_test_job:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,9 +16,9 @@ jobs:
       - name: write_gcs_credentials
         run: echo '${{ secrets.GCS_KEYFILE }}' > keyfile.json
 
-      - name: build_and_run_script
+      - name: build_and_run_dbt
         run: |
           docker build -t dbt-container .
           docker run --rm \
             -v ${{ github.workspace }}/keyfile.json:/keyfile.json \
-            dbt-container python3 scripts/bq_load_player_games.py
+            dbt-container dbt test
