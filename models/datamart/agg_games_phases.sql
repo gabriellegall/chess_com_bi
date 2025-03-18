@@ -34,7 +34,7 @@ WITH aggregate_fields AS (
         COUNTIF(miss_category_playing = 'Massive Blunder')                  AS nb_massive_blunder_playing,
         COUNTIF(miss_context_playing = 'Throw')                             AS nb_throw_playing,
         COUNTIF(miss_context_playing = 'Missed Opportunity')                AS nb_missed_opportunity_playing,
-        ANY_VALUE(median_score_playing_game_phase)                          AS median_score_playing,
+        APPROX_QUANTILES(score_playing, 100)[OFFSET(50)]                    AS median_score_playing,
     FROM {{ ref ('games_with_moves') }}
     GROUP BY GROUPING SETS (
         (1, 2, 3),
