@@ -42,4 +42,7 @@ WITH aggregate_fields AS (
         )
 )
 
-SELECT * FROM aggregate_fields
+SELECT 
+    *,
+    COUNT(*) OVER (PARTITION BY username, time_class, end_time_month, opponent_rating_range, game_phase_key) > {{ var('datamart')['min_games_played'] }} AS has_enough_games
+FROM aggregate_fields
