@@ -33,6 +33,7 @@ WITH aggregate_fields AS (
         ANY_VALUE(game_std_score_playing)                                        AS game_std_score_playing,
         ANY_VALUE(game_total_move_number)                                        AS game_total_move_number,
         ANY_VALUE(game_playing_turn_name_first_blunder)                          AS game_playing_turn_name_first_blunder,
+        ANY_VALUE(game_max_score_playing_range)                                  AS game_max_score_playing_range,
     FROM {{ ref ('games_with_moves') }}
     GROUP BY 1, 2
 )

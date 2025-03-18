@@ -160,8 +160,12 @@ WITH games_scope AS (
     COUNTIF(miss_context_playing = 'Throw') OVER game_window                                                                      AS game_total_nb_throw,
     COUNTIF(miss_context_playing = 'Missed Opportunity') OVER game_window                                                         AS game_total_nb_missed_opportunity,
     MAX(score_playing) OVER game_window                                                                                           AS game_max_score_playing,
+    CASE 
+      WHEN MAX(score_playing) OVER game_window < {{ var('should_win_range')['low'] }} THEN '0-{{ var('should_win_range')['low'] }}'
+      WHEN MAX(score_playing) OVER game_window < {{ var('should_win_range')['mid'] }} THEN '{{ var('should_win_range')['low'] }}-{{ var('should_win_range')['mid'] }}'
+      ELSE '{{ var('should_win_range')['mid'] }}+' END                                                                            AS game_max_score_playing_range,
     CASE    
-      WHEN MAX(score_playing) OVER game_window > {{ var('score_thresholds')['should_win_score'] }} THEN 'Decisive advantage'    
+      WHEN MAX(score_playing) OVER game_window > {{ var('should_win_range')['mid'] }} THEN 'Decisive advantage'    
       ELSE 'No decisive advantage' END                                                                                            AS game_decisive_advantage,
     MIN(score_playing) OVER game_window                                                                                           AS game_min_score_playing,
     STDDEV_SAMP(score_playing) OVER game_window                                                                                   AS game_std_score_playing,

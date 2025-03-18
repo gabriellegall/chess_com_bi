@@ -29,7 +29,9 @@ vars:
     variance_score_mistake: 100
     score_balanced_limit: 200
     even_score_limit: 150
-    should_win_score: 700
+  should_win_range:
+    low: 400
+    mid: 700
   data_scope:
     first_end_date: "'2024-10-01'"
   datamart:

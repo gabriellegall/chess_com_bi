@@ -123,10 +123,12 @@ models:
         description: "{{ doc('game_total_nb_missed_opportunity') }}"
       - name: game_max_score_playing
         description: "{{ doc('game_max_score_playing') }}"
+      - name: game_max_score_playing_range
+        description: "{{ doc('game_max_score_playing_range') }}"
       - name: game_decisive_advantage
         description: "
           {{ doc('game_decisive_advantage') }}
-          A decisive winning advantage is defined by a score above {{ var('score_thresholds')['should_win_score'] }}.
+          A decisive winning advantage is defined by a score above {{ var('should_win_range')['mid'] }}.
           "
       - name: game_min_score_playing
         description: "{{ doc('game_min_score_playing') }}"

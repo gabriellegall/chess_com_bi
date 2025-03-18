@@ -266,6 +266,10 @@ Window calculation repeating the number of `miss_context_playing = 'Missed Oppor
 Window calculation repeating the maximum score from the username's perspective at the game_uuid level.
 {% enddocs %}
 
+{% docs game_max_score_playing_range %}
+Window calculation repeating ranges of the maximum score from the username's perspective at the game_uuid level.
+{% enddocs %}
+
 {% docs game_decisive_advantage %}
 Window calculation at the game_uuid level checking if the username was, at any point, in a decisive winning position.
 {% enddocs %}
@@ -285,3 +289,4 @@ Window calculation repeating the total number of moves at the game_uuid level.
 {% docs game_playing_turn_name_first_blunder %}
 Window calculation repeating who ('Opponent' vs 'Playing') made the first massive blunder at the game_uuid level.
 {% enddocs %}
+
