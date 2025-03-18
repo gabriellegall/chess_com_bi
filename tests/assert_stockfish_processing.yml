@@ -1,0 +1,11 @@
+version: 2
+
+data_tests:
+  - name: assert_stockfish_processing
+    description: "
+      This test ensures that stockfish has processed and evaluated the expected number of moves, for all games loaded in the datawarehouse. 
+      This test could fail for several reasons:
+      (1) some games have been loaded, but the games moves are not yet evaluated (severity = low)
+      (2) There are some duplicate records in the games moves table (severity = medium) 
+      (3) Stockfish has not evaluated all moves (severity = high)
+      "

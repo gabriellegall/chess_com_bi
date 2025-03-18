@@ -94,13 +94,15 @@ table_games         = f'{dataset_id}.{table_games_prefix}*'
 tables_games_moves  = f'{dataset_id}.{table_games_moves_prefix}*'
 
 if table_with_prefix_exists(client, dataset_id, table_games_moves_prefix):
-    # Define SQL query to get games not yet processed
+    # Define SQL query to get unique games not yet processed
+    # Remark: we use QUALIFY to remove duplicates when several [username] share the same [game_uuid] (playing against each other)
     query = f"""
     SELECT *
     FROM `{table_games}` game
     LEFT OUTER JOIN (SELECT DISTINCT game_uuid FROM `{tables_games_moves}`) games_moves
     USING (game_uuid)
     WHERE games_moves.game_uuid IS NULL
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY game_uuid) = 1
     """
 else:
     # If no games_moves_* table exists, select all games
@@ -123,4 +125,3 @@ if not games_moves.empty:
     print(f"Data loaded into BigQuery table: {table_id}")
 else:
     print("The games DataFrame is empty. No data loaded into BigQuery.")
-
