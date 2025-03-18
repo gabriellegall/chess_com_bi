@@ -1,4 +1,4 @@
-name: games_processing
+name: bq_load_player_games_moves
 
 on:
   workflow_run:
@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  games_processing_job:
+  bq_load_player_games_moves_job:
     runs-on: ubuntu-latest
 
     steps:
