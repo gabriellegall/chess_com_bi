@@ -2,7 +2,7 @@ name: bq_load_player_games_moves
 
 on:
   workflow_run:
-    workflows: ["api_data_integration"]
+    workflows: ["bq_load_player_games"]
     types:
       - completed
 
