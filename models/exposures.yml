@@ -8,9 +8,8 @@ exposures:
     url: http://188.245.223.251:3000/
     description: The objective is to have an overview of the chess.com progress over time.
     depends_on:
-      - ref("agg_games_phases_benchmark")
-      - ref("agg_games_phases")
-      - ref("agg_games")
+      - ref("games_agg_moves")
+      - ref("games_benchmark")
       - ref("recent_games_moves")
     owner:
       name: Gabriel LE GALL

@@ -67,7 +67,6 @@ WITH games_scope AS (
     *,
     LAG(score_playing) OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC)                      AS prev_score_playing,
     score_playing - LAG(score_playing) OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC)      AS variance_score_playing,
-    PERCENTILE_CONT(score_playing, 0.5) OVER (PARTITION BY game_uuid, username, game_phase)                  AS median_score_playing_game_phase,
   FROM score_defintion
 )
 
@@ -148,33 +147,10 @@ WITH games_scope AS (
   FROM prev_position_definition
 )
 
-, game_level_calculation AS (
-  SELECT 
-    *,
-    PERCENTILE_CONT(score_playing, 0.5) OVER game_window                                                                          AS game_median_score_playing,
-    COUNTIF(miss_category_playing = 'Massive Blunder') OVER game_window                                                           AS game_total_nb_massive_blunder,
-    CASE    
-      WHEN COUNTIF(miss_category_playing = 'Massive Blunder') OVER game_window > 0 THEN 'Massive Blunder(s)'    
-      ELSE 'No Massive Blunder' END                                                                                               AS game_total_massive_blunder,
-    COUNTIF(miss_category_playing IN ('Blunder', 'Massive Blunder')) OVER game_window                                             AS game_total_nb_blunder,
-    COUNTIF(miss_context_playing = 'Throw') OVER game_window                                                                      AS game_total_nb_throw,
-    COUNTIF(miss_context_playing = 'Missed Opportunity') OVER game_window                                                         AS game_total_nb_missed_opportunity,
-    MAX(score_playing) OVER game_window                                                                                           AS game_max_score_playing,
-    CASE 
-      WHEN MAX(score_playing) OVER game_window < {{ var('should_win_range')['low'] }} THEN '0-{{ var('should_win_range')['low'] }}'
-      WHEN MAX(score_playing) OVER game_window < {{ var('should_win_range')['mid'] }} THEN '{{ var('should_win_range')['low'] }}-{{ var('should_win_range')['mid'] }}'
-      ELSE '{{ var('should_win_range')['mid'] }}+' END                                                                            AS game_max_score_playing_range,
-    CASE    
-      WHEN MAX(score_playing) OVER game_window > {{ var('should_win_range')['mid'] }} THEN 'Decisive advantage'    
-      ELSE 'No decisive advantage' END                                                                                            AS game_decisive_advantage,
-    MIN(score_playing) OVER game_window                                                                                           AS game_min_score_playing,
-    STDDEV_SAMP(score_playing) OVER game_window                                                                                   AS game_std_score_playing,
-    MAX(move_number) OVER game_window                                                                                             AS game_total_move_number,
-    FIRST_VALUE (
-      CASE WHEN COALESCE(miss_category_playing, miss_category_opponent) = 'Massive Blunder' THEN playing_turn_name ELSE NULL END IGNORE NULLS)
-      OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)   AS game_playing_turn_name_first_blunder,
-  FROM context_definition
-  WINDOW game_window AS (PARTITION BY game_uuid, username)
-)
-
-SELECT * FROM game_level_calculation
+SELECT 
+  *,
+  MAX(move_number) OVER (PARTITION BY game_uuid, username) AS total_nb_moves,
+  FIRST_VALUE (
+    CASE WHEN COALESCE(miss_category_playing, miss_category_opponent) = 'Massive Blunder' THEN playing_turn_name ELSE NULL END IGNORE NULLS)
+    OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS first_blunder_playing_turn_name, 
+FROM context_definition
