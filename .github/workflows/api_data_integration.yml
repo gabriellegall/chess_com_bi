@@ -1,4 +1,4 @@
-name: api_data_integration
+name: bq_load_player_games
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:  # Allows manual triggering from the Actions tab
 
 jobs:
-  api_games_integration_job:
+  bq_load_player_games_job:
     runs-on: ubuntu-latest
 
     steps:
