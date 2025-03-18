@@ -1,4 +1,4 @@
-name: dbt_run
+name: dbt_test
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     - cron: "0 0 * * 0"  # Runs every Sunday at midnight UTC
 
 jobs:
-  dbt_run_job:
+  dbt_test_job:
     runs-on: ubuntu-latest
 
     steps:
