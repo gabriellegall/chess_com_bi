@@ -17,7 +17,7 @@ WITH username_info AS (
     COUNTIF(nb_missed_opportunity_playing > 0) / COUNT(*)   AS rate_nb_missed_opportunity_playing,
     AVG(median_score_playing)                               AS avg_score_playing,
     COUNT(*)                                                AS nb_games,
-  FROM {{ ref ('games_agg_moves') }}
+  FROM {{ ref ('agg_games_with_moves') }}
   WHERE TRUE
     AND playing_rating_range = opponent_rating_range -- ensure that the level of both players is relevant
     AND end_time_date >= DATE_TRUNC(CURRENT_DATE - INTERVAL 1 MONTH, MONTH)
@@ -46,7 +46,7 @@ SELECT
   AVG(gp.median_score_playing)                              AS bench_avg_score_playing,
   COUNT(*)                                                  AS bench_nb_games,
 FROM username_info u
-LEFT OUTER JOIN {{ ref ('games_agg_moves') }} gp 
+LEFT OUTER JOIN {{ ref ('agg_games_with_moves') }} gp 
   ON gp.username <> u.username
   AND gp.game_phase_key = u.game_phase_key
   AND gp.time_class = u.time_class

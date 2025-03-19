@@ -29,6 +29,7 @@ WITH aggregate_fields AS (
         ANY_VALUE(playing_as)                                                                           AS playing_as,
         ANY_VALUE(playing_result)                                                                       AS playing_result,
         ANY_VALUE(time_class)                                                                           AS time_class,
+        ANY_VALUE(first_blunder_playing_turn_name)                                                      AS first_blunder_playing_turn_name,
         -- Measures                         
         COUNTIF(miss_category_playing IN ('Blunder', 'Massive Blunder'))                                AS nb_blunder_playing,
         COUNTIF(miss_category_playing = 'Massive Blunder')                                              AS nb_massive_blunder_playing,
