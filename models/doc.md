@@ -248,48 +248,50 @@ Definition of who ('Opponent' vs 'Playing') made the first massive blunder - at 
 Simplification of the maximum game score, aiming to define if the username was in a decisive winning position (at any point).
 {% enddocs %}
 
-# TO DELETE
-{% docs game_median_score_playing %}
-Window calculation repeating the median score from the username's perspective at the game_uuid level.
+{% docs aggregation_level %}
+Aggregation level at which the metrics are defined. Several different and independent aggregation levels are mixed within the table.
 {% enddocs %}
 
-{% docs game_total_nb_massive_blunder %}
-Window calculation repeating the number of `miss_category_opponent = 'Massive Blunder'` at the game_uuid level.
+{% docs game_phase_key %}
+`game_phase` if applicable for the given aggregation level, otherwise returns a generic values describing the aggregation.
 {% enddocs %}
 
-{% docs game_total_massive_blunder %}
-Window calculation at the game_uuid level to check if it contains at least one `miss_category_opponent = 'Massive Blunder'`.
+{% docs nb_blunder_playing %}
+Number of blunders detected in the game, technically it is a count of 'Blunder' OR 'Massive Blunder' on the field `miss_category_playing`
 {% enddocs %}
 
-{% docs game_total_nb_blunder %}
-Window calculation repeating the number of `miss_category_opponent = 'Blunder'` at the game_uuid level.
+{% docs nb_massive_blunder_playing %}
+Number of massive blunders detected in the game, technically it is a count of 'Massive Blunder' on the field `miss_category_playing`
 {% enddocs %}
 
-{% docs game_total_nb_throw %}
-Window calculation repeating the number of `miss_context_playing = 'Throw'` at the game_uuid level.
+{% docs nb_throw_playing %}
+Number of throws detected in the game, technically it is a count of 'Throw' on the field `miss_context_playing`
 {% enddocs %}
 
-{% docs game_total_nb_missed_opportunity %}
-Window calculation repeating the number of `miss_context_playing = 'Missed Opportunity'` at the game_uuid level.
+{% docs nb_missed_opportunity_playing %}
+Number of throws detected in the game, technically it is a count of 'Missed Opportunity' on the field `miss_context_playing`
 {% enddocs %}
 
-{% docs game_max_score_playing %}
-Window calculation repeating the maximum score from the username's perspective at the game_uuid level.
+{% docs median_score_playing %}
+Median evaluation score of the username’s position throughout the game.
 {% enddocs %}
 
-{% docs game_max_score_playing_range %}
-Window calculation repeating ranges of the maximum score from the username's perspective at the game_uuid level.
+{% docs max_score_playing %}
+Maximum evaluation score reached by username during the game.
 {% enddocs %}
 
-{% docs game_min_score_playing %}
-Window calculation repeating the minimum score from the username's perspective at the game_uuid level.
+{% docs min_score_playing %}
+Minimum evaluation score reached by username during the game.
 {% enddocs %}
 
-{% docs game_std_score_playing %}
-Window calculation repeating the score standard deviation from the username's perspective at the game_uuid level.
+{% docs std_score_playing %}
+Standard deviation of the evaluation scores, indicating the volatility of the game.
 {% enddocs %}
 
-{% docs median_score_playing_game_phase %}
-Window calculation repeating the median score from the username's perspective at the game_phase level.
+{% docs max_score_playing_range %}
+Categorical range representation of the maximum evaluation score.
 {% enddocs %}
 
+{% docs has_enough_games %}
+Boolean indicating whether username has played a sufficient number of games for statistical relevance. This field is used as a filter on reports/dashboards.
+{% enddocs %}
