@@ -201,7 +201,7 @@ Variance in the score between the previous and the current turn.
 {% enddocs %}
 
 {% docs miss_category_playing %}
-If the move is an inaccuracy (from the perspective of username), classification of the type of miss is as follows : 'Mistake' < 'Blunder' < 'Massive Blunder'
+If the move is an inaccuracy (from the perspective of username), classification of the type of miss is as follows : 'Mistake' < 'Blunder' < 'Massive Blunder'.
 {% enddocs %}
 
 {% docs miss_move_number_playing %}
@@ -213,7 +213,7 @@ Move number associated with any of the username's massive blunder.
 {% enddocs %}
 
 {% docs miss_category_opponent %}
-If the move is an inaccuracy (from the perspective of the opponent), classification of the type of miss is as follows : 'Mistake' < 'Blunder' < 'Massive Blunder'
+If the move is an inaccuracy (from the perspective of the opponent), classification of the type of miss is as follows : 'Mistake' < 'Blunder' < 'Massive Blunder'.
 {% enddocs %}
 
 {% docs miss_move_number_opponent %}
@@ -257,19 +257,19 @@ Aggregation level at which the metrics are defined. Several different and indepe
 {% enddocs %}
 
 {% docs nb_blunder_playing %}
-Number of blunders detected in the game, technically it is a count of 'Blunder' OR 'Massive Blunder' on the field `miss_category_playing`
+Number of blunders detected in the game, technically it is a count of 'Blunder' OR 'Massive Blunder' on the field `miss_category_playing`.
 {% enddocs %}
 
 {% docs nb_massive_blunder_playing %}
-Number of massive blunders detected in the game, technically it is a count of 'Massive Blunder' on the field `miss_category_playing`
+Number of massive blunders detected in the game, technically it is a count of 'Massive Blunder' on the field `miss_category_playing`.
 {% enddocs %}
 
 {% docs nb_throw_playing %}
-Number of throws detected in the game, technically it is a count of 'Throw' on the field `miss_context_playing`
+Number of throws detected in the game, technically it is a count of 'Throw' on the field `miss_context_playing`.
 {% enddocs %}
 
 {% docs nb_missed_opportunity_playing %}
-Number of throws detected in the game, technically it is a count of 'Missed Opportunity' on the field `miss_context_playing`
+Number of throws detected in the game, technically it is a count of 'Missed Opportunity' on the field `miss_context_playing`.
 {% enddocs %}
 
 {% docs median_score_playing %}

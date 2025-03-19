@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: games_moves
-    description: "Games moves data with few calculated fields that can be directly derived w/o any join"
+    description: "Games moves data with few calculated fields that can be directly derived w/o any join."
     columns:
       - name: game_uuid
         description: "{{ doc('game_uuid') }}"

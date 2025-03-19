@@ -6,7 +6,7 @@ sources:
     tables:
       - name: games
         identifier: "games_infos_*"
-        description: "chess.com raw data extracted from the API"
+        description: "Chess.com raw data extracted from the API."
         columns:
           - name: archive_url
             description: "{{ doc('archive_url') }}"
@@ -57,7 +57,7 @@ sources:
           - name: black_uuid
             description: "{{ doc('black_uuid') }}"
       - name: games_moves
-        description: "individual game moves evaluated using the Stockfish engine"
+        description: "Individual game moves evaluated using the Stockfish engine."
         columns:
           - name: game_uuid
             description: "{{ doc('game_uuid') }}"

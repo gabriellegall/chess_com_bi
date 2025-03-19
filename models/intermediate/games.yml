@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: games
-    description: "Games data with few calculated fields that can be directly derived w/o any join"
+    description: "Games data with few calculated fields that can be directly derived w/o any join."
     columns:
       - name: archive_url
         description: "{{ doc('archive_url') }}"
