@@ -200,10 +200,6 @@ Score in the previous turn.
 Variance in the score between the previous and the current turn.
 {% enddocs %}
 
-{% docs median_score_playing_game_phase %}
-Window calculation repeating the median score from the username's perspective at the game_phase level.
-{% enddocs %}
-
 {% docs miss_category_playing %}
 If the move is an inaccuracy (from the perspective of username), classification of the type of miss is as follows : 'Mistake' < 'Blunder' < 'Massive Blunder'
 {% enddocs %}
@@ -238,6 +234,21 @@ A 'Throw' occurs when the previous situation was even or already disadvantageous
 A 'Missed Opportunity' occurs when the previous situation was advantageous (for the player username).
 {% enddocs %}
 
+{% docs total_nb_moves %}
+Total number of moves played in the game.
+{% enddocs %}
+
+{% docs first_blunder_playing_turn_name %}
+Definition of who ('Opponent' vs 'Playing') made the first massive blunder - at the game_uuid level.
+{% enddocs %}
+
+# Agg games with moves
+
+{% docs max_score_playing_type %}
+Simplification of the maximum game score, aiming to define if the username was in a decisive winning position (at any point).
+{% enddocs %}
+
+# TO DELETE
 {% docs game_median_score_playing %}
 Window calculation repeating the median score from the username's perspective at the game_uuid level.
 {% enddocs %}
@@ -270,10 +281,6 @@ Window calculation repeating the maximum score from the username's perspective a
 Window calculation repeating ranges of the maximum score from the username's perspective at the game_uuid level.
 {% enddocs %}
 
-{% docs game_decisive_advantage %}
-Window calculation at the game_uuid level checking if the username was, at any point, in a decisive winning position.
-{% enddocs %}
-
 {% docs game_min_score_playing %}
 Window calculation repeating the minimum score from the username's perspective at the game_uuid level.
 {% enddocs %}
@@ -282,11 +289,7 @@ Window calculation repeating the minimum score from the username's perspective a
 Window calculation repeating the score standard deviation from the username's perspective at the game_uuid level.
 {% enddocs %}
 
-{% docs game_total_move_number %}
-Window calculation repeating the total number of moves at the game_uuid level.
-{% enddocs %}
-
-{% docs game_playing_turn_name_first_blunder %}
-Window calculation repeating who ('Opponent' vs 'Playing') made the first massive blunder at the game_uuid level.
+{% docs median_score_playing_game_phase %}
+Window calculation repeating the median score from the username's perspective at the game_phase level.
 {% enddocs %}
 

@@ -1,12 +1,12 @@
 version: 2
 
 exposures:
-  - name: chess_performance_overview
-    label: Chess Performance Overview
+  - name: chess_com_dashboard
+    label: Chess.com Dashboard
     type: dashboard
     maturity: high
     url: http://188.245.223.251:3000/
-    description: The objective is to have an overview of the chess.com progress over time.
+    description: The objective is to have an overview of the progress over time and an understanding of the areas of improvement.
     depends_on:
       - ref("agg_games_with_moves")
       - ref("agg_games_with_moves_only_games")

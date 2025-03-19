@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: agg_games_with_moves
+    description: "
+      Multi-level aggregation of the games with moves table to construct summarized metrics. 
+      Aggregation occurs at two independent levels: (1) Game level (2) Game x Game phase level.
+      "
+    columns:
+      - name: opponent_rating
+        description: "{{ doc('opponent_rating') }}"
+      - name: opponent_rating_range
+        description: "{{ doc('opponent_rating_range') }}"
+      - name: playing_as
+        description: "{{ doc('playing_as') }}"
+      - name: playing_result
+        description: "{{ doc('playing_result') }}"
+      - name: time_class
+        description: "{{ doc('time_class') }}"
+      - name: first_blunder_playing_turn_name
+        description: "{{ doc('first_blunder_playing_turn_name') }}"
+
+
+      - name: max_score_playing_type
+        description: "
+          {{ doc('max_score_playing_type') }}
+          A decisive winning advantage is defined by a score above {{ var('should_win_range')['mid'] }}.
+          "

@@ -1,8 +1,8 @@
 version: 2
 
 models:
-  - name: recent_games_moves
-    description: "Subset of the games with moves, filtered on recent games and specific turns only"
+  - name: games_with_moves_only_recent
+    description: "Subset of the games with moves, filtered on recent games and specific turns only."
     columns:
       - name: username
         description: "{{ doc('username') }}"
