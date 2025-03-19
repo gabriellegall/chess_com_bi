@@ -33,7 +33,7 @@ vars:
     low: 400
     mid: 700
   data_scope:
-    month_history_depth: 6
+    month_history_depth: 5
   datamart:
     min_games_played: 20
 
