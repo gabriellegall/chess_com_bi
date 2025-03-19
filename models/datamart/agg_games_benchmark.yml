@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: agg_games_benchmark
+    description: "
+      Multi-level aggregation of the metrics table to construct summarized metrics and player-level benchmark. 
+      Aggregation occurs at two independent levels: (1) username level (2) username x game phase level.
+      Benchmark is performed on the following common dimensions : `time_class` x `playing_rating_range` x `game_phase` (if applicable). 
+      ⚠️ Only games where `playing_rating_range = opponent_rating_range` are kept.
+      For username, only games played since the first day of the previous month are kept. For the benchmark group, all games are kept.
+      A minimum of {{ var('datamart')['min_games_played'] }} games played is requied for the statistics to be calculed.⚠️
+      "    
+    columns:
+      - name: username
+        description: "{{ doc('username') }}"
+      - name: game_phase_key
+        description: "{{ doc('game_phase_key') }}"
+      - name: time_class
+        description: "{{ doc('time_class') }}"
+      - name: playing_rating_range
+        description: "{{ doc('playing_rating_range') }}"
+      - name: aggregation_level
+        description: "{{ doc('aggregation_level') }}"
+      - name: rate_nb_blunder_playing
+        description: "{{ doc('rate_nb_blunder_playing') }}"
+      - name: rate_nb_massive_blunder_playing
+        description: "{{ doc('rate_nb_massive_blunder_playing') }}"
+      - name: rate_nb_throw_playing
+        description: "{{ doc('rate_nb_throw_playing') }}"
+      - name: rate_nb_missed_opportunity_playing
+        description: "{{ doc('rate_nb_missed_opportunity_playing') }}"
+      - name: nb_games
+        description: "{{ doc('nb_games') }}"
+      - name: bench_rate_nb_blunder_playing
+        description: "{{ doc('bench_rate_nb_blunder_playing') }}"
+      - name: bench_rate_nb_massive_blunder_playing
+        description: "{{ doc('bench_rate_nb_massive_blunder_playing') }}"
+      - name: bench_rate_nb_throw_playing
+        description: "{{ doc('bench_rate_nb_throw_playing') }}"
+      - name: bench_rate_nb_missed_opportunity_playing
+        description: "{{ doc('bench_rate_nb_missed_opportunity_playing') }}"
+      - name: bench_nb_games
+        description: "{{ doc('bench_nb_games') }}"

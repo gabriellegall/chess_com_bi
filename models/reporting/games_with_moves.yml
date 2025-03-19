@@ -68,8 +68,6 @@ models:
         description: "{{ doc('prev_score_playing') }}"
       - name: variance_score_playing
         description: "{{ doc('variance_score_playing') }}"
-      - name: median_score_playing_game_phase
-        description: "{{ doc('median_score_playing_game_phase') }}"
       - name: miss_category_playing
         description: "
           {{ doc('miss_category_playing') }}.
@@ -109,32 +107,7 @@ models:
         description: "{{ doc('prev_position_status_playing') }}"
       - name: miss_context_playing
         description: "{{ doc('miss_context_playing') }}"
-      - name: game_median_score_playing
-        description: "{{ doc('game_median_score_playing') }}"
-      - name: game_total_nb_massive_blunder
-        description: "{{ doc('game_total_nb_massive_blunder') }}"
-      - name: game_total_massive_blunder
-        description: "{{ doc('game_total_massive_blunder') }}"
-      - name: game_total_nb_blunder
-        description: "{{ doc('game_total_nb_blunder') }}"
-      - name: game_total_nb_throw
-        description: "{{ doc('game_total_nb_throw') }}"
-      - name: game_total_nb_missed_opportunity
-        description: "{{ doc('game_total_nb_missed_opportunity') }}"
-      - name: game_max_score_playing
-        description: "{{ doc('game_max_score_playing') }}"
-      - name: game_max_score_playing_range
-        description: "{{ doc('game_max_score_playing_range') }}"
-      - name: game_decisive_advantage
-        description: "
-          {{ doc('game_decisive_advantage') }}
-          A decisive winning advantage is defined by a score above {{ var('should_win_range')['mid'] }}.
-          "
-      - name: game_min_score_playing
-        description: "{{ doc('game_min_score_playing') }}"
-      - name: game_std_score_playing
-        description: "{{ doc('game_std_score_playing') }}"
-      - name: game_total_move_number
-        description: "{{ doc('game_total_move_number') }}"
-      - name: game_playing_turn_name_first_blunder
-        description: "{{ doc('game_playing_turn_name_first_blunder') }}"
+      - name: total_nb_moves
+        description: "{{ doc('total_nb_moves') }}"
+      - name: first_blunder_playing_turn_name
+        description: "{{ doc('first_blunder_playing_turn_name') }}"

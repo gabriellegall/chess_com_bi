@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: agg_games_with_moves_only_games
+    description: "Subset of the aggregated metrics table, only for the game-level aggregation. This table has been designed to limit scans on all aggregations."
+    columns:
+      - name: username
+        description: "{{ doc('username') }}"
+      - name: game_uuid
+        description: "{{ doc('game_uuid') }}"
+      - name: game_phase
+        description: "{{ doc('game_phase') }}"
+      - name: url
+        description: "{{ doc('url') }}"
+      - name: end_time
+        description: "{{ doc('end_time') }}"
+      - name: end_time_date
+        description: "{{ doc('end_time_date') }}"
+      - name: end_time_month
+        description: "{{ doc('end_time_month') }}"
+      - name: playing_rating
+        description: "{{ doc('playing_rating') }}"
+      - name: playing_rating_range
+        description: "{{ doc('playing_rating_range') }}"
+      - name: opponent_rating
+        description: "{{ doc('opponent_rating') }}"
+      - name: opponent_rating_range
+        description: "{{ doc('opponent_rating_range') }}"
+      - name: playing_as
+        description: "{{ doc('playing_as') }}"
+      - name: playing_result
+        description: "{{ doc('playing_result') }}"
+      - name: time_class
+        description: "{{ doc('time_class') }}"
+      - name: first_blunder_playing_turn_name
+        description: "{{ doc('first_blunder_playing_turn_name') }}"
+      - name: aggregation_level
+        description: "{{ doc('aggregation_level') }}"
+      - name: game_phase_key
+        description: "{{ doc('game_phase_key') }}"
+      - name: nb_blunder_playing
+        description: "{{ doc('nb_blunder_playing') }}"
+      - name: nb_massive_blunder_playing
+        description: "{{ doc('nb_massive_blunder_playing') }}"
+      - name: massive_blunder_move_number_playing
+        description: "{{ doc('massive_blunder_move_number_playing') }}"
+      - name: nb_throw_playing
+        description: "{{ doc('nb_throw_playing') }}"
+      - name: nb_missed_opportunity_playing
+        description: "{{ doc('nb_missed_opportunity_playing') }}"
+      - name: median_score_playing
+        description: "{{ doc('median_score_playing') }}"
+      - name: max_score_playing
+        description: "{{ doc('max_score_playing') }}"
+      - name: min_score_playing
+        description: "{{ doc('min_score_playing') }}"
+      - name: std_score_playing
+        description: "{{ doc('std_score_playing') }}"
+      - name: max_score_playing_range
+        description: "{{ doc('max_score_playing_range') }}"
+      - name: max_score_playing_type
+        description: "
+          {{ doc('max_score_playing_type') }}
+          A decisive winning advantage is defined by a score above {{ var('should_win_range')['mid'] }}.
+          "
+      - name: has_enough_games
+        description: "
+          {{ doc('has_enough_games') }} 
+          A minimum of {{ var('datamart')['min_games_played'] }} games played for the given partition is necessary for this condition to be true.
+          "
