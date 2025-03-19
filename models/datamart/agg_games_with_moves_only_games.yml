@@ -1,11 +1,8 @@
 version: 2
 
 models:
-  - name: agg_games_with_moves
-    description: "
-      Multi-level aggregation of the games with moves table to construct summarized metrics. 
-      ⚠️ Aggregation occurs at two independent levels: (1) Game level (2) Game x Game phase level ⚠️.
-      "
+  - name: agg_games_with_moves_only_games
+    description: "Subset of the aggregated metrics table, only for the game-level aggregation. This table has been designed to limit scans on all aggregations."
     columns:
       - name: username
         description: "{{ doc('username') }}"

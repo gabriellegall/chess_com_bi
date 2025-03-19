@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: agg_games_benchmark
+    description: "
+      Multi-level aggregation of the metrics table to construct summarized metrics and player-level benchmark. 
+      ⚠️ Aggregation occurs at two independent levels: (1) Username level (2) Username x Game phase level ⚠️.
+      "    
+    columns:
+      - name: username
+        description: "{{ doc('username') }}"
+      - name: game_phase_key
+        description: "{{ doc('game_phase_key') }}"
+      - name: time_class
+        description: "{{ doc('time_class') }}"
+      - name: playing_rating_range
+        description: "{{ doc('playing_rating_range') }}"
+      - name: aggregation_level
+        description: "{{ doc('aggregation_level') }}"
