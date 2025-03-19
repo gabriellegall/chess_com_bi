@@ -5,7 +5,7 @@ WITH games_scope AS (
     *
   FROM {{ ref ('games') }}
   WHERE TRUE
-    AND end_time_date >= {{ var('data_scope')['first_end_date'] }}
+    AND end_time_date >= DATE_TRUNC(CURRENT_DATE - INTERVAL {{ var('data_scope')['month_history_depth'] }} MONTH, MONTH)
     AND rated
 )
 

@@ -4,7 +4,7 @@ models:
   - name: games_with_moves
     description: "
       Games and games moves joined together, making it possible to calculate score variations, blunders, ELO ranges, game phases, etc.
-      ⚠️ Only games which are (1) rated, and (2) played after the {{ var('data_scope')['first_end_date'] }} are kept ⚠️.
+      ⚠️ Only games which are (1) rated, and (2) played in the last {{ var('data_scope')['month_history_depth'] }} full months ⚠️.
       " 
     columns:
       - name: game_uuid
