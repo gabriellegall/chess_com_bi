@@ -64,4 +64,7 @@ models:
           A decisive winning advantage is defined by a score above {{ var('should_win_range')['mid'] }}.
           "
       - name: has_enough_games
-        description: "{{ doc('has_enough_games') }}"
+        description: "
+          {{ doc('has_enough_games') }} 
+          A minimum of {{ var('datamart')['min_games_played'] }} games played for the given partition is necessary for this condition to be true.
+          "

@@ -36,14 +36,12 @@ SELECT
   ANY_VALUE(u.rate_nb_massive_blunder_playing)              AS rate_nb_massive_blunder_playing,
   ANY_VALUE(u.rate_nb_throw_playing)                        AS rate_nb_throw_playing,
   ANY_VALUE(u.rate_nb_missed_opportunity_playing)           AS rate_nb_missed_opportunity_playing,
-  ANY_VALUE(u.avg_score_playing)                            AS avg_score_playing,
   ANY_VALUE(u.nb_games)                                     AS nb_games,
   -- Other players metrics (benchmark)
   COUNTIF(gp.nb_blunder_playing > 0) / COUNT(*)             AS bench_rate_nb_blunder_playing,
   COUNTIF(gp.nb_massive_blunder_playing > 0) / COUNT(*)     AS bench_rate_nb_massive_blunder_playing,
   COUNTIF(gp.nb_throw_playing > 0) / COUNT(*)               AS bench_rate_nb_throw_playing,
   COUNTIF(gp.nb_missed_opportunity_playing > 0) / COUNT(*)  AS bench_rate_nb_missed_opportunity_playing,
-  AVG(gp.median_score_playing)                              AS bench_avg_score_playing,
   COUNT(*)                                                  AS bench_nb_games,
 FROM username_info u
 LEFT OUTER JOIN {{ ref ('agg_games_with_moves') }} gp 

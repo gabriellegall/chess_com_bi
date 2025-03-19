@@ -4,7 +4,7 @@ models:
   - name: agg_games_with_moves
     description: "
       Multi-level aggregation of the games with moves table to construct summarized metrics. 
-      ⚠️ Aggregation occurs at two independent levels: (1) Game level (2) Game x Game phase level ⚠️.
+      Aggregation occurs at two independent levels: (1) game level (2) game x game phase level.
       "
     columns:
       - name: username
@@ -64,7 +64,10 @@ models:
       - name: max_score_playing_type
         description: "
           {{ doc('max_score_playing_type') }}
-          A decisive winning advantage is defined by a score above {{ var('should_win_range')['mid'] }}.
+          A decisive winning advantage is defined by a score above .
           "
       - name: has_enough_games
-        description: "{{ doc('has_enough_games') }}"
+        description: "
+          {{ doc('has_enough_games') }} 
+          A minimum of {{ var('datamart')['min_games_played'] }} games played for the given partition is necessary for this condition to be true.
+          "

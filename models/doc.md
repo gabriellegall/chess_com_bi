@@ -295,3 +295,45 @@ Categorical range representation of the maximum evaluation score.
 {% docs has_enough_games %}
 Boolean indicating whether username has played a sufficient number of games for statistical relevance. This field is used as a filter on reports/dashboards.
 {% enddocs %}
+
+# Games benchmark
+
+{% docs bench_nb_games %}
+Number of games played by other players in the benchmark group.
+{% enddocs %}
+
+{% docs bench_rate_nb_blunder_playing %}
+For all games in the benchmark group of players: number of games containing a blunder, divided by the total number of games played.
+{% enddocs %}
+
+{% docs bench_rate_nb_massive_blunder_playing %}
+For all games in the benchmark group of players: number of games containing a massive blunder, divided by the total number of games played.
+{% enddocs %}
+
+{% docs bench_rate_nb_missed_opportunity_playing %}
+For all games in the benchmark group of players: number of games containing a missed opportunity, divided by the total number of games played.
+{% enddocs %}
+
+{% docs bench_rate_nb_throw_playing %}
+For all games in the benchmark group of players: number of games containing a throw, divided by the total number of games played.
+{% enddocs %}
+
+{% docs nb_games %}
+The total number of games played by username.
+{% enddocs %}
+
+{% docs rate_nb_blunder_playing %}
+For username: number of games containing a blunder, divided by the total number of games played.
+{% enddocs %}
+
+{% docs rate_nb_massive_blunder_playing %}
+For username: number of games containing a massive blunder, divided by the total number of games played.
+{% enddocs %}
+
+{% docs rate_nb_missed_opportunity_playing %}
+For username: number of games containing a missed opportunity, divided by the total number of games played.
+{% enddocs %}
+
+{% docs rate_nb_throw_playing %}
+For username: number of games containing a throw, divided by the total number of games played.
+{% enddocs %}
