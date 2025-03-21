@@ -1,10 +1,7 @@
 name: bq_load_player_games_moves
 
 on:
-  workflow_run:
-    workflows: ["bq_load_player_games"]
-    types:
-      - completed
+  workflow_dispatch:
 
 jobs:
   bq_load_player_games_moves_job:
