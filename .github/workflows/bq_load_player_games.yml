@@ -1,7 +1,9 @@
 name: bq_load_player_games
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'  # Runs every day at midnight
+  workflow_dispatch:  # Allows manual triggering from the Actions tab
 
 jobs:
   bq_load_player_games_job:

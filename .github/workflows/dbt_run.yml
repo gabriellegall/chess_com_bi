@@ -2,6 +2,10 @@ name: dbt_run
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["bq_load_player_games_moves"]
+    types:
+      - completed
 
 jobs:
   dbt_run_job:
