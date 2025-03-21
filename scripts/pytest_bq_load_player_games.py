@@ -3,6 +3,18 @@ import pandas as pd
 from unittest.mock import patch
 from bq_load_player_games import get_player_archive_and_filter
 
+# This test function is testing the 'get_player_archive_and_filter' function from the 'bq_load_player_games' module.
+# The function takes a player's username, email, their game history, and an optional 'min_archive' parameter that 
+# filters the player's game archives based on a minimum archive date.
+# 
+# The test uses mock data for the response from the Chess.com API to simulate different scenarios for filtering the archives:
+# - If 'min_archive' is None, it should return all available archives without any date filtering.
+# - If 'min_archive' is provided, the archives will be filtered to include only those after the specified date.
+# - It also handles cases where the user has a history with the most recent archive URL, filtering the archives based on that.
+# 
+# The test is parametrized to run with different 'min_archive' values and user history to ensure the function behaves as expected 
+# under various conditions.
+
 # Mock response data from Chess.com API for the user 'test_user'
 mock_archives = {
     "archives": [
