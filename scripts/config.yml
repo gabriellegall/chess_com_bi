@@ -9,6 +9,7 @@ api:
     - gokhvttttgxdddhjkig345
     - yorek99
   email: cassado01@gmail.com
+  min_archive: "2024/10"
 
 bigquery:
   config:

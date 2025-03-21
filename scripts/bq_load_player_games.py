@@ -12,44 +12,48 @@ def table_with_prefix_exists(client: bigquery.Client, dataset_id: str, prefix: s
     tables = client.list_tables(dataset_id) # List all tables in the dataset
     return any(table.table_id.startswith(prefix) for table in tables)
 
-# Assuming that previous archive URL(s) have been already integrated. Keep only the archive URL(s) >= latest one
-def get_player_archive_and_filter(username: str, email: str, username_history: pd.DataFrame) -> dict[str, any]:
+def get_player_archive_and_filter(username: str, email: str, username_history: pd.DataFrame, min_archive: str = None) -> dict[str, any]:
     headers = {'User-Agent': f'username: {username}, email: {email}'}
     URL = f'https://api.chess.com/pub/player/{username}/games/archives'
 
     response = requests.get(URL, headers=headers)
     archives = response.json()
 
-    # If the DataFrame is empty (no data in BQ), return the full archive (all URLs)
-    if username_history.empty:
-        print(f"No user history for '{username}'")
-        return archives
+    def filter_on_latest_import(archive_urls: list[str]) -> list[str]:
+        # If the DataFrame is empty (no data in BQ), return the full archive (all URLs)
+        if username_history.empty:
+            print(f"No user history for '{username}'")
+            return archive_urls
 
-    # If a username is found, return URL archives >= the latest archive integrated
-    # If no username history is found, return the full archive (all URLs)
-    user_row = username_history[username_history['username'] == username]
-    if not user_row.empty:
-        latest_archive_url = user_row.iloc[0]['latest_archive_url']
-    else:
-        latest_archive_url = ""
+        # If a username is found, return URL archives >= the latest archive integrated
+        # If no username history is found, return the full archive (all URLs)
+        user_row = username_history[username_history['username'] == username]
+        latest_archive_url = user_row.iloc[0]['latest_archive_url'] if not user_row.empty else ""
 
-    filtered_archives = [
-        archive_url for archive_url in archives.get("archives", [])
-        if latest_archive_url == "" or archive_url >= latest_archive_url
-    ]
-    archives['archives'] = filtered_archives
+        return [archive_url for archive_url in archive_urls if latest_archive_url == "" or archive_url >= latest_archive_url]
 
+    def filter_on_hard_coded_date(archive_urls: list[str]) -> list[str]:
+        # If min_archive is provided, filter on the hard coded minimum date
+        if min_archive:
+            return [archive_url for archive_url in archive_urls if archive_url[-7:] >= min_archive]
+        return archive_urls
+
+    archive_urls = archives.get("archives", [])
+    archive_urls = filter_on_latest_import(archive_urls)
+    archive_urls = filter_on_hard_coded_date(archive_urls)
+
+    archives['archives'] = archive_urls
     return archives
 
 # For the relevant archive URL(s), get all games > latest_end_time for each username(s)
-def fetch_and_append_game_data(usernames: list[str], email: str, username_history: pd.DataFrame) -> pd.DataFrame:
+def fetch_and_append_game_data(usernames: list[str], email: str, username_history: pd.DataFrame, min_archive: str = None) -> pd.DataFrame:
     all_game_data = []
     api_query_counter = 0
     current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     for username in usernames:
         # Get the archives URL(s) to be queried via the API
-        archives = get_player_archive_and_filter(username, email, username_history)
+        archives = get_player_archive_and_filter(username, email, username_history, min_archive)
 
         # Define the player's latest_end_time (the latest game integrated in BQ)
         if username_history.empty:
@@ -115,49 +119,51 @@ def fetch_and_append_game_data(usernames: list[str], email: str, username_histor
 
     return df
 
-# Open the config file if it exists
-config_path = os.path.join(os.getcwd(), "scripts", "config.yml")
-with open(config_path, "r") as file:
-    config = yaml.safe_load(file)
+if __name__ == "__main__":
+    # Open the config file if it exists
+    config_path = os.path.join(os.getcwd(), "scripts", "config.yml")
+    with open(config_path, "r") as file:
+        config = yaml.safe_load(file)
 
-# Set up BigQuery client
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./keyfile.json"
-client = bigquery.Client()
+    # Set up BigQuery client
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./keyfile.json"
+    client = bigquery.Client()
 
-# Define the BigQuery dataset and table prefix
-project_id      = config["bigquery"]["config"]["project_id"]
-dataset_id      = config["bigquery"]["config"]["dataset_id"]
-table_prefix    = config["bigquery"]["tables"]["games_prefix"]
-usernames       = config["api"]["usernames"]
-email           = config["api"]["email"]
+    # Define the BigQuery dataset and table prefix
+    project_id      = config["bigquery"]["config"]["project_id"]
+    dataset_id      = config["bigquery"]["config"]["dataset_id"]
+    table_prefix    = config["bigquery"]["tables"]["games_prefix"]
+    usernames       = config["api"]["usernames"]
+    email           = config["api"]["email"]
+    min_archive     = config["api"]["min_archive"]
 
-# If at least one table exists, get when the latest integration occured for each username
-if table_with_prefix_exists(client, dataset_id, table_prefix):
-    query = f"""
-    SELECT
-        username,
-        MAX(archive_url) AS latest_archive_url,
-        MAX(end_time_integer) AS latest_end_time
-    FROM `{dataset_id}.{table_prefix}*`
-    GROUP BY 1
-    """
-    username_history = read_gbq(query, project_id=project_id, dialect='standard')
-    print("Query executed successfully!")
-# If no table exists, return an empty dataframe
-else:
-    print(f"No tables with the prefix '{table_prefix}' found.")
-    username_history = pd.DataFrame()
+    # If at least one table exists, get when the latest integration occured for each username
+    if table_with_prefix_exists(client, dataset_id, table_prefix):
+        query = f"""
+        SELECT
+            username,
+            MAX(archive_url) AS latest_archive_url,
+            MAX(end_time_integer) AS latest_end_time
+        FROM `{dataset_id}.{table_prefix}*`
+        GROUP BY 1
+        """
+        username_history = read_gbq(query, project_id=project_id, dialect='standard')
+        print("Query executed successfully!")
+    # If no table exists, return an empty dataframe
+    else:
+        print(f"No tables with the prefix '{table_prefix}' found.")
+        username_history = pd.DataFrame()
 
-# Fetch all game data
-games = fetch_and_append_game_data(usernames, email, username_history)
+    # Fetch all game data
+    games = fetch_and_append_game_data(usernames, email, username_history, min_archive)
 
-# Generate the table name with current date, hour, and minute
-date_suffix = datetime.now().strftime('%Y%m%d_%H%M')
-table_id = f'{dataset_id}.{table_prefix}{date_suffix}'
+    # Generate the table name with current date, hour, and minute
+    date_suffix = datetime.now().strftime('%Y%m%d_%H%M')
+    table_id = f'{dataset_id}.{table_prefix}{date_suffix}'
 
-# Load the data
-if not games.empty:
-    to_gbq(games, table_id, project_id='chesscom-451104', if_exists='replace')
-    print(f"Data loaded into BigQuery table: {table_id}")
-else:
-    print("The games DataFrame is empty. No data loaded into BigQuery.")
+    # Load the data
+    if not games.empty:
+        to_gbq(games, table_id, project_id='chesscom-451104', if_exists='replace')
+        print(f"Data loaded into BigQuery table: {table_id}")
+    else:
+        print("The games DataFrame is empty. No data loaded into BigQuery.")
