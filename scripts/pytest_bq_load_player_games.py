@@ -1,8 +1,3 @@
-import pytest
-import pandas as pd
-from unittest.mock import patch
-from bq_load_player_games import get_player_archive_and_filter
-
 # This test function is testing the 'get_player_archive_and_filter' function from the 'bq_load_player_games' module.
 # The function takes a player's username, email, their game history, and an optional 'min_archive' parameter that 
 # filters the player's game archives based on a minimum archive date.
@@ -14,6 +9,11 @@ from bq_load_player_games import get_player_archive_and_filter
 # 
 # The test is parametrized to run with different 'min_archive' values and user history to ensure the function behaves as expected 
 # under various conditions.
+
+import pytest
+import pandas as pd
+from unittest.mock import patch
+from bq_load_player_games import get_player_archive_and_filter
 
 # Mock response data from Chess.com API for the user 'test_user'
 mock_archives = {
