@@ -19,7 +19,8 @@ vars:
     utc_to_target_timezone: "'Europe/Paris'"
   game_phases:
     end_early_game_move: 15
-    end_mid_game_move: 30
+    end_mid_game_move: 35
+    end_late_game_move: 65
   elo_range:
     low: 500
     mid: 800
