@@ -30,8 +30,8 @@ vars:
     score_balanced_limit: 200
     even_score_limit: 150
   should_win_range:
-    low: 400
-    mid: 700
+    low: 300
+    mid: 500
   data_scope:
     month_history_depth: 5
   datamart:
