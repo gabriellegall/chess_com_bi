@@ -1,4 +1,4 @@
-name: Master Daily Run
+name: master_daily_run
 
 on:
   schedule:
