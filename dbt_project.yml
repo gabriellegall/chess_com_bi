@@ -21,8 +21,8 @@ vars:
     end_early_game_move: 15
     end_mid_game_move: 30
   elo_range:
-    low: 600
-    mid: 700
+    low: 500
+    mid: 800
   score_thresholds:
     variance_score_massive_blunder: 600
     variance_score_blunder: 250
