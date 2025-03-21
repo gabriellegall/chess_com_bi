@@ -8,6 +8,8 @@ models:
         description: "{{ doc('archive_url') }}"
       - name: username
         description: "{{ doc('username') }}"
+        tests:
+          - not_null
       - name: bq_load_date
         description: "{{ doc('bq_load_date') }}"
       - name: url
@@ -29,6 +31,8 @@ models:
         description: "{{ doc('tcn') }}"
       - name: game_uuid
         description: "{{ doc('game_uuid') }}"
+        tests:
+          - not_null
       - name: initial_setup
         description: "{{ doc('initial_setup') }}"
       - name: fen
@@ -71,7 +75,11 @@ models:
           - not_null
       - name: playing_rating
         description: "{{ doc('playing_rating') }}"
+        tests:
+          - not_null
       - name: opponent_rating
         description: "{{ doc('opponent_rating') }}"
+        tests:
+          - not_null
       - name: playing_result
         description: "{{ doc('playing_result') }}"

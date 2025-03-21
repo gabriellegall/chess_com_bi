@@ -6,12 +6,18 @@ models:
     columns:
       - name: game_uuid
         description: "{{ doc('game_uuid') }}"
+        tests:
+          - not_null
       - name: move_number
         description: "{{ doc('move_number') }}"
+        tests:
+          - not_null
       - name: move
         description: "{{ doc('move') }}"
       - name: score_white
         description: "{{ doc('score_white') }}"
+        tests:
+          - not_null
       - name: player_color_turn
         description: "{{ doc('player_color_turn') }}"
       - name: score_black
