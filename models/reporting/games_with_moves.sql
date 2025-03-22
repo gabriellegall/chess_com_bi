@@ -27,10 +27,10 @@ WITH games_scope AS (
     games_moves.move_number,
     games_moves.move,
     CASE  
-      WHEN move_number <= {{ var('game_phases')['end_early_game_move'] }} THEN '1-Early Game'
-      WHEN move_number <= {{ var('game_phases')['end_mid_game_move'] }} THEN '2-Mid Game'
-      WHEN move_number <= {{ var('game_phases')['end_late_game_move'] }} THEN '3-Late Game'
-      ELSE '4-Very Late Game' END as game_phase,
+      WHEN move_number <= {{ var('game_phases')['early']['end_game_move'] }} THEN {{ var('game_phases')['early']['name'] }}
+      WHEN move_number <= {{ var('game_phases')['mid']['end_game_move'] }} THEN {{ var('game_phases')['mid']['name'] }}
+      WHEN move_number <= {{ var('game_phases')['late']['end_game_move'] }} THEN {{ var('game_phases')['late']['name'] }}
+      ELSE {{ var('game_phases')['very_late']['name'] }} END AS game_phase,
     games_moves.player_color_turn,
     games.playing_as,
     player_color_turn = playing_as AS is_playing_turn,

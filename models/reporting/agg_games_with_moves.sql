@@ -18,28 +18,33 @@ WITH aggregate_fields AS (
             ELSE 'Game Phases'
             END AS aggregation_level,
         -- Dimensions
-        ANY_VALUE(url)                                                                                  AS url,
-        ANY_VALUE(end_time)                                                                             AS end_time,
-        ANY_VALUE(end_time_date)                                                                        AS end_time_date,
-        ANY_VALUE(end_time_month)                                                                       AS end_time_month, 
-        ANY_VALUE(playing_rating)                                                                       AS playing_rating,
-        ANY_VALUE(playing_rating_range)                                                                 AS playing_rating_range,
-        ANY_VALUE(opponent_rating)                                                                      AS opponent_rating,
-        ANY_VALUE(opponent_rating_range)                                                                AS opponent_rating_range,
-        ANY_VALUE(playing_as)                                                                           AS playing_as,
-        ANY_VALUE(playing_result)                                                                       AS playing_result,
-        ANY_VALUE(time_class)                                                                           AS time_class,
-        ANY_VALUE(first_blunder_playing_turn_name)                                                      AS first_blunder_playing_turn_name,
-        -- Measures                         
-        COUNTIF(miss_category_playing IN ('Blunder', 'Massive Blunder'))                                AS nb_blunder_playing,
-        COUNTIF(miss_category_playing = 'Massive Blunder')                                              AS nb_massive_blunder_playing,
-        STRING_AGG(CAST(massive_blunder_move_number_playing AS STRING), ', ')                           AS massive_blunder_move_number_playing,
-        COUNTIF(miss_context_playing = 'Throw')                                                         AS nb_throw_playing,
-        COUNTIF(miss_context_playing = 'Missed Opportunity')                                            AS nb_missed_opportunity_playing,
-        APPROX_QUANTILES(score_playing, 100)[OFFSET(50)]                                                AS median_score_playing,
-        MAX(score_playing)                                                                              AS max_score_playing,
-        MIN(score_playing)                                                                              AS min_score_playing,
-        STDDEV_SAMP(score_playing)                                                                      AS std_score_playing,
+        ANY_VALUE(url)                                                                                          AS url,
+        ANY_VALUE(end_time)                                                                                     AS end_time,
+        ANY_VALUE(end_time_date)                                                                                AS end_time_date,
+        ANY_VALUE(end_time_month)                                                                               AS end_time_month, 
+        ANY_VALUE(playing_rating)                                                                               AS playing_rating,
+        ANY_VALUE(playing_rating_range)                                                                         AS playing_rating_range,
+        ANY_VALUE(opponent_rating)                                                                              AS opponent_rating,
+        ANY_VALUE(opponent_rating_range)                                                                        AS opponent_rating_range,
+        ANY_VALUE(playing_as)                                                                                   AS playing_as,
+        ANY_VALUE(playing_result)                                                                               AS playing_result,
+        ANY_VALUE(time_class)                                                                                   AS time_class,
+        ANY_VALUE(first_blunder_playing_turn_name)                                                              AS first_blunder_playing_turn_name,
+        -- Measures                                 
+        COUNTIF(miss_category_playing IN ('Blunder', 'Massive Blunder'))                                        AS nb_blunder_playing,
+        COUNTIF(miss_category_playing = 'Massive Blunder')                                                      AS nb_massive_blunder_playing,
+        {% for phase, values in var('game_phases').items() %}       
+        COUNTIF(game_phase = {{ values['name'] }} AND miss_category_playing = 'Massive Blunder')                AS nb_massive_blunder_{{ phase }}_playing,
+        COUNTIF(game_phase = {{ values['name'] }} AND miss_category_playing IN ('Blunder', 'Massive Blunder'))  AS nb_blunder_{{ phase }}_playing,
+        {% endfor %}
+        STRING_AGG(CAST(massive_blunder_move_number_playing AS STRING), ', ')                                   AS massive_blunder_move_number_playing,
+        COUNTIF(miss_context_playing = 'Throw')                                                                 AS nb_throw_playing,
+        COUNTIF(miss_context_playing = 'Missed Opportunity')                                                    AS nb_missed_opportunity_playing,
+        APPROX_QUANTILES(score_playing, 100)[OFFSET(50)]                                                        AS median_score_playing,
+        MAX(score_playing)                                                                                      AS max_score_playing,
+        MIN(score_playing)                                                                                      AS min_score_playing,
+        STDDEV_SAMP(score_playing)                                                                              AS std_score_playing,
+
         -- Calculated Dimensions
         CASE 
             WHEN MAX(score_playing) < {{ var('should_win_range')['low'] }} 
