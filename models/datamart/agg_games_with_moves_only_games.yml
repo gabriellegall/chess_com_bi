@@ -42,6 +42,22 @@ models:
         description: "{{ doc('nb_blunder_playing') }}"
       - name: nb_massive_blunder_playing
         description: "{{ doc('nb_massive_blunder_playing') }}"
+      - name: nb_blunder_early_playing
+        description: "{{ doc('nb_blunder_early_playing') }}"
+      - name: nb_massive_blunder_early_playing
+        description: "{{ doc('nb_massive_blunder_early_playing') }}"
+      - name: nb_blunder_mid_playing
+        description: "{{ doc('nb_blunder_mid_playing') }}"
+      - name: nb_massive_blunder_mid_playing
+        description: "{{ doc('nb_massive_blunder_mid_playing') }}"
+      - name: nb_blunder_late_playing
+        description: "{{ doc('nb_blunder_late_playing') }}"
+      - name: nb_massive_blunder_late_playing
+        description: "{{ doc('nb_massive_blunder_late_playing') }}"
+      - name: nb_blunder_very_late_playing
+        description: "{{ doc('nb_blunder_very_late_playing') }}"
+      - name: nb_massive_blunder_very_late_playing
+        description: "{{ doc('nb_massive_blunder_very_late_playing') }}"
       - name: massive_blunder_move_number_playing
         description: "{{ doc('massive_blunder_move_number_playing') }}"
       - name: nb_throw_playing
