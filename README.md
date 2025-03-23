@@ -25,18 +25,16 @@ This repository contains all the scripts aiming to:
 - Documentation: **DBT Docs** (on a GitHub Page)
 
 ## Requirements
-- Python, with the required libraries installed
+- Python3
 - A BigQuery project, with a `keyfile.json` containing the credentials
 - Docker Desktop
-- /i\ The Stockfish engine (for local execution of the script `bq_load_player_games_moves.py`)
 
 ## Commands
-- Load the chess.com data into BigQuery:
-- Run the Stockfish engine and load results in BigQuery:
+Inside the container, once the `keyfile.json` has been mounted, the following commands can be executed:
+- Load the chess.com data into BigQuery: `python3 scripts/bq_load_player_games.py`
+- Run the Stockfish engine and load results in BigQuery: `python3 scripts/bq_load_player_games_moves.py`
 - Run all DBT models: `dbt run`
 - Run all DBT tests: `dbt test`
-- Generate and view the documentation: `dbt docs generate; dbt docs serve`
-/i\ Here, integrate the commands we can used inside the container
 
 # 📂 Project
 
