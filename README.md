@@ -24,7 +24,7 @@ This repository contains all the scripts aiming to:
 - Orchestration: **GitHub Workflows** (using GitHub Runners)
 - Documentation: **DBT Docs** (on a GitHub Page)
 
-## Requirements
+## Requirements (locally)
 - Python3
 - A BigQuery project, with a `keyfile.json` containing the credentials
 - Docker Desktop
@@ -90,6 +90,10 @@ Several workflows have been defined:
 1. Full run (daily): `bq_load_player_games.yml` -> (if OK) `bq_load_player_games_moves.yml` -> (if OK) `dbt_run` 
 2. Testing (weekly): `dbt_test`
 3. Documentation update (CI): `dbt_documentation`
+
+## Metabase
+Metabase is used to construct the dashboards and analysis. I hosted Metabase in a VPS, on Hetzner, using the public Metabase docker image.
+The folder `metabase.db` is a backup of all the Metabase developments, and it can be used if any re-deployment is needed. Under such scenario, we should simply replace the existing folder `metabase.db` inside the Docker container with the backup.
 
 # 🚀 Outlooks
 
