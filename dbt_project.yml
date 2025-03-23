@@ -52,12 +52,20 @@ models:
     intermediate:
       +materialized: view
       +schema: intermediate
+      +docs:
+        node_color: '#696969' # Silver
     reporting:
       +materialized: view
       +schema: reporting
+      +docs:
+        node_color: '#C5A939' # Gold
     datamart:
       +materialized: view
       +schema: datamart
+      +docs:
+        node_color: '#B59410' # Darker Gold
 seeds:
   chess_com_bi:
     schema: staging
+    +docs:
+      node_color: '#5fb825' # Light Green (like DBT seeds)
