@@ -15,9 +15,10 @@ This repository contains all the scripts aiming to:
 2. Extract the individual moves for each game played, evaluate the position using the Stockfish engine, and load it in BigQuery.
 3. Construct a data model using DBT to define metrics and dimensions (blunders, game phases, ELO ranges, etc.).
 
-# 🛠️ Tooling
-## Stack
-- Extract & Load: **Python**
+# 🛠️ Technical overview
+## Tools
+- Extract & Load API data: **Python**
+- Evaluate moves: **Stockfish engine** (using Python)
 - Data storage & compute: **BigQuery** (free tier)
 - Data transformation: **DBT**
 - Data visualization: **Metabase** (via Docker on a VPS)
@@ -26,7 +27,7 @@ This repository contains all the scripts aiming to:
 
 ## Requirements (locally)
 - Python3
-- A BigQuery project, with a `keyfile.json` containing the credentials
+- A BigQuery project, with the `keyfile.json` containing the credentials
 - Docker Desktop
 
 ## Commands
