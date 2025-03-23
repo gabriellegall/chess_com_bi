@@ -31,7 +31,7 @@ This repository contains all the scripts aiming to:
 
 ## Requirements (locally)
 - Python3
-- A BigQuery project, with the `keyfile.json` containing the credentials
+- A BigQuery project, with the `keyfile.json` containing the service account credentials. Those credentials can be stored at the root for local execution.
 - Docker Desktop
 
 ## Commands
