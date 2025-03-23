@@ -9,6 +9,7 @@ The key questions answered are:
 - "Do I make more or less blunders compared to other similar players ? Is it true for all game phases ?"
 - "What are the games I should review to address the most important issues I have ?"
 
+Here are some previews of the Metabase dashboard:
 ![Illustration 1](https://github.com/gabriellegall/chess_com_bi/blob/main/images/metabase_page_1.png)
 ![Illustration 3](https://github.com/gabriellegall/chess_com_bi/blob/main/images/metabase_page_3.png)
 
@@ -34,7 +35,7 @@ This repository contains all the scripts aiming to:
 - Docker Desktop
 
 ## Commands
-Inside the container, once the `keyfile.json` has been mounted, the following commands can be executed:
+Inside the project container, once the `keyfile.json` has been mounted, the following commands can be executed:
 - Load the chess.com data into BigQuery: `python3 scripts/bq_load_player_games.py`
 - Run the Stockfish engine and load results in BigQuery: `python3 scripts/bq_load_player_games_moves.py`
 - Run all DBT models: `dbt run`
@@ -110,4 +111,4 @@ The folder `metabase.db` is a backup of all the Metabase developments, and it ca
 
 ### Code
 - the two Python scripts to fetch data from the API and evaluate moves using Stockfish could be improved with more modular functions, facilitating debugging and reading.
-- those two scripts could be complemented with more unit tests, using Pytest.
+- those two scripts could be complemented with more unit tests, using pytest.
