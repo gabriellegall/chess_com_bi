@@ -1,6 +1,6 @@
-# ♟️ Purpose
+# ♟️ Overview
 
-## Overview
+## Purpose
 This project is an end-to-end data solution aiming to extract information from chess.com and construct insightful analysis on the player's performance.
 The key questions answered are:
 - "Do I manage to beat stronger players and improve ?"
