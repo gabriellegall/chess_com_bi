@@ -1,7 +1,7 @@
 # Purpose
 
 ## Overview
-This project is an end-to-end data solution aiming to extract informtion from chess.com and construct insightfull analysis on the player's performance.
+This project is an end-to-end data solution aiming to extract information from chess.com and construct insightful analysis on the player's performance.
 The key questions answered are:
 - "Do I manage to beat stronger players and improve ?"
 - "Am I weaker at specific game phases on average ?"
@@ -17,12 +17,12 @@ This repository contains all the scripts aiming to:
 
 # Tooling
 ## Stack
-- Extract & Load: Python
-- Data storage & compute: BigQuery (free tier)
-- Data transformation: DBT
-- Data visualization: Metabase (via Docker on a VPS)
-- Orchestration: GitHub Workflows (using GitHub Runners)
-- Documentation: DBT Docs (on a GitHub Page)
+- Extract & Load: **Python**
+- Data storage & compute: **BigQuery** (free tier)
+- Data transformation: **DBT**
+- Data visualization: **Metabase** (via Docker on a VPS)
+- Orchestration: **GitHub Workflows** (using GitHub Runners)
+- Documentation: **DBT Docs** (on a GitHub Page)
 
 ## Requirements
 - Python, with the required libraries installed
@@ -46,7 +46,7 @@ It uses the `config.yml` to define usernames and history depth to be queried, as
 
 ### Unit testing
 Following changes in the integration, unit test scenarios have been defined using pytest.
-More unit tests could be developped to avoid regressions and side effects.
+More unit tests could be developed to avoid regressions and side effects.
 Those tests could be executed on the CI or on ad-hoc basis when modifying the query.
 
 ### Incremental strategy
@@ -76,7 +76,7 @@ The datawarehouse is structured through several layers in order to ensure (1) pe
 As explained earlier, it is not possible to perform DML operations under the BigQuery free tier (e.g. INSERT). Therefore, I use the 'table' or 'view' materialization with a DROP TABLE pre-hook if necessary. To avoid big write operations while optimizing Metabase query performance, I only materialize aggregated and filtered tables as 'table'. intermediate models or highly granular reporting tables are materialized as 'view'.
 
 ### Data quality and testing 
-DBT tests have been developped to monitor data quality:
+DBT tests have been developed to monitor data quality:
 - generic DBT tests 'not_null' on key fields and business rules expecting to always be filled.
 - a custom DBT test on the Stockfish games evaluation, to ensure that all games are processed as expected and all moves are evaluated.
 
@@ -91,7 +91,7 @@ GitHub Workflows are used as an orchestration tool. Those have two main benefits
 Several workflows have been defined:
 1. Full run (daily): `bq_load_player_games.yml` -> (if OK) `bq_load_player_games_moves.yml` -> (if OK) `dbt_run` 
 2. Testing (weekly): `dbt_test`
-3. Documentaton update (CI): `dbt_documentation`
+3. Documentation update (CI): `dbt_documentation`
 
 # Outlooks
 
