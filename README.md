@@ -40,6 +40,7 @@ Inside the project container, once the `keyfile.json` has been mounted, the foll
 - Run the Stockfish engine and load results in BigQuery: `python3 scripts/bq_load_player_games_moves.py`
 - Run all DBT models: `dbt run`
 - Run all DBT tests: `dbt test`
+
 Most of those commands are summarized inside the `Makefile`.
 
 # 📂 Project
