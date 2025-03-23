@@ -21,8 +21,8 @@ This repository contains all the scripts aiming to:
 
 # 🛠️ Technical overview
 ## Tools
-- Extract & Load API data: **Python**
-- Evaluate moves: **Stockfish engine** (using Python)
+- Extract & load API data: **Python**
+- Chess evaluation: **Stockfish engine** (using Python)
 - Data storage & compute: **BigQuery** (free tier)
 - Data transformation: **DBT**
 - Data visualization: **Metabase** (via Docker on a VPS)
@@ -87,7 +87,7 @@ DBT tests have been developed to monitor data quality:
 ### Documentation
 All models are documented in DBT via yaml files. 
 Since several models share the same fields, I use a markdown file `doc.md` to centralize new definitions and I call those definitions inside each yaml.
-To ensure that there is a perfect match between the `doc.md` and the various yaml files, I create a script `test_doc.py` which can be executed to make a full gap analysis and raise warnings if any.
+To ensure that there is a perfect match between the `doc.md` and the various yaml files, I created a script `test_doc.py` which can be executed to make a full gap analysis and raise warnings if any.
 DBT documentation is hosted using GitHub Pages and updated on each merge with the main branch.
 
 ## Orchestration
