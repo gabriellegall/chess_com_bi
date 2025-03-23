@@ -1,4 +1,4 @@
-# Purpose
+# ♟️ Purpose
 
 ## Overview
 This project is an end-to-end data solution aiming to extract information from chess.com and construct insightful analysis on the player's performance.
@@ -15,7 +15,7 @@ This repository contains all the scripts aiming to:
 2. Extract the individual moves for each game played, evaluate the position using the Stockfish engine, and load it in BigQuery.
 3. Construct a data model using DBT to define metrics and dimensions (blunders, game phases, ELO ranges, etc.).
 
-# Tooling
+# 🛠️ Tooling
 ## Stack
 - Extract & Load: **Python**
 - Data storage & compute: **BigQuery** (free tier)
@@ -38,7 +38,7 @@ This repository contains all the scripts aiming to:
 - Generate and view the documentation: `dbt docs generate; dbt docs serve`
 /i\ Here, integrate the commands we can used inside the container
 
-# Project
+# 📂 Project
 
 ## Data extraction
 The script `bq_load_player_games.py` gets the data from the chess.com API and loads it in BigQuery.
@@ -93,7 +93,7 @@ Several workflows have been defined:
 2. Testing (weekly): `dbt_test`
 3. Documentation update (CI): `dbt_documentation`
 
-# Outlooks
+# 🚀 Outlooks
 
 ## Possible improvements
 
