@@ -52,6 +52,7 @@ It uses the `config.yml` to define usernames and history depth to be queried, as
 The chess.com games information are partitioned by username and month on the API requests. 
 Therefore, the script has been designed to query only the partitions that are greater than or equal to the latest partitions integrated in BigQuery for each username.
 Then, a second filter is applied to load only games played after the latest end_time integrated in BigQuery. This ensures that only newer games played are integrated.
+
 Since the free tier of BigQuery does not allow for DML operations (like INSERT), I use a CREATE table statement for each data integration execution. Each incremental table has a suffix corresponding to the execution date.
 
 ### Unit testing
@@ -65,6 +66,7 @@ It uses the `config.yml` to define the BigQuery project information with table n
 
 ### Incremental strategy 
 Only games not yet processed are processed by the Stockfish engine. To identify those games, a query is executed in BigQuery, comparing the games loaded with the games loaded for which game moves have been already evaluated.
+
 Since the free tier of BigQuery does not allow for DML operations (like INSERT), I use a CREATE table statement for each data integration execution. Each incremental table has a suffix corresponding to the execution date.
 
 ## DBT
@@ -87,8 +89,8 @@ DBT tests have been developed to monitor data quality:
 
 ### Documentation
 All models are documented in DBT via yaml files. 
-Since several models share the same fields, I use a markdown file `doc.md` to centralize new definitions and I call those definitions inside each yaml.
-To ensure that there is a perfect match between the `doc.md` and the various yaml files, I created a script `test_doc.py` which can be executed to make a full gap analysis and raise warnings if any.
+Since several models share the same fields, I use a markdown file `doc.md` to centralize new definitions and I call those definitions inside each yaml. To ensure that there is a perfect match between the `doc.md` and the various yaml files, I created a script `test_doc.py` which can be executed to make a full gap analysis and raise warnings if any.
+
 DBT documentation is hosted using GitHub Pages and updated on each merge with the main branch.
 
 ## Orchestration
@@ -100,6 +102,7 @@ Several workflows have been defined:
 
 ## Metabase
 Metabase is used to construct the dashboards and analysis. I hosted Metabase in a VPS, on Hetzner, using the public Metabase docker image.
+
 The folder `metabase.db` is a backup of all the Metabase developments, and it can be used if any re-deployment is needed. Under such scenario, we should simply replace the existing folder `metabase.db` inside the Docker container with the backup.
 
 # 🚀 Outlooks
