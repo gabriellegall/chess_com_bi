@@ -22,7 +22,7 @@ This repository contains all the scripts aiming to:
 # 🛠️ Technical overview
 ## Tools
 - Extract & load API data: **Python**
-- Chess evaluation: **Stockfish engine** (using Python)
+- Chess evaluation: **Stockfish engine** (with Python)
 - Data storage & compute: **BigQuery** (free tier)
 - Data transformation: **DBT**
 - Data visualization: **Metabase** (via Docker on a VPS)
@@ -47,16 +47,16 @@ Inside the project container, once the `keyfile.json` has been mounted, the foll
 The script `bq_load_player_games.py` gets the data from the chess.com API and loads it in BigQuery.
 It uses the `config.yml` to define usernames and history depth to be queried, as well as BigQuery project information with table names to be used.
 
-### Unit testing
-Following changes in the integration, unit test scenarios have been defined using pytest.
-More unit tests could be developed to avoid regressions and side effects.
-Those tests could be executed on the CI or on ad-hoc basis when modifying the query.
-
 ### Incremental strategy
 The chess.com games information are partitioned by username and month on the API requests. 
 Therefore, the script has been designed to query only the partitions that are greater than or equal to the latest partitions integrated in BigQuery for each username.
 Then, a second filter is applied to load only games played after the latest end_time integrated in BigQuery. This ensures that only newer games played are integrated.
 Since the free tier of BigQuery does not allow for DML operations (like INSERT), I use a CREATE table statement for each data integration execution. Each incremental table has a suffix corresponding to the execution date.
+
+### Unit testing
+Following changes in the integration rules, unit test scenarios have been defined using pytest.
+More unit tests could be developed to avoid regressions and side effects.
+Those tests could be executed on the CI or on ad-hoc basis when modifying the query.
 
 ## Stockfish evaluation
 The script `bq_load_player_games_moves.py` reads the integrated chess.com data and parses the `[pgn]` field to extract the individual game moves and evaluate a score using the Stockfish engine.
