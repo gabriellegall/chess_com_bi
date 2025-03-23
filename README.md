@@ -67,7 +67,7 @@ Only games not yet processed are processed by the Stockfish engine. To identify 
 Since the free tier of BigQuery does not allow for DML operations (like INSERT), I use a CREATE table statement for each data integration execution. Each incremental table has a suffix corresponding to the execution date.
 
 ## DBT
-![DAG](https://github.com/gabriellegall/chess_com_bi/blob/main/images/dbt_dag.PNG)
+![DAG](https://github.com/gabriellegall/chess_com_bi/blob/main/images/dbt_overview.png)
 
 #### Layers
 The datawarehouse is structured through several layers in order to ensure (1) performance (2) clarity and (3) modularity:
