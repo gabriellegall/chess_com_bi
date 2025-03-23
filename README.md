@@ -9,6 +9,9 @@ The key questions answered are:
 - "Do I make more or less blunders compared to other similar players ? Is it true for all game phases ?"
 - "What are the games I should review to address the most important issues I have ?"
 
+![Illustration 1](https://github.com/gabriellegall/chess_com_bi/blob/main/images/metabase_page_1.png)
+![Illustration 3](https://github.com/gabriellegall/chess_com_bi/blob/main/images/metabase_page_3.png)
+
 ## Repository
 This repository contains all the scripts aiming to: 
 1. Extract the games played data from the chess.com API and load it in BigQuery.
@@ -63,6 +66,7 @@ Only games not yet processed are processed by the Stockfish engine. To identify 
 Since the free tier of BigQuery does not allow for DML operations (like INSERT), I use a CREATE table statement for each data integration execution. Each incremental table has a suffix corresponding to the execution date.
 
 ## DBT
+![DAG](https://github.com/gabriellegall/chess_com_bi/blob/main/images/dbt_dag.PNG)
 
 #### Layers
 The datawarehouse is structured through several layers in order to ensure (1) performance (2) clarity and (3) modularity:
