@@ -117,7 +117,7 @@ The folder `metabase.db` is a backup of all the Metabase developments, and it ca
 ### Code
 - the two Python scripts to fetch data from the API and evaluate moves using Stockfish could be improved with more modular functions, facilitating debugging and reading.
 - those two scripts could be complemented with more unit tests, using pytest.
-- alternatively, the script `bq_load_player_games.py` could be replaced with the [DLT library, supporting chess.com and BigQuery](https://dlthub.com/docs/dlt-ecosystem/destinations/bigquery).
+- alternatively, the script `bq_load_player_games.py` could be replaced with the [DLT library, supporting chess.com and BigQuery](https://dlthub.com/docs/dlt-ecosystem/destinations/bigquery). This solution, however, requires to set-up a billing account for BigQuery.
 
 ### Data architecture
 - To support near real-time updates, I could adjust the data architecture and host a PostgresSQL database instead of BigQuery. With columnar storage, partitioning, indexing, and incremental updates, Postgres could replace BigQuery for reasonably large datasets (<20GB).
