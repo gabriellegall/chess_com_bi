@@ -91,7 +91,7 @@ DBT tests have been developed to monitor data quality:
 ### Documentation
 All models are documented in DBT via yaml files. 
 Since several models share the same fields, I use a markdown file `doc.md` to centralize new definitions and I call those definitions inside each yaml. To ensure that there is a perfect match between the `doc.md` and the various yaml files, I created a script `test_doc.py` which can be executed to make a full gap analysis and raise warnings if any.
-
+ large 
 DBT documentation is hosted using GitHub Pages and updated on each merge with the main branch.
 
 ## Orchestration
@@ -117,3 +117,7 @@ The folder `metabase.db` is a backup of all the Metabase developments, and it ca
 ### Code
 - the two Python scripts to fetch data from the API and evaluate moves using Stockfish could be improved with more modular functions, facilitating debugging and reading.
 - those two scripts could be complemented with more unit tests, using pytest.
+- alternatively, the script `bq_load_player_games.py` could be replaced with the [DLT library, supporting chess.com and BigQuery](https://dlthub.com/docs/dlt-ecosystem/destinations/bigquery).
+
+### Data architecture
+- To support near real-time updates, I could adjust the data architecture and host a PostgresSQL database instead of BigQuery. With columnar storage, partitioning, indexing, and incremental updates, Postgres could replace BigQuery for reasonably large datasets (<20GB).
