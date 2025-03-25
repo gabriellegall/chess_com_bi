@@ -16,7 +16,7 @@ SELECT
     playing_as,
 FROM {{ ref('games_with_moves') }}
 WHERE 
-    end_time_date >= DATE_TRUNC(CURRENT_DATE - INTERVAL 1 MONTH, MONTH)
+    end_time_date >= DATE_TRUNC(CURRENT_DATE - INTERVAL 1 WEEK, WEEK)
     AND (MOD(move_number, 5) = 0 OR move_number = 1)
     AND move_number <= 60
 ORDER BY end_time DESC
