@@ -107,7 +107,5 @@ models:
         description: "{{ doc('prev_position_status_playing') }}"
       - name: miss_context_playing
         description: "{{ doc('miss_context_playing') }}"
-      - name: total_nb_moves
-        description: "{{ doc('total_nb_moves') }}"
       - name: first_blunder_playing_turn_name
         description: "{{ doc('first_blunder_playing_turn_name') }}"

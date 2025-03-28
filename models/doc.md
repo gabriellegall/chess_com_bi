@@ -234,10 +234,6 @@ A 'Throw' occurs when the previous situation was even or already disadvantageous
 A 'Missed Opportunity' occurs when the previous situation was advantageous (for the player username).
 {% enddocs %}
 
-{% docs total_nb_moves %}
-Total number of moves played in the game.
-{% enddocs %}
-
 {% docs first_blunder_playing_turn_name %}
 Definition of who ('Opponent' vs 'Playing') made the first massive blunder - at the game_uuid level.
 {% enddocs %}
@@ -254,6 +250,10 @@ Aggregation level at which the metrics are defined. Several different and indepe
 
 {% docs game_phase_key %}
 `game_phase` if applicable for the given aggregation level, otherwise returns a generic values describing the aggregation.
+{% enddocs %}
+
+{% docs nb_moves %}
+Total number of moves played in the game.
 {% enddocs %}
 
 {% docs nb_blunder_playing %}

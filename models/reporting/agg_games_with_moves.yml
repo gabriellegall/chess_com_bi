@@ -37,6 +37,8 @@ models:
         description: "{{ doc('time_class') }}"
       - name: first_blunder_playing_turn_name
         description: "{{ doc('first_blunder_playing_turn_name') }}"
+      - name: nb_moves
+        description : "{{ doc('nb_moves') }}"
       - name: aggregation_level
         description: "{{ doc('aggregation_level') }}"
       - name: game_phase_key

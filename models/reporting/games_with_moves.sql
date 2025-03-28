@@ -150,7 +150,6 @@ WITH games_scope AS (
 
 SELECT 
   *,
-  MAX(move_number) OVER (PARTITION BY game_uuid, username) AS total_nb_moves,
   FIRST_VALUE (
     CASE WHEN COALESCE(miss_category_playing, miss_category_opponent) = 'Massive Blunder' THEN playing_turn_name ELSE NULL END IGNORE NULLS)
     OVER (PARTITION BY game_uuid, username ORDER BY move_number ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS first_blunder_playing_turn_name, 
