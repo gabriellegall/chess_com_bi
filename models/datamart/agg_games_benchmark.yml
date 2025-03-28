@@ -4,8 +4,8 @@ models:
   - name: agg_games_benchmark
     description: "
       Multi-level aggregation of the metrics table to construct summarized metrics and player-level benchmark. 
-      Aggregation occurs at two independent levels: (1) username level (2) username x game phase level.
-      Benchmark is performed on the following common dimensions : `time_class` x `playing_rating_range` x `game_phase` (if applicable). 
+      Aggregation occurs at two independent levels: (1) `username` level (2) `username` x `game_phase` level.
+      Benchmark is performed on the following common dimensions : `time_class` x `playing_rating_range` x `game_phase` (if `game_phase` is not aggregated). 
       ⚠️ Only games where `playing_rating_range = opponent_rating_range` are kept.
       For username, only games played since the first day of the previous month are kept. For the benchmark group, all games are kept.
       A minimum of {{ var('datamart')['min_games_played'] }} games played is requied for the statistics to be calculed.⚠️

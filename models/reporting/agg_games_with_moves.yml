@@ -4,7 +4,7 @@ models:
   - name: agg_games_with_moves
     description: "
       Multi-level aggregation of the games with moves table to construct summarized metrics. 
-      Aggregation occurs at two independent levels: (1) game level (2) game x game phase level.
+      Aggregation occurs at two independent levels: (1) `game_uuid` level (2) `game_uuid` x `game_phase` level.
       "
     columns:
       - name: username
