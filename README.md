@@ -121,3 +121,6 @@ The folder `metabase.db` is a backup of all the Metabase developments, and it ca
 
 ### Data architecture
 - To support near real-time updates, I could adjust the data architecture and host a PostgresSQL database instead of BigQuery. With columnar storage, partitioning, indexing, and incremental updates, Postgres could replace BigQuery for reasonably large datasets (<20GB).
+
+### Packages
+- Although the project is very small, it could have been beneficial to use [dbt_project_evaluator](https://hub.getdbt.com/dbt-labs/dbt_project_evaluator/latest/) to monitor the usage of DBT's best practices.
