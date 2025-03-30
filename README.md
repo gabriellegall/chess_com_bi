@@ -27,7 +27,8 @@ This repository contains all the scripts aiming to:
 - Data transformation: **DBT**
 - Data visualization: **Metabase** (via Docker on a VPS)
 - Orchestration: **GitHub Workflows** (using GitHub Runners)
-- Documentation: **DBT Docs** (on a GitHub Page)
+- Documentation: **DBT Docs** (on GitHub Pages)
+- Secrets management: GitHub Secrets
 
 ## Requirements (locally)
 - Python3
