@@ -1,5 +1,7 @@
 {{ config(materialized='view') }}
 
+{% set elo_range_values = var('elo_range') %}
+
 WITH games_scope AS (
   SELECT
     *
@@ -39,14 +41,20 @@ WITH games_scope AS (
       ELSE 'Opponent Turn' END AS playing_turn_name,
     games.playing_rating, 
     CASE 
-      WHEN games.playing_rating < {{ var('elo_range')['low'] }} THEN '0-{{ var('elo_range')['low'] }}'
-      WHEN games.playing_rating < {{ var('elo_range')['mid'] }} THEN '{{ var('elo_range')['low'] }}-{{ var('elo_range')['mid'] }}'
-      ELSE '{{ var('elo_range')['mid'] }}+' END AS playing_rating_range,
+      {% for idx in range(elo_range_values|length) %}
+      WHEN games.playing_rating < {{ elo_range_values[idx] }} THEN 
+          '{{ "%04d"|format(elo_range_values[idx-1] if idx > 0 else 0) }}-{{ "%04d"|format(elo_range_values[idx]) }}'
+      {% endfor %}
+      ELSE '{{ "%04d"|format(elo_range_values[-1]) }}+'
+      END AS playing_rating_range,
     games.opponent_rating,
     CASE 
-      WHEN games.opponent_rating < {{ var('elo_range')['low'] }} THEN '0-{{ var('elo_range')['low'] }}'
-      WHEN games.opponent_rating < {{ var('elo_range')['mid'] }} THEN '{{ var('elo_range')['low'] }}-{{ var('elo_range')['mid'] }}'
-      ELSE '{{ var('elo_range')['mid'] }}+' END AS opponent_rating_range,
+      {% for idx in range(elo_range_values|length) %}
+      WHEN games.opponent_rating < {{ elo_range_values[idx] }} THEN 
+          '{{ "%04d"|format(elo_range_values[idx-1] if idx > 0 else 0) }}-{{ "%04d"|format(elo_range_values[idx]) }}'
+      {% endfor %}
+      ELSE '{{ "%04d"|format(elo_range_values[-1]) }}+'
+      END AS opponent_rating_range,
     games.playing_result,
     CASE 
       WHEN playing_as = 'White' THEN score_white

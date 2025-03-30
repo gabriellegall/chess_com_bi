@@ -30,9 +30,7 @@ vars:
       very_late:
         name: "'4-Very Late Game'"
 
-  elo_range:
-    low: 500
-    mid: 800
+  elo_range: [500,800,1000,1200,1400,1600,1800]
   score_thresholds:
     variance_score_massive_blunder: 600
     variance_score_blunder: 250
