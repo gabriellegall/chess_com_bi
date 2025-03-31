@@ -108,6 +108,7 @@ if table_with_prefix_exists(client, dataset_id, table_games_moves_prefix):
     WHERE 
         games_moves.game_uuid IS NULL
         AND LENGTH(game.pgn) > 0
+        AND game.rules = 'chess'
     QUALIFY ROW_NUMBER() OVER (PARTITION BY game_uuid) = 1
     """
 else:
