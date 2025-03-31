@@ -8,11 +8,30 @@ api:
     - romainpct
     - gokhvttttgxdddhjkig345
     - yorek99
+    # Reddit users:
     - dapipshark
     - sajmansito
     - beng_16
+    - 62westwallaby
+    - xn312fx
+    - sluciano3
+    - glenmsheppard
+    - jaebr8
+    - max_otto_stierlitz
+    - kkgttv
+    - chesstrogen
+    - typicalplayer11
+    - meachumz
+    - febar92
+    - monksc
+    - rogerick
+    - babystinkboog
+    - nyylp844
+    - jamesi05
+    - somedrewguy
+    - voidlr
   email: cassado01@gmail.com
-  min_archive: "2024/10"
+  min_archive: "2025/02"
 
 bigquery:
   config:

@@ -18,6 +18,10 @@ def analyze_chess_game(game_uuid: str, pgn: str, engine_path: str) -> pd.DataFra
     # Load the PGN
     game = chess.pgn.read_game(io.StringIO(pgn))
 
+    if game is None:
+        print(f"Warning: Failed to parse PGN for game {game_uuid}")
+        return pd.DataFrame(columns=["game_uuid", "move_number", "move", "score_white"])
+
     # Initialize lists to hold data
     move_numbers = []
     moves = []
@@ -101,7 +105,9 @@ if table_with_prefix_exists(client, dataset_id, table_games_moves_prefix):
     FROM `{table_games}` game
     LEFT OUTER JOIN (SELECT DISTINCT game_uuid FROM `{tables_games_moves}`) games_moves
     USING (game_uuid)
-    WHERE games_moves.game_uuid IS NULL
+    WHERE 
+        games_moves.game_uuid IS NULL
+        AND LENGTH(game.pgn) > 0
     QUALIFY ROW_NUMBER() OVER (PARTITION BY game_uuid) = 1
     """
 else:
