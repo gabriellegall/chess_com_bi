@@ -2,7 +2,10 @@ version: 2
 
 models:
   - name: games
-    description: "Games data with few calculated fields that can be directly derived w/o any join."
+    description: "
+      Games data with few calculated fields that can be directly derived w/o any join.
+      ⚠️ Only games which (1) have a pgn code (2) are played with classic chess rules (3) are not starting based on a pre-defined setup, are kept.
+      "
     columns:
       - name: archive_url
         description: "{{ doc('archive_url') }}"

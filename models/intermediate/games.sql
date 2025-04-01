@@ -1,12 +1,23 @@
 {{ config(materialized='view') }}
 
-WITH cast_types AS (
+
+WITH filter_table AS (
+    SELECT 
+        *
+    FROM {{ source('staging', 'games') }} 
+    WHERE TRUE 
+        AND LENGTH(pgn) > 0             -- Only games respecting this condition are processed by Stockfish
+        AND rules = 'chess'             -- Only games respecting this condition are processed by Stockfish
+        AND LENGTH(initial_setup) = 0   -- Also, ignore games with a pre-setup
+)
+
+, cast_types AS (
     SELECT 
         *,
         DATETIME(TIMESTAMP_SECONDS(end_time_integer), {{ var('data_conversion')['utc_to_target_timezone'] }})                       AS end_time, 
         DATE(DATETIME(TIMESTAMP_SECONDS(end_time_integer), {{ var('data_conversion')['utc_to_target_timezone'] }}))                 AS end_time_date,
         FORMAT_DATE('%Y-%m', DATETIME(TIMESTAMP_SECONDS(end_time_integer), {{ var('data_conversion')['utc_to_target_timezone'] }})) AS end_time_month,
-    FROM {{ source('staging', 'games') }} 
+    FROM filter_table    
 )
 
 , define_playing AS (

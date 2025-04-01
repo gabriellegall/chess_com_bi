@@ -6,10 +6,6 @@ WITH agg_game AS (
     game_uuid,
     ANY_VALUE(pgn) AS pgn,
   FROM {{ ref ('games') }}
-  WHERE TRUE 
-    AND LENGTH(pgn) > 0 -- Integration condition
-    AND rules = 'chess' -- Integration condition
-    AND LENGTH(initial_setup) = 0 -- Testing logic is not compatible with games having an initial set-up
   GROUP BY 1, 2
 )
 
