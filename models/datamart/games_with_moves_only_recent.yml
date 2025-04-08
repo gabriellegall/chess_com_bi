@@ -2,7 +2,10 @@ version: 2
 
 models:
   - name: games_with_moves_only_recent
-    description: "Subset of the games with moves, filtered on recent games and specific turns only."
+    description: "
+      Subset of the games with moves, filtered on recent games and specific turns only.
+      Remark: extra records were generated for games with missing move_number (i.e. games that ended 'too early'). 
+      "
     columns:
       - name: game_uuid
         description: "{{ doc('game_uuid') }}"
@@ -13,7 +16,10 @@ models:
       - name: playing_result
         description: "{{ doc('playing_result') }}"
       - name: score_playing
-        description: "{{ doc('score_playing') }}"
+        description: "
+          {{ doc('score_playing') }}
+          If the score is NULL because of missing move_number, then the LAST_VALUE is used instead. This is a proxy to make games comparable over move_number.
+          "
       - name: opponent_rating_range
         description: "{{ doc('opponent_rating_range') }}"
       - name: url
