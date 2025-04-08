@@ -18,7 +18,6 @@ FROM {{ ref('games_with_moves') }}
 WHERE 
     end_time_date >= DATE_TRUNC(CURRENT_DATE - INTERVAL 1 WEEK, WEEK)
 GROUP BY 1, 2
-
 )
 
 , unnest_and_join AS (
