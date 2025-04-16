@@ -13,10 +13,11 @@ WITH games_times AS (
     username,
     game_uuid,
     time_remaining,
+    OFFSET AS move_number,
     CAST(REGEXP_EXTRACT(time_remaining, r'(\d{1,2})') AS INT64)                         AS time_part_remaining_hours, -- first 1 or 2 digits
     CAST(REGEXP_EXTRACT(time_remaining, r'\d{1,2}:(\d{2})') AS INT64)                   AS time_part_remaining_minutes, -- second 2 digits after ":"
     CAST(REGEXP_EXTRACT(time_remaining, r'\d{1,2}:\d{2}:(\d{2}(?:\.\d+)?)') AS FLOAT64) AS time_part_remaining_seconds, -- third 2 digits after ":", with the digit after "." if any
-  FROM games_times, UNNEST(game_times) AS time_remaining
+  FROM games_times, UNNEST(game_times) AS time_remaining WITH OFFSET AS OFFSET
 )
 
 , calculate_minutes_remaining AS (
@@ -28,5 +29,4 @@ WITH games_times AS (
 
 SELECT 
   * EXCEPT (time_part_remaining_hours, time_part_remaining_minutes, time_part_remaining_seconds) 
-  ROW_NUMBER() OVER (PARTITION BY game_uuid ORDER BY time_remaining_seconds ASC) AS move_number,
 FROM calculate_minutes_remaining
