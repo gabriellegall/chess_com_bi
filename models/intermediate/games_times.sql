@@ -20,7 +20,13 @@ WITH games_times AS (
   FROM games_times, UNNEST(game_times) AS time_remaining
 )
 
+, calculate_minutes_remaining AS (
+  SELECT 
+    *,
+    time_part_remaining_hours * 3600 + time_part_remaining_minutes * 60 + time_part_remaining_seconds AS time_remaining_seconds
+  FROM extract_time
+)
+
 SELECT 
-  *,
-  time_part_remaining_hours * 3600 + time_part_remaining_minutes * 60 + time_part_remaining_seconds AS time_remaining_seconds
-FROM extract_time
+  * EXCEPT (time_part_remaining_hours, time_part_remaining_minutes, time_part_remaining_seconds) 
+FROM calculate_minutes_remaining
