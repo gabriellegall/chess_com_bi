@@ -113,8 +113,7 @@ The folder `metabase.db` is a backup of all the Metabase developments, and it ca
 ## Possible improvements
 
 ### Data analytics
-- Integration of the remaining clock time on each move, to evaluate time management and the relationship with misplays.
-- Extension of the benchmark model to integrate more metrics.
+- Extension of the benchmark model to integrate more metrics (e.g. throws, missed opportunities).
 
 ### Code
 - the two Python scripts to fetch data from the API and evaluate moves using Stockfish could be improved with more modular functions, facilitating debugging and reading.
