@@ -369,3 +369,13 @@ For username: number of games containing a missed opportunity, divided by the to
 {% docs rate_nb_throw_playing %}
 For username: number of games containing a throw, divided by the total number of games played.
 {% enddocs %}
+
+# Games times
+
+{% docs time_remaining %}
+Raw string timestamp describing the time remaining at the end of the move.
+{% enddocs %}
+
+{% docs time_remaining_seconds %}
+Timestamp describing the time remaining at the end of the move, expressed in seconds.
+{% enddocs %}

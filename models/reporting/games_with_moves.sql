@@ -27,11 +27,12 @@ WITH games_scope AS (
     games.black_rating,
     games.bq_load_date,
     games_moves.move_number,
+    games_times.time_remaining_seconds,
     games_moves.move,
     CASE  
-      WHEN move_number <= {{ var('game_phases')['early']['end_game_move'] }} THEN {{ var('game_phases')['early']['name'] }}
-      WHEN move_number <= {{ var('game_phases')['mid']['end_game_move'] }} THEN {{ var('game_phases')['mid']['name'] }}
-      WHEN move_number <= {{ var('game_phases')['late']['end_game_move'] }} THEN {{ var('game_phases')['late']['name'] }}
+      WHEN games_moves.move_number <= {{ var('game_phases')['early']['end_game_move'] }} THEN {{ var('game_phases')['early']['name'] }}
+      WHEN games_moves.move_number <= {{ var('game_phases')['mid']['end_game_move'] }} THEN {{ var('game_phases')['mid']['name'] }}
+      WHEN games_moves.move_number <= {{ var('game_phases')['late']['end_game_move'] }} THEN {{ var('game_phases')['late']['name'] }}
       ELSE {{ var('game_phases')['very_late']['name'] }} END AS game_phase,
     games_moves.player_color_turn,
     games.playing_as,
@@ -69,6 +70,10 @@ WITH games_scope AS (
     USING (game_uuid)
   LEFT OUTER JOIN {{ ref ('username_mapping') }} username_mapping
     ON LOWER(username_mapping.username) = LOWER(games.username) 
+  LEFT OUTER JOIN {{ ref ('games_times') }} games_times
+    ON games.game_uuid = games_times.game_uuid
+    AND games.username = games_times.username
+    AND games_moves.move_number = games_times.move_number
 )
 
 , previous_score AS (

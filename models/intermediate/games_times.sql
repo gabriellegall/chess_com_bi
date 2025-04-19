@@ -13,7 +13,7 @@ WITH games_times AS (
     username,
     game_uuid,
     time_remaining,
-    OFFSET AS move_number,
+    OFFSET + 1                                                                          AS move_number,
     CAST(REGEXP_EXTRACT(time_remaining, r'(\d{1,2})') AS INT64)                         AS time_part_remaining_hours, -- first 1 or 2 digits
     CAST(REGEXP_EXTRACT(time_remaining, r'\d{1,2}:(\d{2})') AS INT64)                   AS time_part_remaining_minutes, -- second 2 digits after ":"
     CAST(REGEXP_EXTRACT(time_remaining, r'\d{1,2}:\d{2}:(\d{2}(?:\.\d+)?)') AS FLOAT64) AS time_part_remaining_seconds, -- third 2 digits after ":", with the digit after "." if any
