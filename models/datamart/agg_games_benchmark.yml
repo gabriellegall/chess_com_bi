@@ -41,3 +41,15 @@ models:
         description: "{{ doc('bench_rate_nb_missed_opportunity_playing') }}"
       - name: bench_nb_games
         description: "{{ doc('bench_nb_games') }}"
+      - name: rate_nb_massive_blunder_playing_prct_time_50
+        description: "{{ doc('rate_nb_massive_blunder_playing_prct_time_50') }}"
+      - name: rate_nb_massive_blunder_playing_prct_time_70
+        description: "{{ doc('rate_nb_massive_blunder_playing_prct_time_70') }}"
+      - name: rate_nb_massive_blunder_playing_prct_time_90
+        description: "{{ doc('rate_nb_massive_blunder_playing_prct_time_90') }}"
+      - name: bench_rate_nb_massive_blunder_playing_prct_time_50
+        description: "{{ doc('bench_rate_nb_massive_blunder_playing_prct_time_50') }}"
+      - name: bench_rate_nb_massive_blunder_playing_prct_time_70
+        description: "{{ doc('bench_rate_nb_massive_blunder_playing_prct_time_70') }}"
+      - name: bench_rate_nb_massive_blunder_playing_prct_time_90
+        description: "{{ doc('bench_rate_nb_massive_blunder_playing_prct_time_90') }}"

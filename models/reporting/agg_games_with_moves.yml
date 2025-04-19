@@ -89,3 +89,9 @@ models:
           {{ doc('has_enough_games') }} 
           A minimum of {{ var('datamart')['min_games_played'] }} games played for the given partition is necessary for this condition to be true.
           "
+      - name: time_control
+        description: "{{ doc('time_control') }}"
+      - name: first_blunder_playing_prct_time_remaining
+        description: "{{ doc('first_blunder_playing_prct_time_remaining') }}"
+      - name: first_massive_blunder_playing_prct_time_remaining
+        description: "{{ doc('first_massive_blunder_playing_prct_time_remaining') }}"

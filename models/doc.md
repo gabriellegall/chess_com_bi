@@ -379,3 +379,39 @@ Raw string timestamp describing the time remaining at the end of the move.
 {% docs time_remaining_seconds %}
 Timestamp describing the time remaining at the end of the move, expressed in seconds.
 {% enddocs %}
+
+{% docs prct_time_remaining %}
+Percent of the clock time remaining (after the move has been played), compared to the time available when the 1st move of the game was made.
+{% enddocs %}
+
+{% docs first_blunder_playing_prct_time_remaining %}
+Percent of the clock time remaining when username made the first blunder.
+{% enddocs %}
+
+{% docs first_massive_blunder_playing_prct_time_remaining %}
+Percent of the clock time remaining when username made the first massive blunder.
+{% enddocs %}
+
+{% docs rate_nb_massive_blunder_playing_prct_time_50 %}
+For username: number of games containing a massive blunder with a percent of the clock time remaining above 50%, divided by the total number of games played.
+{% enddocs %}
+
+{% docs rate_nb_massive_blunder_playing_prct_time_70 %}
+For username: number of games containing a massive blunder with a percent of the clock time remaining above 70%, divided by the total number of games played.
+{% enddocs %}
+
+{% docs rate_nb_massive_blunder_playing_prct_time_90 %}
+For username: number of games containing a massive blunder with a percent of the clock time remaining above 90%, divided by the total number of games played.
+{% enddocs %}
+
+{% docs bench_rate_nb_massive_blunder_playing_prct_time_50 %}
+For all games in the benchmark group of players: number of games containing a massive blunder with a percent of the clock time remaining above 50%, divided by the total number of games played.
+{% enddocs %}
+
+{% docs bench_rate_nb_massive_blunder_playing_prct_time_70 %}
+For all games in the benchmark group of players: number of games containing a massive blunder with a percent of the clock time remaining above 70%, divided by the total number of games played.
+{% enddocs %}
+
+{% docs bench_rate_nb_massive_blunder_playing_prct_time_90 %}
+For all games in the benchmark group of players: number of games containing a massive blunder with a percent of the clock time remaining above 90%, divided by the total number of games played.
+{% enddocs %}

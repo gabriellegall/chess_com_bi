@@ -33,3 +33,9 @@ models:
           "
       - name: playing_as
         description: "{{ doc('playing_as') }}"
+      - name: time_control
+        description: "{{ doc('time_control') }}"
+      - name: time_remaining_seconds
+        description: "{{ doc('time_remaining_seconds') }}"
+      - name: prct_time_remaining
+        description: "{{ doc('prct_time_remaining') }}"

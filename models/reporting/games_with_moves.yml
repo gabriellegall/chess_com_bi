@@ -109,3 +109,9 @@ models:
         description: "{{ doc('miss_context_playing') }}"
       - name: first_blunder_playing_turn_name
         description: "{{ doc('first_blunder_playing_turn_name') }}"
+      - name: time_control
+        description: "{{ doc('time_control') }}"
+      - name: time_remaining_seconds
+        description: "{{ doc('time_remaining_seconds') }}"
+      - name: prct_time_remaining
+        description: "{{ doc('prct_time_remaining') }}"
