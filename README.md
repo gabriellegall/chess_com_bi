@@ -8,6 +8,7 @@ The key questions answered are:
 - "Do I manage to reduce the frequency at which I make blunders in my games ?"
 - "Do I make more or less blunders compared to other similar players ? Is it true for all game phases ?"
 - "What are the games I should review to address the most important issues I have ?"
+- "Do I make big mistakes when I am under time pressure ?"
 
 Here are some previews of the Metabase dashboard:
 ![Illustration 1](https://github.com/gabriellegall/chess_com_bi/blob/main/images/metabase_page_1.png)

@@ -1,0 +1,9 @@
+version: 2
+
+data_tests:
+  - name: assert_move_number_consistency
+    description: "
+      This test ensures that the field `move_number` is consistently assigned between the `games_moves` model and the `games_times` model.
+      Indeed, there is a risk of error since `move_number` is defined differently in both models:
+      in the former it is assigned in Python. In the latter, it is the result of a window function. 
+      "

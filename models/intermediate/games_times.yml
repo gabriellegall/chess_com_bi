@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: games_times
+    description:
+      "Time remaining at the end of each move played. Data extracted using REGEXP_EXTRACT based on the games model."
+    columns:
+      - name: username
+        description: "{{ doc('username') }}"
+      - name: game_uuid
+        description: "{{ doc('game_uuid') }}"
+      - name: move_number
+        description: "{{ doc('move_number') }}"
+      - name: time_remaining
+        description: "{{ doc('time_remaining') }}"
+      - name: time_remaining_seconds
+        description: "{{ doc('time_remaining_seconds') }}"

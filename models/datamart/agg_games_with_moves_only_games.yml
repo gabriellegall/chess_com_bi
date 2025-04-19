@@ -34,6 +34,8 @@ models:
         description: "{{ doc('time_class') }}"
       - name: first_blunder_playing_turn_name
         description: "{{ doc('first_blunder_playing_turn_name') }}"
+      - name: nb_moves
+        description : "{{ doc('nb_moves') }}"
       - name: aggregation_level
         description: "{{ doc('aggregation_level') }}"
       - name: game_phase_key
@@ -77,10 +79,16 @@ models:
       - name: max_score_playing_type
         description: "
           {{ doc('max_score_playing_type') }}
-          A decisive winning advantage is defined by a score above {{ var('should_win_range')['mid'] }}.
+          A decisive winning advantage is defined by a score above .
           "
       - name: has_enough_games
         description: "
           {{ doc('has_enough_games') }} 
           A minimum of {{ var('datamart')['min_games_played'] }} games played for the given partition is necessary for this condition to be true.
           "
+      - name: time_control
+        description: "{{ doc('time_control') }}"
+      - name: first_blunder_playing_prct_time_remaining
+        description: "{{ doc('first_blunder_playing_prct_time_remaining') }}"
+      - name: first_massive_blunder_playing_prct_time_remaining
+        description: "{{ doc('first_massive_blunder_playing_prct_time_remaining') }}"
