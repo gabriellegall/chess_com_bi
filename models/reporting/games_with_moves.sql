@@ -21,6 +21,7 @@ WITH games_scope AS (
     games.end_time_date,
     games.end_time_month,
     games.time_class,
+    games.time_control,
     games.white_username,
     games.white_rating,
     games.black_username,
@@ -28,6 +29,7 @@ WITH games_scope AS (
     games.bq_load_date,
     games_moves.move_number,
     games_times.time_remaining_seconds,
+    games_times.time_remaining_seconds / FIRST_VALUE(games_times.time_remaining_seconds) OVER (PARTITION BY games.game_uuid, games_moves.player_color_turn ORDER BY games_moves.move_number ASC) AS prct_time_remaining,
     games_moves.move,
     CASE  
       WHEN games_moves.move_number <= {{ var('game_phases')['early']['end_game_move'] }} THEN {{ var('game_phases')['early']['name'] }}
