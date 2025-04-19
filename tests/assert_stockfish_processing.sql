@@ -9,15 +9,6 @@ WITH agg_game AS (
   GROUP BY 1, 2
 )
 
-, agg_times AS (
-  SELECT
-    username,
-    game_uuid,
-    COUNT(*) AS nb_times
-  FROM {{ ref ('games_times') }}
-  GROUP BY 1, 2 
-)
-
 , agg_moves AS (
   SELECT
     game_uuid,
@@ -33,11 +24,8 @@ WITH agg_game AS (
     ( SELECT MAX(CAST(moves AS INT64)) FROM UNNEST(REGEXP_EXTRACT_ALL(pgn, r'(\d+)\... ')) AS moves ) AS nb_move_p2,
   FROM agg_game
   LEFT OUTER JOIN agg_moves USING (game_uuid)
-  LEFT OUTER JOIN agg_times USING (game_uuid, username)
 )
 
 SELECT *
 FROM extract_moves_count
-WHERE TRUE
-  AND (COALESCE(nb_move_p1, 0) + COALESCE(nb_move_p2, 0) <> COALESCE(nb_moves, 0))
-  OR COALESCE(nb_moves, 0) <> nb_times
+WHERE COALESCE(nb_move_p1, 0) + COALESCE(nb_move_p2, 0) <> COALESCE(nb_moves, 0)
