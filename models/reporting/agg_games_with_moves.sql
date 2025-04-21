@@ -37,6 +37,7 @@ WITH aggregate_fields AS (
         COUNT(move_number)                                                                                                       AS nb_moves,                 
         COUNTIF(miss_category_playing IN ('Blunder', 'Massive Blunder'))                                                         AS nb_blunder_playing,
         COUNTIF(miss_category_playing = 'Massive Blunder')                                                                       AS nb_massive_blunder_playing,
+        COUNTIF(score_playing > {{ var('should_win_range')['mid'] }})                                                            AS nb_moves_above_decisive_advantage,        
         MIN(CASE WHEN miss_category_playing IN ('Blunder', 'Massive Blunder') THEN prct_time_remaining ELSE NULL END)            AS first_blunder_playing_prct_time_remaining,
         MIN(CASE WHEN miss_category_playing = 'Massive Blunder' THEN prct_time_remaining ELSE NULL END)                          AS first_massive_blunder_playing_prct_time_remaining,
         {% for phase, values in var('game_phases').items() %}       
@@ -57,11 +58,11 @@ WITH aggregate_fields AS (
                 THEN '0-{{ var('should_win_range')['low'] }}'
             WHEN MAX(score_playing) < {{ var('should_win_range')['mid'] }} 
                 THEN '{{ var('should_win_range')['low'] }}-{{ var('should_win_range')['mid'] }}'
-            ELSE '{{ var('should_win_range')['mid'] }}+' END                                            AS max_score_playing_range, 
+            ELSE '{{ var('should_win_range')['mid'] }}+' END                                                                     AS max_score_playing_range, 
         CASE    
             WHEN MAX(score_playing) > {{ var('should_win_range')['mid'] }} 
                 THEN 'Decisive advantage'    
-            ELSE 'No decisive advantage' END                                                            AS max_score_playing_type,
+            ELSE 'No decisive advantage' END                                                                                     AS max_score_playing_type,
     
     FROM {{ ref ('games_with_moves') }}
     GROUP BY GROUPING SETS (

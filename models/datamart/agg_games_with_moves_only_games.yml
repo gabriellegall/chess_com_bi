@@ -92,3 +92,8 @@ models:
         description: "{{ doc('first_blunder_playing_prct_time_remaining') }}"
       - name: first_massive_blunder_playing_prct_time_remaining
         description: "{{ doc('first_massive_blunder_playing_prct_time_remaining') }}"
+      - name: nb_moves_above_decisive_advantage
+        description: "
+          {{ doc('nb_moves_above_decisive_advantage') }} 
+          The any score above {{ var('should_win_range')['mid'] }} is considered a decisive advantage.
+          "

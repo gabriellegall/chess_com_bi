@@ -328,6 +328,10 @@ Number of massive blunders detected in the very late-game phase, technically it 
 Number of blunders detected in the very late-game phase, technically it is a count of 'Blunder' on the field `miss_category_playing`.
 {% enddocs %}
 
+{% docs nb_moves_above_decisive_advantage %}
+Number of moves played when the position has reached a decisive advantage for username.
+{% enddocs %}
+
 # Games benchmark
 
 {% docs bench_nb_games %}
