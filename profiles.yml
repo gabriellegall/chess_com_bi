@@ -1,6 +1,6 @@
 chess_com_bi:
   outputs:
-    dev:
+    prod:
       dataset: sandbox_dataset
       job_execution_timeout_seconds: 300
       job_retries: 1
@@ -11,4 +11,4 @@ chess_com_bi:
       project: chesscom-451104
       threads: 4
       type: bigquery
-  target: dev
+  target: prod
