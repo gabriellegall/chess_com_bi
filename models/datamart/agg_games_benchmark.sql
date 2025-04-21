@@ -28,36 +28,58 @@ WITH username_info AS (
   HAVING COUNT(*) > {{ var('datamart')['min_games_played'] }} -- ensure that enough observations are captured
 )
 
+, benchmark_metrics AS (
+  SELECT 
+    u.username,
+    u.game_phase_key,
+    u.time_class,
+    u.playing_rating_range,
+    u.aggregation_level,
+    -- Playing metrics
+    ANY_VALUE(u.rate_nb_blunder_playing)                                            AS rate_nb_blunder_playing,
+    ANY_VALUE(u.rate_nb_massive_blunder_playing)                                    AS rate_nb_massive_blunder_playing,
+    ANY_VALUE(u.rate_nb_massive_blunder_playing_prct_time_50)                       AS rate_nb_massive_blunder_playing_prct_time_50,
+    ANY_VALUE(u.rate_nb_massive_blunder_playing_prct_time_70)                       AS rate_nb_massive_blunder_playing_prct_time_70,
+    ANY_VALUE(u.rate_nb_massive_blunder_playing_prct_time_90)                       AS rate_nb_massive_blunder_playing_prct_time_90,
+    ANY_VALUE(u.rate_nb_throw_playing)                                              AS rate_nb_throw_playing,
+    ANY_VALUE(u.rate_nb_missed_opportunity_playing)                                 AS rate_nb_missed_opportunity_playing,
+    ANY_VALUE(u.nb_games)                                                           AS nb_games,
+    -- Other players metrics (benchmark)                      
+    COUNTIF(gp.nb_blunder_playing > 0) / COUNT(*)                                   AS bench_rate_nb_blunder_playing,
+    COUNTIF(gp.nb_massive_blunder_playing > 0) / COUNT(*)                           AS bench_rate_nb_massive_blunder_playing,
+    COUNTIF(gp.first_massive_blunder_playing_prct_time_remaining > 0.5) / COUNT(*)  AS bench_rate_nb_massive_blunder_playing_prct_time_50,
+    COUNTIF(gp.first_massive_blunder_playing_prct_time_remaining > 0.7) / COUNT(*)  AS bench_rate_nb_massive_blunder_playing_prct_time_70,
+    COUNTIF(gp.first_massive_blunder_playing_prct_time_remaining > 0.9) / COUNT(*)  AS bench_rate_nb_massive_blunder_playing_prct_time_90,
+    COUNTIF(gp.nb_throw_playing > 0) / COUNT(*)                                     AS bench_rate_nb_throw_playing,
+    COUNTIF(gp.nb_missed_opportunity_playing > 0) / COUNT(*)                        AS bench_rate_nb_missed_opportunity_playing,
+    COUNT(*)                                                                        AS bench_nb_games,
+  FROM username_info u
+  LEFT OUTER JOIN {{ ref ('agg_games_with_moves') }} gp 
+    ON gp.username <> u.username
+    AND gp.game_phase_key = u.game_phase_key
+    AND gp.time_class = u.time_class
+    AND gp.playing_rating_range = u.playing_rating_range
+  WHERE gp.playing_rating_range = gp.opponent_rating_range -- ensure that the level of both players is relevant
+  GROUP BY ALL
+  HAVING COUNT(*) > {{ var('datamart')['min_games_played'] }} -- ensure that enough observations are captured
+)
+
+-- For simplicity, keep only the rating range with most observations for each [time_class] and [username]
+, define_most_frequent_range AS (
+  SELECT 
+    username,
+    time_class,
+    MAX_BY(playing_rating_range, nb_games) AS most_relevant_playing_rating_range,
+    SUM(nb_games) AS nb_games
+  FROM benchmark_metrics
+  WHERE aggregation_level = 'Games'
+  GROUP BY 1, 2
+)
+
 SELECT 
-  u.username,
-  u.game_phase_key,
-  u.time_class,
-  u.playing_rating_range,
-  u.aggregation_level,
-  -- Playing metrics
-  ANY_VALUE(u.rate_nb_blunder_playing)                                            AS rate_nb_blunder_playing,
-  ANY_VALUE(u.rate_nb_massive_blunder_playing)                                    AS rate_nb_massive_blunder_playing,
-  ANY_VALUE(u.rate_nb_massive_blunder_playing_prct_time_50)                       AS rate_nb_massive_blunder_playing_prct_time_50,
-  ANY_VALUE(u.rate_nb_massive_blunder_playing_prct_time_70)                       AS rate_nb_massive_blunder_playing_prct_time_70,
-  ANY_VALUE(u.rate_nb_massive_blunder_playing_prct_time_90)                       AS rate_nb_massive_blunder_playing_prct_time_90,
-  ANY_VALUE(u.rate_nb_throw_playing)                                              AS rate_nb_throw_playing,
-  ANY_VALUE(u.rate_nb_missed_opportunity_playing)                                 AS rate_nb_missed_opportunity_playing,
-  ANY_VALUE(u.nb_games)                                                           AS nb_games,
-  -- Other players metrics (benchmark)                      
-  COUNTIF(gp.nb_blunder_playing > 0) / COUNT(*)                                   AS bench_rate_nb_blunder_playing,
-  COUNTIF(gp.nb_massive_blunder_playing > 0) / COUNT(*)                           AS bench_rate_nb_massive_blunder_playing,
-  COUNTIF(gp.first_massive_blunder_playing_prct_time_remaining > 0.5) / COUNT(*)  AS bench_rate_nb_massive_blunder_playing_prct_time_50,
-  COUNTIF(gp.first_massive_blunder_playing_prct_time_remaining > 0.7) / COUNT(*)  AS bench_rate_nb_massive_blunder_playing_prct_time_70,
-  COUNTIF(gp.first_massive_blunder_playing_prct_time_remaining > 0.9) / COUNT(*)  AS bench_rate_nb_massive_blunder_playing_prct_time_90,
-  COUNTIF(gp.nb_throw_playing > 0) / COUNT(*)                                     AS bench_rate_nb_throw_playing,
-  COUNTIF(gp.nb_missed_opportunity_playing > 0) / COUNT(*)                        AS bench_rate_nb_missed_opportunity_playing,
-  COUNT(*)                                                                        AS bench_nb_games,
-FROM username_info u
-LEFT OUTER JOIN {{ ref ('agg_games_with_moves') }} gp 
-  ON gp.username <> u.username
-  AND gp.game_phase_key = u.game_phase_key
-  AND gp.time_class = u.time_class
-  AND gp.playing_rating_range = u.playing_rating_range
-WHERE gp.playing_rating_range = gp.opponent_rating_range -- ensure that the level of both players is relevant
-GROUP BY ALL
-HAVING COUNT(*) > {{ var('datamart')['min_games_played'] }} -- ensure that enough observations are captured
+  benchmark.* 
+FROM benchmark_metrics benchmark
+INNER JOIN define_most_frequent_range frequent
+  ON  benchmark.username = frequent.username
+  AND benchmark.time_class = frequent.time_class
+  AND benchmark.playing_rating_range = frequent.most_relevant_playing_rating_range
