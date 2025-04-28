@@ -8,7 +8,7 @@ WITH filter_table AS (
     WHERE TRUE 
         AND LENGTH(pgn) > 0             -- Only games respecting this condition are processed by Stockfish
         AND rules = 'chess'             -- Only games respecting this condition are processed by Stockfish
-        AND LENGTH(initial_setup) = 0   -- Also, ignore games with a pre-setup
+        AND (LENGTH(initial_setup) = 0 OR initial_setup = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1') -- Classic set-up
 )
 
 , cast_types AS (
