@@ -9,6 +9,7 @@ WITH games_scope AS (
   WHERE TRUE
     AND end_time_date >= DATE_TRUNC(CURRENT_DATE - INTERVAL {{ var('data_scope')['month_history_depth'] }} MONTH, MONTH)
     AND rated
+    AND time_class IN ( {{ "'" ~ var('data_scope')['time_class'] | join("','") ~ "'" }} )
 )
 
 , score_defintion AS (
