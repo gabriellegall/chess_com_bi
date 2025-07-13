@@ -13,8 +13,8 @@ docker_run_dbt:
 
 # Metabase local development:
 docker_launch_metabase:
-	docker pull metabase/metabase
-	docker run -d -p 3000:3000 --name metabase metabase/metabase
+	docker pull metabase/metabase:v0.53.5
+	docker run -d -p 3000:3000 --name metabase metabase/metabase:v0.53.5
 
 docker_backup_metabasedb:
 	powershell -ExecutionPolicy Bypass -Command "if (Test-Path .\metabase.db) { Remove-Item -Path .\metabase.db -Recurse -Force }"
