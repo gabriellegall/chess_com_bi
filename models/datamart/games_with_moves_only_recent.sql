@@ -16,7 +16,7 @@ SELECT
     ARRAY_CONCAT([1], GENERATE_ARRAY(5, 60, 5)) AS expected_move_number
 FROM {{ ref('games_with_moves') }}
 WHERE 
-    end_time_date >= DATE_TRUNC(CURRENT_DATE - INTERVAL 1 WEEK, WEEK)
+    end_time_date >= DATE_TRUNC(CURRENT_DATE - INTERVAL 1 WEEK, ISOWEEK)
 GROUP BY 1, 2
 )
 
